@@ -7,8 +7,11 @@ using DiskCardGame;
 
 namespace ReadmeMaker
 {
-    public class ReadmeDump
+    public static class ReadmeDump
     {
+	    const string bloodIcon = "![Blood Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png)";
+	    const string boneIcon = "![Bone Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png)";
+	    
         public static void Dump()
         {
 	        Plugin.Log.LogInfo("Generating Readme...");
@@ -93,8 +96,6 @@ namespace ReadmeMaker
 
         private static string GetCardInfo(CardInfo info)
         {
-	        string bloodIcon = "![Blood Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png)";
-	        string boneIcon = "![Bone Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png)";
 	        
 	        // - **Drone** - 1,1 with Bone digger and Evolve. Evolves into Crawler Forest
 	        StringBuilder builder = new StringBuilder();
