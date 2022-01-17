@@ -36,10 +36,10 @@ namespace ReadmeMaker
 	        List<CardInfo> rareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
 	        rareCards.Sort((a, b)=>String.Compare(a.displayedName, b.displayedName, StringComparison.Ordinal));
 
-	        List<NewAbility> abilities = NewAbility.abilities.FindAll((a)=>a.id.GetPrivateFieldValue<string>("guid") == Plugin.PluginGuid);
+	        List<NewAbility> abilities = NewAbility.abilities;
 	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
 	        
-	        List<NewSpecialAbility> specialAbilities = NewSpecialAbility.specialAbilities.FindAll((a)=>a.id.GetPrivateFieldValue<string>("guid") == Plugin.PluginGuid);
+	        List<NewSpecialAbility> specialAbilities = NewSpecialAbility.specialAbilities;
 	        specialAbilities.Sort((a, b)=>String.Compare(a.statIconInfo.rulebookName, b.statIconInfo.rulebookName, StringComparison.Ordinal));
 
 	        //
