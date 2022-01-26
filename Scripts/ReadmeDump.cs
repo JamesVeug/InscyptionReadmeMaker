@@ -10,12 +10,16 @@ namespace ReadmeMaker
 {
     public static class ReadmeDump
     {
-	    const string bloodIcon = "![Blood Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png)";
-	    const string boneIcon = "![Bone Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png)";
-	    const string energyIconManta = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_manta.png)";
-	    const string moxIconB = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_b.png)";
-	    const string moxIconG = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_g.png)";
-	    const string moxIconO = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_o.png)";
+	    const string bloodIcon = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png";
+	    const string bloodIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood_{0}.png";
+	    const string boneIcon = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png";
+	    const string boneIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone_{0}.png";
+	    const string energyIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_{0}.png";
+	    const string energyIconManta = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_manta.png";
+	    const string energyIconZepht = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_zepht.png";
+	    const string moxIconB = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_b.png";
+	    const string moxIconG = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_g.png";
+	    const string moxIconO = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_o.png";
 	    
         public static void Dump()
         {
@@ -194,12 +198,12 @@ namespace ReadmeMaker
 	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
 
 	        // Cost
-	        AppendCost(info.BloodCost, bloodIcon, builder);
-	        AppendCost(info.bonesCost, boneIcon, builder);
-	        AppendCost(info.energyCost, energyIconManta, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, builder);
+	        AppendCost(info.BloodCost, bloodIcon, bloodIcon0, builder);
+	        AppendCost(info.bonesCost, boneIcon, boneIcon0, builder);
+	        AppendCost(info.energyCost, Plugin.ReadmeConfig.CostEnergyIconType == ReadmeConfig.EnergyCostType.Manta ? energyIconManta : energyIconZepht, energyIcon0, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, null, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, null, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, null, builder);
 
 	        // Abilities
 	        for (int i = 0; i < info.abilities.Count; i++)
@@ -275,23 +279,34 @@ namespace ReadmeMaker
 	        return builder.ToString();
         }
 
-        private static void AppendCost(int cost, string icon, StringBuilder builder)
+        private static void AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
         {
 	        if (cost <= 0)
 		        return;
-	        
-	        if (cost <= 4)
+
+	        string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
+	        if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
 	        {
 		        // Bone Bone Bone Bone
 		        for (int i = 0; i < cost; i++)
 		        {
-			        builder.Append($" {icon}");
+			        builder.Append($" {formattedIcon}");
 		        }
 	        }
 	        else
 	        {
-		        // 4Bone
-		        builder.Append($" {cost}{icon}");
+		        builder.Append($" {formattedIcon}");
+		        
+		        string costString = cost.ToString();
+		        foreach (char c in costString)
+		        {
+			        string formattedNumberIcon = string.Format(numberFormat, c);
+			        string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
+		        
+		        
+			        // Bone4
+			        builder.Append($"{formattedNumber}");
+		        }
 	        }
         }
 
