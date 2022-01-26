@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
@@ -11,6 +12,10 @@ namespace ReadmeMaker
     {
 	    const string bloodIcon = "![Blood Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png)";
 	    const string boneIcon = "![Bone Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png)";
+	    const string energyIconManta = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_manta.png)";
+	    const string moxIconB = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_b.png)";
+	    const string moxIconG = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_g.png)";
+	    const string moxIconO = "![Energy Cost](https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_o.png)";
 	    
         public static void Dump()
         {
@@ -31,10 +36,10 @@ namespace ReadmeMaker
 	        List<CardInfo> allCards = NewCard.cards.FindAll((a) => a.metaCategories.Count > 0);
 	        
 	        List<CardInfo> cards = allCards.FindAll((a) => !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        cards.Sort((a, b)=>String.Compare(a.displayedName, b.displayedName, StringComparison.Ordinal));
+	        cards.Sort(SortCards);
 	        
 	        List<CardInfo> rareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        rareCards.Sort((a, b)=>String.Compare(a.displayedName, b.displayedName, StringComparison.Ordinal));
+	        rareCards.Sort(SortCards);
 
 	        List<NewAbility> abilities = NewAbility.abilities;
 	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
@@ -84,6 +89,94 @@ namespace ReadmeMaker
 	        return stringBuilder.ToString();
         }
 
+        private static int SortCards(CardInfo a, CardInfo b)
+        {
+	        int sorted = 0;
+	        switch (Plugin.ReadmeConfig.CardSortBy)
+	        {
+		        case ReadmeConfig.SortByType.Cost:
+			        sorted = GetCostValue(a, b); 
+			        break;
+		        case ReadmeConfig.SortByType.Name:
+			        sorted = String.Compare(a.displayedName, b.displayedName, StringComparison.Ordinal); 
+			        break;
+	        }
+
+	        if (!Plugin.ReadmeConfig.CardSortAscending)
+	        {
+		        return sorted * -1;
+	        }
+	        
+	        return sorted;
+        }
+
+        private static int GetCostValue(CardInfo a, CardInfo b)
+        {
+	        List<Tuple<int, int>> aCosts = GetCostType(a);
+	        List<Tuple<int, int>> bCosts = GetCostType(b);
+	        
+	        bool sameCostTypes = true;
+	        foreach (Tuple<int, int> aCost in aCosts)
+	        {
+		        Tuple<int, int> bCost = bCosts.Find((z) => z.Item1 == aCost.Item1);
+		        if (bCost != null)
+		        {
+			        sameCostTypes = false;
+			        break;
+		        }
+	        }
+
+	        int sortedValue = 0;
+	        if (sameCostTypes)
+	        {
+		        // Compare by amount of each cost
+		        foreach (Tuple<int,int> aCost in aCosts)
+		        {
+			        Tuple<int, int> bCost = bCosts.Find((z) => z.Item1 == aCost.Item1);
+			        if (aCost.Item2 != bCost.Item2)
+			        {
+				        sortedValue = aCost.Item2 - bCost.Item2;
+				        break;
+			        }
+		        }
+	        }
+	        else
+	        {
+		        // Compare by who has the minimum cost type (Not perfect)
+		        Tuple<int, int> aMin = aCosts.Min();
+		        Tuple<int, int> bMin = bCosts.Min();
+		        sortedValue = aMin.Item1 - bMin.Item1;
+	        }
+	        
+	        ListPool.Push(aCosts);
+	        ListPool.Push(bCosts);
+
+	        return sortedValue;
+        }
+        
+        private static List<Tuple<int, int>> GetCostType(CardInfo a)
+        {
+	        List<Tuple<int, int>> list = ListPool.Pull<Tuple<int, int>>();
+	        if (a.BloodCost > 0)
+	        {
+		        list.Add(new Tuple<int, int>(0, a.BloodCost));
+	        }
+	        if (a.bonesCost > 0)
+	        {
+		        list.Add(new Tuple<int, int>(1, a.bonesCost));
+	        }
+	        if (a.energyCost > 0)
+	        {
+		        list.Add(new Tuple<int, int>(2, a.energyCost));
+	        }
+	        if (a.gemsCost.Count > 0)
+	        {
+		        list.Add(new Tuple<int, int>(3, a.gemsCost.Count));
+	        }
+
+	        return list;
+        }
+
         private static string GetAbilityInfo(NewAbility newAbility)
         {
 	        return $" - **{newAbility.info.rulebookName}** - {newAbility.info.rulebookDescription}";
@@ -96,28 +189,17 @@ namespace ReadmeMaker
 
         private static string GetCardInfo(CardInfo info)
         {
-	        
-	        // - **Drone** - 1,1 with Bone digger and Evolve. Evolves into Crawler Forest
 	        StringBuilder builder = new StringBuilder();
 	        builder.Append($" - **{info.displayedName}** - ");
 	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
 
 	        // Cost
-	        if (info.BloodCost > 0)
-	        {
-		        for (int i = 0; i < info.BloodCost; i++)
-		        {
-			        builder.Append($" {bloodIcon}");
-		        }
-	        }
-	        
-	        if (info.bonesCost > 0)
-	        {
-		        for (int i = 0; i < info.bonesCost; i++)
-		        {
-			        builder.Append($" {boneIcon}");
-		        }
-	        }
+	        AppendCost(info.BloodCost, bloodIcon, builder);
+	        AppendCost(info.bonesCost, boneIcon, builder);
+	        AppendCost(info.energyCost, energyIconManta, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, builder);
+	        AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, builder);
 
 	        // Abilities
 	        for (int i = 0; i < info.abilities.Count; i++)
@@ -170,8 +252,47 @@ namespace ReadmeMaker
 			        builder.Append($".");
 		        }
 	        }
+	        
+	        // Traits
+	        for (int i = 0; i < info.traits.Count; i++)
+	        {
+		        if (i == 0)
+		        {
+			        builder.Append($" Traits:");
+		        }
+		        else
+		        {
+			        builder.Append($",");
+		        }
+
+		        builder.Append($" {info.traits[i]}");
+		        if (i == info.abilities.Count - 1)
+		        {
+			        builder.Append($".");
+		        }
+	        }
 
 	        return builder.ToString();
+        }
+
+        private static void AppendCost(int cost, string icon, StringBuilder builder)
+        {
+	        if (cost <= 0)
+		        return;
+	        
+	        if (cost <= 4)
+	        {
+		        // Bone Bone Bone Bone
+		        for (int i = 0; i < cost; i++)
+		        {
+			        builder.Append($" {icon}");
+		        }
+	        }
+	        else
+	        {
+		        // 4Bone
+		        builder.Append($" {cost}{icon}");
+	        }
         }
 
         private static string GetSpecialAbilityName(SpecialTriggeredAbility ability)

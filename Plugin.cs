@@ -15,10 +15,14 @@ namespace ReadmeMaker
 
         public static string Directory;
         public static ManualLogSource Log;
+        public static Plugin Instance;
+        public static ReadmeConfig ReadmeConfig;
 
         private void Awake()
         {
 	        Log = Logger;
+	        Instance = this;
+	        ReadmeConfig = new ReadmeConfig();
             Logger.LogInfo($"Loading {PluginName}...");
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
             Logger.LogInfo($"Loaded {PluginName}!");
