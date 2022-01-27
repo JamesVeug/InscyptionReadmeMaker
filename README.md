@@ -11,3 +11,30 @@ To see what your Readme looks like when its on the store.
 
 ## Credits:
 - **JamesGames** - Creator
+- **Eri** - Eris's Battery Cost icon
+- **Manta Rain** - Manta's Battery Cost icon
+- **Zepht** - Zepht's Battery Cost icon
+
+## Notes:
+- Thunderstore will not accept Readmes over 32kb!
+
+
+# Update notes:
+
+## `Version: 0.2.0 - 27/1/2022`
+### Added:
+- Config to change how the Readme will be shown
+- Added Energy Cost
+- Added Mox Gem Costs
+- Costs Larger than 4 will now show as (icon)X. Changeable 
+
+### Changed:
+- Compressed URLs to fit in more cards in the Readme
+
+### Fixed:
+- Icons not aligned
+
+
+## `Version: 0.1.0 - 17/1/2022`
+### General:
+- Initial Release
