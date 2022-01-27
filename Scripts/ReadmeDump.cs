@@ -5,21 +5,25 @@ using System.Linq;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using UnityEngine;
 
 namespace ReadmeMaker
 {
     public static class ReadmeDump
     {
-	    const string bloodIcon = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood.png";
+	    const string bloodIcon = "https://tinyurl.com/34daekbw";
+	    const string boneIcon = "https://tinyurl.com/2p86btxk";
+	    const string energyIconManta = "https://tinyurl.com/yc3vhhba";
+	    const string energyIconZepht = "https://tinyurl.com/24r7pve3";
+	    const string energyIconEri = "https://tinyurl.com/3xxfer5f";
+	    const string moxIconB = "https://tinyurl.com/mr3wd88d";
+	    const string moxIconG = "https://tinyurl.com/a2b7zhmt";
+	    const string moxIconO = "https://tinyurl.com/ybsfz23h";
+	    
+	    // TODO: Shorten somehow
 	    const string bloodIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood_{0}.png";
-	    const string boneIcon = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone.png";
 	    const string boneIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone_{0}.png";
 	    const string energyIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_{0}.png";
-	    const string energyIconManta = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_manta.png";
-	    const string energyIconZepht = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_zepht.png";
-	    const string moxIconB = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_b.png";
-	    const string moxIconG = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_g.png";
-	    const string moxIconO = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_mox_o.png";
 	    
         public static void Dump()
         {
@@ -99,10 +103,10 @@ namespace ReadmeMaker
 	        switch (Plugin.ReadmeConfig.CardSortBy)
 	        {
 		        case ReadmeConfig.SortByType.Cost:
-			        sorted = GetCostValue(a, b); 
+			        sorted = CompareByCost(a, b); 
 			        break;
 		        case ReadmeConfig.SortByType.Name:
-			        sorted = String.Compare(a.displayedName, b.displayedName, StringComparison.Ordinal); 
+			        sorted = CompareByDisplayName(a, b); 
 			        break;
 	        }
 
@@ -114,48 +118,50 @@ namespace ReadmeMaker
 	        return sorted;
         }
 
-        private static int GetCostValue(CardInfo a, CardInfo b)
+        private static int CompareByDisplayName(CardInfo a, CardInfo b)
+        {
+	        return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
+        }
+
+        private static int CompareByCost(CardInfo a, CardInfo b)
         {
 	        List<Tuple<int, int>> aCosts = GetCostType(a);
 	        List<Tuple<int, int>> bCosts = GetCostType(b);
-	        
-	        bool sameCostTypes = true;
-	        foreach (Tuple<int, int> aCost in aCosts)
+
+	        // Show least amount of costs at the top (Blood, Bone, Blood&Bone)
+	        if (aCosts.Count != bCosts.Count)
 	        {
-		        Tuple<int, int> bCost = bCosts.Find((z) => z.Item1 == aCost.Item1);
-		        if (bCost != null)
+		        return aCosts.Count - bCosts.Count;
+	        }
+	        
+	        // Show lowest cost first (Blood, Bone, Energy)
+	        for (var i = 0; i < aCosts.Count; i++)
+	        {
+		        Tuple<int, int> aCost = aCosts[i];
+		        Tuple<int, int> bCost = bCosts[i];
+		        if (aCost.Item1 != bCost.Item1)
 		        {
-			        sameCostTypes = false;
-			        break;
+			        return aCost.Item1 - bCost.Item1;
 		        }
 	        }
 
-	        int sortedValue = 0;
-	        if (sameCostTypes)
+	        // Show lowest amounts first (1 Blood, 2 Blood)
+	        for (var i = 0; i < aCosts.Count; i++)
 	        {
-		        // Compare by amount of each cost
-		        foreach (Tuple<int,int> aCost in aCosts)
+		        Tuple<int, int> aCost = aCosts[i];
+		        Tuple<int, int> bCost = bCosts[i];
+		        if (aCost.Item2 != bCost.Item2)
 		        {
-			        Tuple<int, int> bCost = bCosts.Find((z) => z.Item1 == aCost.Item1);
-			        if (aCost.Item2 != bCost.Item2)
-			        {
-				        sortedValue = aCost.Item2 - bCost.Item2;
-				        break;
-			        }
+			        return aCost.Item2 - bCost.Item2;
 		        }
 	        }
-	        else
-	        {
-		        // Compare by who has the minimum cost type (Not perfect)
-		        Tuple<int, int> aMin = aCosts.Min();
-		        Tuple<int, int> bMin = bCosts.Min();
-		        sortedValue = aMin.Item1 - bMin.Item1;
-	        }
-	        
+
 	        ListPool.Push(aCosts);
 	        ListPool.Push(bCosts);
 
-	        return sortedValue;
+	        // Same Costs
+	        // Default to Name
+	        return CompareByDisplayName(a, b);
         }
         
         private static List<Tuple<int, int>> GetCostType(CardInfo a)
@@ -175,7 +181,23 @@ namespace ReadmeMaker
 	        }
 	        if (a.gemsCost.Count > 0)
 	        {
-		        list.Add(new Tuple<int, int>(3, a.gemsCost.Count));
+		        for (int i = 0; i < a.gemsCost.Count; i++)
+		        {
+			        switch (a.gemsCost[i])
+			        {
+				        case GemType.Green:
+					        list.Add(new Tuple<int, int>(3, 1));
+					        break;
+				        case GemType.Orange:
+					        list.Add(new Tuple<int, int>(4, 1));
+					        break;
+				        case GemType.Blue:
+					        list.Add(new Tuple<int, int>(5, 1));
+					        break;
+				        default:
+					        throw new ArgumentOutOfRangeException();
+			        }
+		        }
 	        }
 
 	        return list;
@@ -198,12 +220,17 @@ namespace ReadmeMaker
 	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
 
 	        // Cost
-	        AppendCost(info.BloodCost, bloodIcon, bloodIcon0, builder);
-	        AppendCost(info.bonesCost, boneIcon, boneIcon0, builder);
-	        AppendCost(info.energyCost, Plugin.ReadmeConfig.CostEnergyIconType == ReadmeConfig.EnergyCostType.Manta ? energyIconManta : energyIconZepht, energyIcon0, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, null, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, null, builder);
-	        AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, null, builder);
+	        bool hasCost = false;
+	        hasCost |= AppendCost(info.BloodCost, bloodIcon, bloodIcon0, builder);
+	        hasCost |= AppendCost(info.bonesCost, boneIcon, boneIcon0, builder);
+	        hasCost |= AppendCost(info.energyCost, GetEnergyIcon(), energyIcon0, builder);
+	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, null, builder);
+	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, null, builder);
+	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, null, builder);
+	        if (!hasCost)
+	        {
+		        builder.Append($" Free.");
+	        }
 
 	        // Abilities
 	        for (int i = 0; i < info.abilities.Count; i++)
@@ -270,19 +297,59 @@ namespace ReadmeMaker
 		        }
 
 		        builder.Append($" {info.traits[i]}");
-		        if (i == info.abilities.Count - 1)
+		        if (i == info.traits.Count - 1)
+		        {
+			        builder.Append($".");
+		        }
+	        }
+	        
+	        // Traits
+	        for (int i = 0; i < info.tribes.Count; i++)
+	        {
+		        if (i == 0)
+		        {
+			        builder.Append($" Tribes:");
+		        }
+		        else
+		        {
+			        builder.Append($",");
+		        }
+
+		        builder.Append($" {info.tribes[i]}");
+		        if (i == info.tribes.Count - 1)
 		        {
 			        builder.Append($".");
 		        }
 	        }
 
+	        // End with a .
+	        if (builder[builder.Length - 1] != '.')
+	        {
+		        builder.Append(".");
+	        }
+	        
 	        return builder.ToString();
         }
 
-        private static void AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
+        private static string GetEnergyIcon()
+        {
+	        switch (Plugin.ReadmeConfig.CostEnergyIconType)
+	        {
+		        case ReadmeConfig.EnergyCostType.Manta:
+			        return energyIconManta;
+		        case ReadmeConfig.EnergyCostType.Zepht:
+			        return energyIconZepht;
+		        case ReadmeConfig.EnergyCostType.Eri:
+			        return energyIconEri;
+		        default:
+			        throw new ArgumentOutOfRangeException();
+	        }
+        }
+
+        private static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
         {
 	        if (cost <= 0)
-		        return;
+		        return false;
 
 	        string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
 	        if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
@@ -308,6 +375,8 @@ namespace ReadmeMaker
 			        builder.Append($"{formattedNumber}");
 		        }
 	        }
+
+	        return true;
         }
 
         private static string GetSpecialAbilityName(SpecialTriggeredAbility ability)

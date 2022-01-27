@@ -25,15 +25,18 @@ namespace ReadmeMaker
 	        ReadmeConfig = new ReadmeConfig();
             Logger.LogInfo($"Loading {PluginName}...");
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
-            Logger.LogInfo($"Loaded {PluginName}!");
         }
 
         private IEnumerator Start()
         {
+	        Logger.LogInfo($"Waiting 5 seconds before making a Readme...");
+	        
 	        // 5 seconds because too lazy to find out when all the mods are actually loaded to 
 	        yield return new WaitForSeconds(5);
 
 	        ReadmeDump.Dump();
+	        
+	        Logger.LogInfo($"Loaded {PluginName}!");
         }
     }
 }
