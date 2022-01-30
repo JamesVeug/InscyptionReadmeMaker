@@ -203,12 +203,12 @@ namespace ReadmeMaker
 	        return list;
         }
 
-		// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
-		// We do this when generating the readme as well for the sake of consistency.
-		private static string ParseAbilityInfo(string desc)
-		{
-			return desc.Replace("[creature]", "A card bearing this sigil");
-		}
+	// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
+	// We do this when generating the readme as well for the sake of consistency.
+	private static string ParseAbilityInfo(string desc)
+	{
+		return desc.Replace("[creature]", "A card bearing this sigil");
+	}
 
         private static string GetAbilityInfo(NewAbility newAbility)
         {
