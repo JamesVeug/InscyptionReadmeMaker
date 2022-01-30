@@ -203,9 +203,14 @@ namespace ReadmeMaker
 	        return list;
         }
 
+		private static string ParseAbilityInfo(string desc)
+		{
+			return desc.Replace("[creature]", "A card bearing this sigil");
+		}
         private static string GetAbilityInfo(NewAbility newAbility)
         {
-	        return $" - **{newAbility.info.rulebookName}** - {newAbility.info.rulebookDescription}";
+			string desc = ParseAbilityInfo(newAbility.info.rulebookDescription);
+	        return $" - **{newAbility.info.rulebookName}** - {desc}";
         }
 
         private static string GetSpecialAbilityInfo(NewSpecialAbility newAbility)
