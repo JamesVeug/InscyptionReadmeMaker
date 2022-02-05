@@ -24,6 +24,8 @@ To see what your Readme looks like when its on the store.
 ## `Version: 0.2.0 - 27/1/2022`
 ### Added:
 - Config to change how the Readme will be shown
+- Added Traits
+- Added Tribes
 - Added Energy Cost
 - Added Mox Gem Costs
 - Costs Larger than 4 will now show as (icon)X. Changeable 
