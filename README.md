@@ -9,6 +9,10 @@ To see what your Readme looks like when its on the store.
 - Go to https://markdownlivepreview.com/
 - Paste in the left column
 
+## Contributers
+- **JamesGames**
+- **TeamDoodz**
+
 ## Credits:
 - **JamesGames** - Creator
 - **Eri** - Eris's Battery Cost icon
