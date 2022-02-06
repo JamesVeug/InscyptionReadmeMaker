@@ -30,10 +30,38 @@ namespace ReadmeMaker
 	        Plugin.Log.LogInfo("Generating Readme...");
 	        string text = GetDumpString();
 
-	        string path = Path.Combine(Plugin.Directory, "GENERATED_README.md");
-	        File.WriteAllText(path, text);
+	        string fullPath = GetOutputFullPath();
+	        Plugin.Log.LogInfo("Dumping Readme to '" + fullPath + "'");
 	        
-	        Plugin.Log.LogInfo("Readme Dumped to " + path);
+	        File.WriteAllText(fullPath, text);
+	    }
+
+        private static string GetOutputFullPath()
+        {
+	        string defaultPath = Path.Combine(Plugin.Directory, "GENERATED_README.md");
+	        string path = Plugin.ReadmeConfig.SavePath;
+	        if (string.IsNullOrEmpty(path))
+	        {
+		        path = defaultPath;
+		        return path;
+	        }
+	        
+	        string directory = Path.GetDirectoryName(path);
+	        
+	        // Create directory if it doesn't exist
+	        if (!Directory.Exists(directory))
+	        {
+		        Directory.CreateDirectory(directory);
+	        }
+	        
+	        // Append file name if there is none
+	        if (path.IndexOf('.') < 0)
+	        {
+		        path = Path.Combine(path, "GENERATED_README.md");
+	        }
+	        
+	        
+	        return path;
         }
 
         private static string GetDumpString()
