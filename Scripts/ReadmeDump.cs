@@ -209,5 +209,71 @@ namespace ReadmeMaker
 			        throw new ArgumentOutOfRangeException();
 	        }
         }
+
+		public static void AppendAllCosts(CardInfo info, StringBuilder builder)
+		{
+			bool hasCost = false;
+			hasCost |= AppendCost(info.BloodCost, ReadmeDump.bloodIcon, ReadmeDump.bloodIcon0, builder);
+			hasCost |= AppendCost(info.bonesCost, ReadmeDump.boneIcon, ReadmeDump.boneIcon0, builder);
+			hasCost |= AppendCost(info.energyCost, ReadmeDump.GetEnergyIcon(), ReadmeDump.energyIcon0, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, ReadmeDump.moxIconB, null, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, ReadmeDump.moxIconG, null, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, ReadmeDump.moxIconO, null, builder);
+			if (!hasCost)
+			{
+				builder.Append($" Free.");
+			}
+		}
+		
+		public static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
+		{
+			if (cost <= 0)
+				return false;
+
+			string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
+			if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
+			{
+				// Bone Bone Bone Bone
+				for (int i = 0; i < cost; i++)
+				{
+					builder.Append($" {formattedIcon}");
+				}
+			}
+			else
+			{
+				builder.Append($" {formattedIcon}");
+		        
+				string costString = cost.ToString();
+				foreach (char c in costString)
+				{
+					string formattedNumberIcon = string.Format(numberFormat, c);
+					string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
+		        
+		        
+					// Bone4
+					builder.Append($"{formattedNumber}");
+				}
+			}
+
+			return true;
+		}
+		
+		public static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
+		{
+			if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)
+			{
+				return ability.ToString();
+			}
+
+			for (int i = 0; i < NewSpecialAbility.specialAbilities.Count; i++)
+			{
+				if (NewSpecialAbility.specialAbilities[i].specialTriggeredAbility == ability)
+				{
+					return NewSpecialAbility.specialAbilities[i].statIconInfo.rulebookName;
+				}
+			}
+
+			return null;
+		}
     }
 }

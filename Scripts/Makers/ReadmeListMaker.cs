@@ -67,17 +67,7 @@ namespace ReadmeMaker
 	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
 
 	        // Cost
-	        bool hasCost = false;
-	        hasCost |= AppendCost(info.BloodCost, ReadmeDump.bloodIcon, ReadmeDump.bloodIcon0, builder);
-	        hasCost |= AppendCost(info.bonesCost, ReadmeDump.boneIcon, ReadmeDump.boneIcon0, builder);
-	        hasCost |= AppendCost(info.energyCost, ReadmeDump.GetEnergyIcon(), ReadmeDump.energyIcon0, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, ReadmeDump.moxIconB, null, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, ReadmeDump.moxIconG, null, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, ReadmeDump.moxIconO, null, builder);
-	        if (!hasCost)
-	        {
-		        builder.Append($" Free.");
-	        }
+	        ReadmeDump.AppendAllCosts(info, builder);
 
 	        // Abilities
 	        for (int i = 0; i < info.abilities.Count; i++)
@@ -119,7 +109,7 @@ namespace ReadmeMaker
 		        }
 
 		        // TODO: Do this by getting the info from the rulebook?
-		        string abilityName = GetSpecialAbilityName(info.specialAbilities[i]);
+		        string abilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[i]);
 		        if (abilityName != null)
 		        {
 			        builder.Append($" {abilityName}");
@@ -176,24 +166,6 @@ namespace ReadmeMaker
 	        }
 	        
 	        return builder.ToString();
-        }
-        
-        private static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
-        {
-	        if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)
-	        {
-		        return ability.ToString();
-	        }
-
-	        for (int i = 0; i < NewSpecialAbility.specialAbilities.Count; i++)
-	        {
-		        if (NewSpecialAbility.specialAbilities[i].specialTriggeredAbility == ability)
-		        {
-			        return NewSpecialAbility.specialAbilities[i].statIconInfo.rulebookName;
-		        }
-	        }
-
-	        return null;
         }
         
         private static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
