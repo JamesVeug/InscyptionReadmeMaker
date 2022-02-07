@@ -303,5 +303,19 @@ namespace ReadmeMaker
 
 			return null;
 		}
+		
+		public static string GetAbilityName(NewAbility newAbility)
+		{
+			return newAbility.info.rulebookName;
+		}
+        
+		// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
+		// We do this when generating the readme as well for the sake of consistency.
+		public static string GetAbilityDescription(NewAbility newAbility)
+		{
+			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
+			string description = newAbility.info.rulebookDescription;
+			return description.Replace("[creature]", "A card bearing this sigil");
+		}
     }
 }

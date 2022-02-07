@@ -167,52 +167,12 @@ namespace ReadmeMaker
 	        
 	        return builder.ToString();
         }
-        
-        private static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
-        {
-	        if (cost <= 0)
-		        return false;
 
-	        string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
-	        if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
-	        {
-		        // Bone Bone Bone Bone
-		        for (int i = 0; i < cost; i++)
-		        {
-			        builder.Append($" {formattedIcon}");
-		        }
-	        }
-	        else
-	        {
-		        builder.Append($" {formattedIcon}");
-		        
-		        string costString = cost.ToString();
-		        foreach (char c in costString)
-		        {
-			        string formattedNumberIcon = string.Format(numberFormat, c);
-			        string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
-		        
-		        
-			        // Bone4
-			        builder.Append($"{formattedNumber}");
-		        }
-	        }
-
-	        return true;
-        }
-        
-        private static string GetAbilityInfo(NewAbility newAbility)
+        public static string GetAbilityInfo(NewAbility newAbility)
         {
-	        // Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
-	        string desc = ParseAbilityInfo(newAbility.info.rulebookDescription);
-	        return $" - **{newAbility.info.rulebookName}** - {desc}";
-        }
-        
-        // In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
-        // We do this when generating the readme as well for the sake of consistency.
-        private static string ParseAbilityInfo(string desc)
-        {
-	        return desc.Replace("[creature]", "A card bearing this sigil");
+	        string nam = ReadmeDump.GetAbilityName(newAbility);
+	        string desc = ReadmeDump.GetAbilityDescription(newAbility);
+	        return $" - **{nam}** - {desc}";
         }
     }
 }
