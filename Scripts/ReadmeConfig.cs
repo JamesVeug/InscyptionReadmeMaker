@@ -6,6 +6,12 @@ namespace ReadmeMaker
 {
     public class ReadmeConfig
     {
+        public enum DisplayType
+        {
+            Table,
+            List,
+        }
+        
         public enum SortByType
         {
             Name,
@@ -19,6 +25,7 @@ namespace ReadmeMaker
             Eri
         }
         
+        public DisplayType DisplayByType => Plugin.Instance.Config.Bind("Display By", "Type", DisplayType.Table, new ConfigDescription("Changes how the cards, abilities and special abilities are displayed.", null, Array.Empty<object>())).Value;
         public SortByType CardSortBy => Plugin.Instance.Config.Bind("Card Sorting", "Sort Type", SortByType.Cost, new ConfigDescription("Changes the order that the cards will be displayed in.", null, Array.Empty<object>())).Value;
         public bool CardSortAscending => Plugin.Instance.Config.Bind("Card Sorting", "Ascending Order", true, new ConfigDescription("True=Names will be ordered from A-Z, False=Z-A... etc", null, Array.Empty<object>())).Value;
         public EnergyCostType CostEnergyIconType => Plugin.Instance.Config.Bind("Card Cost", "Display Type", EnergyCostType.Manta, new ConfigDescription("Different icon styles", null, Array.Empty<object>())).Value;

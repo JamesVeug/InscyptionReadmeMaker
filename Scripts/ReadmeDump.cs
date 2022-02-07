@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
-using UnityEngine;
 
 namespace ReadmeMaker
 {
     public static class ReadmeDump
     {
-	    const string bloodIcon = "https://tinyurl.com/34daekbw";
-	    const string boneIcon = "https://tinyurl.com/2p86btxk";
-	    const string energyIconManta = "https://tinyurl.com/yc3vhhba";
-	    const string energyIconZepht = "https://tinyurl.com/24r7pve3";
-	    const string energyIconEri = "https://tinyurl.com/3xxfer5f";
-	    const string moxIconB = "https://tinyurl.com/mr3wd88d";
-	    const string moxIconG = "https://tinyurl.com/a2b7zhmt";
-	    const string moxIconO = "https://tinyurl.com/ybsfz23h";
+	    // URL's that point to the ReadmeMaker's GitBub.
+	    // Shortened so the Readme is less likely to hit the max size.
+	    public const string bloodIcon = "https://tinyurl.com/34daekbw";
+	    public const string boneIcon = "https://tinyurl.com/2p86btxk";
+	    public const string energyIconManta = "https://tinyurl.com/yc3vhhba";
+	    public const string energyIconZepht = "https://tinyurl.com/24r7pve3";
+	    public const string energyIconEri = "https://tinyurl.com/3xxfer5f";
+	    public const string moxIconB = "https://tinyurl.com/mr3wd88d";
+	    public const string moxIconG = "https://tinyurl.com/a2b7zhmt";
+	    public const string moxIconO = "https://tinyurl.com/ybsfz23h";
 	    
 	    // TODO: Shorten somehow
-	    const string bloodIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood_{0}.png";
-	    const string boneIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone_{0}.png";
-	    const string energyIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_{0}.png";
+	    public const string bloodIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood_{0}.png";
+	    public const string boneIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone_{0}.png";
+	    public const string energyIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_{0}.png";
 	    
         public static void Dump()
         {
@@ -86,43 +86,35 @@ namespace ReadmeMaker
 	        //
 	        // Build string
 	        //
-	        
-	        // Summary
-	        StringBuilder stringBuilder = new StringBuilder();
+
+	        switch (Plugin.ReadmeConfig.DisplayByType)
+	        {
+		        case ReadmeConfig.DisplayType.List:
+			        return ReadmeListMaker.Dump(allCards, cards, rareCards, abilities, specialAbilities);
+		        case ReadmeConfig.DisplayType.Table:
+			        return ReadmeTableMaker.Dump(allCards, cards, rareCards, abilities, specialAbilities);
+		        default:
+			        throw new ArgumentOutOfRangeException();
+	        }
+        }
+
+        public static void AppendSummary(StringBuilder stringBuilder, List<CardInfo> allCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
+        {
 	        stringBuilder.Append("### Includes:\n");
-	        stringBuilder.Append($"- {allCards.Count} New Cards:\n");
-	        stringBuilder.Append($"- {abilities.Count} New Sigils:\n");
-	        stringBuilder.Append($"- {specialAbilities.Count} New Special Abilities:\n");
-
-	        // Cards
-	        stringBuilder.Append("\n### Cards:\n");
-	        for (int i = 0; i < cards.Count; i++)
+	        if (allCards.Count > 0)
 	        {
-		        stringBuilder.Append(GetCardInfo(cards[i]) + "\n");
+		        stringBuilder.Append($"- {allCards.Count} New Cards:\n");
 	        }
 
-	        // Rare Cards
-	        stringBuilder.Append("\n### Rare Cards:\n");
-	        for (int i = 0; i < rareCards.Count; i++)
+	        if (abilities.Count > 0)
 	        {
-		        stringBuilder.Append(GetCardInfo(rareCards[i]) + "\n");
-	        }
-	        
-	        // Sigils
-	        stringBuilder.Append("\n### Sigils:\n");
-	        for (int i = 0; i < abilities.Count; i++)
-	        {
-		        stringBuilder.Append(GetAbilityInfo(abilities[i]) + "\n");
-	        }
-	        
-	        // Special Abilities
-	        stringBuilder.Append("\n### Special Abilities:\n");
-	        for (int i = 0; i < specialAbilities.Count; i++)
-	        {
-		        stringBuilder.Append(GetSpecialAbilityInfo(specialAbilities[i]) + "\n");
+		        stringBuilder.Append($"- {abilities.Count} New Sigils:\n");
 	        }
 
-	        return stringBuilder.ToString();
+	        if (specialAbilities.Count > 0)
+	        {
+		        stringBuilder.Append($"- {specialAbilities.Count} New Special Abilities:\n");
+	        }
         }
 
         private static int SortCards(CardInfo a, CardInfo b)
@@ -231,144 +223,7 @@ namespace ReadmeMaker
 	        return list;
         }
 
-	// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
-	// We do this when generating the readme as well for the sake of consistency.
-	private static string ParseAbilityInfo(string desc)
-	{
-		return desc.Replace("[creature]", "A card bearing this sigil");
-	}
-
-        private static string GetAbilityInfo(NewAbility newAbility)
-        {
-			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
-			string desc = ParseAbilityInfo(newAbility.info.rulebookDescription);
-	        return $" - **{newAbility.info.rulebookName}** - {desc}";
-        }
-
-        private static string GetSpecialAbilityInfo(NewSpecialAbility newAbility)
-        {
-	        return $" - **{newAbility.statIconInfo.rulebookName}** - {newAbility.statIconInfo.rulebookDescription}";
-        }
-
-        private static string GetCardInfo(CardInfo info)
-        {
-	        StringBuilder builder = new StringBuilder();
-	        builder.Append($" - **{info.displayedName}** - ");
-	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
-
-	        // Cost
-	        bool hasCost = false;
-	        hasCost |= AppendCost(info.BloodCost, bloodIcon, bloodIcon0, builder);
-	        hasCost |= AppendCost(info.bonesCost, boneIcon, boneIcon0, builder);
-	        hasCost |= AppendCost(info.energyCost, GetEnergyIcon(), energyIcon0, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, moxIconB, null, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, moxIconG, null, builder);
-	        hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, moxIconO, null, builder);
-	        if (!hasCost)
-	        {
-		        builder.Append($" Free.");
-	        }
-
-	        // Abilities
-	        for (int i = 0; i < info.abilities.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Sigils:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
-
-		        string abilityName = AbilitiesUtil.GetInfo(info.abilities[i]).rulebookName;
-		        builder.Append($" {abilityName}");
-
-		        if (i == info.abilities.Count - 1)
-		        {
-			        builder.Append($".");
-		        }
-	        }
-	        
-	        // Evolution
-	        if (info.evolveParams != null && info.evolveParams.evolution != null)
-	        {
-		        builder.Append($" Evolves into {info.evolveParams.evolution.displayedName}");
-	        }
-	        
-	        // Specials
-	        for (int i = 0; i < info.specialAbilities.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Specials:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
-
-		        // TODO: Do this by getting the info from the rulebook?
-		        string abilityName = GetSpecialAbilityName(info.specialAbilities[i]);
-		        if (abilityName != null)
-		        {
-			        builder.Append($" {abilityName}");
-		        }
-		        
-		        if (i == info.abilities.Count - 1)
-		        {
-			        builder.Append($".");
-		        }
-	        }
-	        
-	        // Traits
-	        for (int i = 0; i < info.traits.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Traits:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
-
-		        builder.Append($" {info.traits[i]}");
-		        if (i == info.traits.Count - 1)
-		        {
-			        builder.Append($".");
-		        }
-	        }
-	        
-	        // Traits
-	        for (int i = 0; i < info.tribes.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Tribes:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
-
-		        builder.Append($" {info.tribes[i]}");
-		        if (i == info.tribes.Count - 1)
-		        {
-			        builder.Append($".");
-		        }
-	        }
-
-	        // End with a .
-	        if (builder[builder.Length - 1] != '.')
-	        {
-		        builder.Append(".");
-	        }
-	        
-	        return builder.ToString();
-        }
-
-        private static string GetEnergyIcon()
+		public static string GetEnergyIcon()
         {
 	        switch (Plugin.ReadmeConfig.CostEnergyIconType)
 	        {
@@ -383,55 +238,84 @@ namespace ReadmeMaker
 	        }
         }
 
-        private static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
-        {
-	        if (cost <= 0)
-		        return false;
+		public static void AppendAllCosts(CardInfo info, StringBuilder builder)
+		{
+			bool hasCost = false;
+			hasCost |= AppendCost(info.BloodCost, ReadmeDump.bloodIcon, ReadmeDump.bloodIcon0, builder);
+			hasCost |= AppendCost(info.bonesCost, ReadmeDump.boneIcon, ReadmeDump.boneIcon0, builder);
+			hasCost |= AppendCost(info.energyCost, ReadmeDump.GetEnergyIcon(), ReadmeDump.energyIcon0, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, ReadmeDump.moxIconB, null, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, ReadmeDump.moxIconG, null, builder);
+			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, ReadmeDump.moxIconO, null, builder);
+			if (!hasCost)
+			{
+				builder.Append($" Free.");
+			}
+		}
+		
+		public static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
+		{
+			if (cost <= 0)
+				return false;
 
-	        string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
-	        if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
-	        {
-		        // Bone Bone Bone Bone
-		        for (int i = 0; i < cost; i++)
-		        {
-			        builder.Append($" {formattedIcon}");
-		        }
-	        }
-	        else
-	        {
-		        builder.Append($" {formattedIcon}");
+			string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
+			if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
+			{
+				// Bone Bone Bone Bone
+				for (int i = 0; i < cost; i++)
+				{
+					builder.Append($" {formattedIcon}");
+				}
+			}
+			else
+			{
+				builder.Append($" {formattedIcon}");
 		        
-		        string costString = cost.ToString();
-		        foreach (char c in costString)
-		        {
-			        string formattedNumberIcon = string.Format(numberFormat, c);
-			        string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
+				string costString = cost.ToString();
+				foreach (char c in costString)
+				{
+					string formattedNumberIcon = string.Format(numberFormat, c);
+					string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
 		        
 		        
-			        // Bone4
-			        builder.Append($"{formattedNumber}");
-		        }
-	        }
+					// Bone4
+					builder.Append($"{formattedNumber}");
+				}
+			}
 
-	        return true;
-        }
+			return true;
+		}
+		
+		public static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
+		{
+			if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)
+			{
+				return ability.ToString();
+			}
 
-        private static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
-        {
-	        if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)
-	        {
-		        return ability.ToString();
-	        }
+			for (int i = 0; i < NewSpecialAbility.specialAbilities.Count; i++)
+			{
+				if (NewSpecialAbility.specialAbilities[i].specialTriggeredAbility == ability)
+				{
+					return NewSpecialAbility.specialAbilities[i].statIconInfo.rulebookName;
+				}
+			}
 
-	        for (int i = 0; i < NewSpecialAbility.specialAbilities.Count; i++)
-	        {
-		        if (NewSpecialAbility.specialAbilities[i].specialTriggeredAbility == ability)
-		        {
-			        return NewSpecialAbility.specialAbilities[i].statIconInfo.rulebookName;
-		        }
-	        }
-
-	        return null;
-        }
+			return null;
+		}
+		
+		public static string GetAbilityName(NewAbility newAbility)
+		{
+			return newAbility.info.rulebookName;
+		}
+        
+		// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
+		// We do this when generating the readme as well for the sake of consistency.
+		public static string GetAbilityDescription(NewAbility newAbility)
+		{
+			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
+			string description = newAbility.info.rulebookDescription;
+			return description.Replace("[creature]", "A card bearing this sigil");
+		}
     }
 }
