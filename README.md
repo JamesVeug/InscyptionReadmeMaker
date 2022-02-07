@@ -18,12 +18,20 @@ To see what your Readme looks like when its on the store.
 - **Eri** - Eris's Battery Cost icon
 - **Manta Rain** - Manta's Battery Cost icon
 - **Zepht** - Zepht's Battery Cost icon
+- **TeamDoodz**
 
 ## Notes:
 - Thunderstore will not accept Readmes over 32kb!
 
 
 # Update notes:
+
+## `Version: 0.3.0 - 7/2/2022`
+### Added:
+- Config to change Display Type (List/Table). Table by Default since it uses less characters and looks better.
+- Config to change where the readme is exported to.
+- Support for descriptions with `[creature]`. Replaced with `A card bearing this sigil`. Thanks to TeamDoodz.
+
 
 ## `Version: 0.2.0 - 27/1/2022`
 ### Added:
