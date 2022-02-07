@@ -27,8 +27,18 @@ namespace ReadmeMaker
             }
 
             // Sigils
+            if (abilities.Count > 0)
+            {
+                stringBuilder.Append("\n### Sigils:\n");
+                BuildAbilityTable(abilities, stringBuilder);
+            }
 
             // Special Abilities
+            if (specialAbilities.Count > 0)
+            {
+                stringBuilder.Append("\n### Special Abilities:\n");
+                BuildSpecialAbilityTable(specialAbilities, stringBuilder);
+            }
 
             return stringBuilder.ToString();
         }
@@ -181,6 +191,136 @@ namespace ReadmeMaker
                     tribesBuilder.Append(info.tribes[j]);
                 }
                 data["Tribes"] = tribesBuilder.ToString();
+            }
+        }
+
+        private static void BuildAbilityTable(List<NewAbility> abilities, StringBuilder stringBuilder)
+        {
+            BreakdownAbilities(abilities, out var headers, out var data);
+            
+            // Headers
+            //|Left columns|Right columns|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|" + headers[i]);
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Sorting types
+            //|-------------|:-------------:|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|-");
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Cards
+            //|alien|thingy|
+            //|baby|other thing|
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < headers.Count; j++)
+                {
+                    Dictionary<string, string> cardData = data[i];
+                    cardData.TryGetValue(headers[j], out string value);
+                    string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
+                    stringBuilder.Append("|" + parsedValue);
+
+                    if (j == headers.Count - 1)
+                    {
+                        stringBuilder.Append("|\n");
+                    }
+                }
+            }
+        }
+
+        private static void BreakdownAbilities(List<NewAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        {
+            headers = new List<string>()
+            {
+                "Name",
+                "Description",
+            };
+
+            splitCards = new List<Dictionary<string, string>>();
+            for (int i = 0; i < cards.Count; i++)
+            {
+                NewAbility newAbility = cards[i];
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                splitCards.Add(data);
+                data["Name"] = ReadmeDump.GetAbilityName(newAbility);
+                data["Description"] = ReadmeDump.GetAbilityDescription(newAbility);
+            }
+        }
+        
+        private static void BuildSpecialAbilityTable(List<NewSpecialAbility> abilities, StringBuilder stringBuilder)
+        {
+            BreakdownSpecialAbilities(abilities, out var headers, out var data);
+            
+            // Headers
+            //|Left columns|Right columns|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|" + headers[i]);
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Sorting types
+            //|-------------|:-------------:|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|-");
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Cards
+            //|alien|thingy|
+            //|baby|other thing|
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < headers.Count; j++)
+                {
+                    Dictionary<string, string> cardData = data[i];
+                    cardData.TryGetValue(headers[j], out string value);
+                    string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
+                    stringBuilder.Append("|" + parsedValue);
+
+                    if (j == headers.Count - 1)
+                    {
+                        stringBuilder.Append("|\n");
+                    }
+                }
+            }
+        }
+
+        private static void BreakdownSpecialAbilities(List<NewSpecialAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        {
+            headers = new List<string>()
+            {
+                "Name",
+                "Description",
+            };
+
+            splitCards = new List<Dictionary<string, string>>();
+            for (int i = 0; i < cards.Count; i++)
+            {
+                NewSpecialAbility newAbility = cards[i];
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                splitCards.Add(data);
+                data["Name"] = newAbility.statIconInfo.rulebookName;
+                data["Description"] = newAbility.statIconInfo.rulebookDescription;
             }
         }
     }
