@@ -96,6 +96,14 @@ namespace ReadmeMaker
             }
         }
 
+        private static void RemoveHeaderIfDisabled(List<string> headerList, string header, bool enabled)
+        {
+            if (!enabled)
+            {
+                headerList.Remove(header);
+            }
+        }
+
         private static void BreakdownCards(List<CardInfo> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
         {
             headers = new List<string>()
@@ -110,6 +118,10 @@ namespace ReadmeMaker
                 "Traits",
                 "Tribes",
             };
+            RemoveHeaderIfDisabled(headers, "Evolution", Plugin.ReadmeConfig.CardShowEvolutions);
+            RemoveHeaderIfDisabled(headers, "Specials", Plugin.ReadmeConfig.CardShowSpecials);
+            RemoveHeaderIfDisabled(headers, "Traits", Plugin.ReadmeConfig.CardShowTraits);
+            RemoveHeaderIfDisabled(headers, "Tribes", Plugin.ReadmeConfig.CardShowTribes);
             
             splitCards = new List<Dictionary<string, string>>();
             for (int i = 0; i < cards.Count; i++)
@@ -128,13 +140,16 @@ namespace ReadmeMaker
                 data["Cost"] = costBuilder.ToString();
                 
                 // Evolution
-                if (info.evolveParams != null && info.evolveParams.evolution != null)
+                if (Plugin.ReadmeConfig.CardShowEvolutions)
                 {
-                    data["Evolution"] = info.evolveParams.evolution.displayedName;
-                }
-                else
-                {
-                    data["Evolution"] = "";
+                    if (info.evolveParams != null && info.evolveParams.evolution != null)
+                    {
+                        data["Evolution"] = info.evolveParams.evolution.displayedName;
+                    }
+                    else
+                    {
+                        data["Evolution"] = "";
+                    }
                 }
 
                 // Sigils
@@ -152,45 +167,59 @@ namespace ReadmeMaker
                 data["Sigils"] = sigilBuilder.ToString();
 
                 // Specials
-                StringBuilder specialsBuilder = new StringBuilder();
-                for (int j = 0; j < info.specialAbilities.Count; j++)
+                if (Plugin.ReadmeConfig.CardShowSpecials)
                 {
-                    if (j > 0)
+                    StringBuilder specialsBuilder = new StringBuilder();
+                    for (int j = 0; j < info.specialAbilities.Count; j++)
                     {
-                        specialsBuilder.Append(", ");
+                        if (j > 0)
+                        {
+                            specialsBuilder.Append(", ");
+                        }
+
+                        string specialAbilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[j]);
+                        if (specialAbilityName != null)
+                        {
+                            specialsBuilder.Append($" {specialAbilityName}");
+                        }
                     }
-                    
-                    string specialAbilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[j]);
-                    if (specialAbilityName != null)
-                    {
-                        specialsBuilder.Append($" {specialAbilityName}");
-                    }
+
+                    data["Specials"] = specialsBuilder.ToString();
                 }
-                data["Specials"] = specialsBuilder.ToString();
-                
+
                 // Traits
-                StringBuilder traitsBuilder = new StringBuilder();
-                for (int j = 0; j < info.traits.Count; j++)
+                if (Plugin.ReadmeConfig.CardShowTraits)
                 {
-                    if (j > 0)
+                    StringBuilder traitsBuilder = new StringBuilder();
+                    for (int j = 0; j < info.traits.Count; j++)
                     {
-                        traitsBuilder.Append(", ");
+                        if (j > 0)
+                        {
+                            traitsBuilder.Append(", ");
+                        }
+
+                        traitsBuilder.Append(info.traits[j]);
                     }
-                    traitsBuilder.Append(info.traits[j]);
+
+                    data["Traits"] = traitsBuilder.ToString();
                 }
-                data["Traits"] = traitsBuilder.ToString();
-                
+
                 // Tribes
-                StringBuilder tribesBuilder = new StringBuilder();
-                for (int j = 0; j < info.tribes.Count; j++)
+                if (Plugin.ReadmeConfig.CardShowTribes)
                 {
-                    if (j > 0)
+                    StringBuilder tribesBuilder = new StringBuilder();
+                    for (int j = 0; j < info.tribes.Count; j++)
                     {
-                        tribesBuilder.Append(", ");
+                        if (j > 0)
+                        {
+                            tribesBuilder.Append(", ");
+                        }
+
+                        tribesBuilder.Append(info.tribes[j]);
                     }
-                    tribesBuilder.Append(info.tribes[j]);
+
+                    data["Tribes"] = tribesBuilder.ToString();
                 }
-                data["Tribes"] = tribesBuilder.ToString();
             }
         }
 

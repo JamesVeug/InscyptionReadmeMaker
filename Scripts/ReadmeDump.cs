@@ -68,7 +68,11 @@ namespace ReadmeMaker
 	        //
 	        // Initialize everything for the Summary
 	        //
-	        List<CardInfo> allCards = NewCard.cards.FindAll((a) => a.metaCategories.Count > 0);
+	        List<CardInfo> allCards = NewCard.cards;
+	        if (!Plugin.ReadmeConfig.CardShowUnobtainable)
+	        {
+		        allCards = allCards.FindAll((a) => a.metaCategories.Count > 0);
+	        }
 	        
 	        List<CardInfo> cards = allCards.FindAll((a) => !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
 	        cards.Sort(SortCards);
