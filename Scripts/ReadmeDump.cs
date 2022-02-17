@@ -9,21 +9,20 @@ namespace ReadmeMaker
 {
     public static class ReadmeDump
     {
-	    // URL's that point to the ReadmeMaker's GitBub.
-	    // Shortened so the Readme is less likely to hit the max size.
-	    public const string bloodIcon = "https://tinyurl.com/34daekbw";
-	    public const string boneIcon = "https://tinyurl.com/2p86btxk";
-	    public const string energyIconManta = "https://tinyurl.com/yc3vhhba";
-	    public const string energyIconZepht = "https://tinyurl.com/24r7pve3";
-	    public const string energyIconEri = "https://tinyurl.com/3xxfer5f";
-	    public const string moxIconB = "https://tinyurl.com/mr3wd88d";
-	    public const string moxIconG = "https://tinyurl.com/a2b7zhmt";
-	    public const string moxIconO = "https://tinyurl.com/ybsfz23h";
-	    
-	    // TODO: Shorten somehow
-	    public const string bloodIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_blood_{0}.png";
-	    public const string boneIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_bone_{0}.png";
-	    public const string energyIcon0 = "https://raw.githubusercontent.com/JamesVeug/InscyptionReadmeMaker/main/Artwork/Git/cost_energy_{0}.png";
+	    // List if different costs the mod supports
+	    // Ordered by what will be shown. Vanilla first then Custom last
+	    public static List<ACost> Costs = new List<ACost>()
+	    {
+		    new BloodCost(),
+		    new BoneCost(),
+		    new EnergyCost(),
+		    new MoxBlueCost(),
+		    new MoxGreenCost(),
+		    new MoxOrangeCost(),
+		    
+		    // List Custom costs here
+		    new LifeCost(),
+	    };
 	    
         public static void Dump()
         {
@@ -223,69 +222,28 @@ namespace ReadmeMaker
 	        return list;
         }
 
-		public static string GetEnergyIcon()
-        {
-	        switch (Plugin.ReadmeConfig.CostEnergyIconType)
-	        {
-		        case ReadmeConfig.EnergyCostType.Manta:
-			        return energyIconManta;
-		        case ReadmeConfig.EnergyCostType.Zepht:
-			        return energyIconZepht;
-		        case ReadmeConfig.EnergyCostType.Eri:
-			        return energyIconEri;
-		        default:
-			        throw new ArgumentOutOfRangeException();
-	        }
-        }
-
 		public static void AppendAllCosts(CardInfo info, StringBuilder builder)
 		{
 			bool hasCost = false;
-			hasCost |= AppendCost(info.BloodCost, ReadmeDump.bloodIcon, ReadmeDump.bloodIcon0, builder);
-			hasCost |= AppendCost(info.bonesCost, ReadmeDump.boneIcon, ReadmeDump.boneIcon0, builder);
-			hasCost |= AppendCost(info.energyCost, ReadmeDump.GetEnergyIcon(), ReadmeDump.energyIcon0, builder);
-			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Blue) ? 1 : 0, ReadmeDump.moxIconB, null, builder);
-			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Green) ? 1 : 0, ReadmeDump.moxIconG, null, builder);
-			hasCost |= AppendCost(info.gemsCost.Contains(GemType.Orange) ? 1 : 0, ReadmeDump.moxIconO, null, builder);
+			for (int i = 0; i < Costs.Count; i++)
+			{
+				hasCost |= Costs[i].AppendCost(info, builder);
+			}
+			
+			// Add Free if we don't get a cost
 			if (!hasCost)
 			{
-				builder.Append($" Free.");
-			}
-		}
-		
-		public static bool AppendCost(int cost, string icon, string numberFormat, StringBuilder builder)
-		{
-			if (cost <= 0)
-				return false;
-
-			string formattedIcon = string.Format("<img align=\"center\" src=\"{0}\">", icon);
-			if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
-			{
-				// Bone Bone Bone Bone
-				for (int i = 0; i < cost; i++)
+				if (Plugin.ReadmeConfig.DisplayByType == ReadmeConfig.DisplayType.Table)
 				{
-					builder.Append($" {formattedIcon}");
+					builder.Append($"Free");
+				}
+				else
+				{
+					builder.Append($" Free.");
 				}
 			}
-			else
-			{
-				builder.Append($" {formattedIcon}");
-		        
-				string costString = cost.ToString();
-				foreach (char c in costString)
-				{
-					string formattedNumberIcon = string.Format(numberFormat, c);
-					string formattedNumber = string.Format("<img align=\"center\" src=\"{0}\">", formattedNumberIcon);
-		        
-		        
-					// Bone4
-					builder.Append($"{formattedNumber}");
-				}
-			}
-
-			return true;
 		}
-		
+
 		public static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
 		{
 			if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)

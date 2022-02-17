@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using APIPlugin;
 using UnityEngine;
 
@@ -93,6 +95,37 @@ namespace ReadmeMaker
             }
             if (fi == null) throw new ArgumentOutOfRangeException("propName", string.Format("Field {0} was not found in Type {1}", propName, obj.GetType().FullName));
             fi.SetValue(obj, val);
+        }
+        
+        
+		
+        public static MethodInfo[] GetExtensionMethods(this Type t)
+        {
+            List<Type> types = new List<Type>();
+
+            foreach (Assembly item in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                types.AddRange(item.GetTypes());
+            }
+
+            var query = from type in types
+                where type.IsSealed && !type.IsGenericType && !type.IsNested
+                from method in type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                where method.IsDefined(typeof(ExtensionAttribute), false)
+                where method.GetParameters()[0].ParameterType == t
+                select method;
+            return query.ToArray<MethodInfo>();
+        }
+		
+        public static MethodInfo GetExtensionMethod(this Type t, string MethodeName)
+        {
+            var mi = from methode in t.GetExtensionMethods()
+                where methode.Name == MethodeName
+                select methode;
+            if (mi.Count<MethodInfo>() <= 0)
+                return null;
+            else
+                return mi.First<MethodInfo>();
         }
     }
 }
