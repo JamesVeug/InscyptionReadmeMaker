@@ -1,7 +1,7 @@
 # Readme Maker
 Creates a file that lists all new cards/abilities and special abilities to be used in your Readme.
 
-See console for path to file that is created.
+
 
 To see what your Readme looks like when its on the store.
 - Open your Readme.md in a text editor (Notepad, Sublime... etc)
@@ -9,22 +9,45 @@ To see what your Readme looks like when its on the store.
 - Go to https://markdownlivepreview.com/
 - Paste in the left column
 
+## How to use it
+- Install the mod (Through thunderstore is highly recommended)
+- Start the game
+- Wait for console to say that it has dumped the GENERATED_RTEADME.md
+
+
+## Notes:
+- Supports Void_Slime's Life Cost
+- Thunderstore will not accept a Readme with more than 32,768 characters. So if your mod has a lot of cards and sigils it's likely you'll hit this limit.
+
 ## Contributers
 - **JamesGames**
 - **TeamDoodz**
 
-## Credits:
-- **JamesGames** - Creator
+## Special Thanks:
 - **Eri** - Eris's Battery Cost icon
 - **Manta Rain** - Manta's Battery Cost icon
 - **Zepht** - Zepht's Battery Cost icon
-- **TeamDoodz**
-
-## Notes:
-- Thunderstore will not accept Readmes over 32kb!
 
 
 # Update notes:
+
+## `Version: 0.4.0 - 18/2/2022`
+### General:
+- Refactored how Config works. So you'll need to delete your config so it makes a new one with the correct options.
+- Greatly reduced character count
+
+### Added:
+- Support for Life Cost
+- Config Disable aligning of images
+- Config to disable Tribes
+- Config to disable Traits
+- Config to disable Special Abilites
+
+
+### Removed:
+- Removed Manta's Energy icon because there isn't support for multiple image types per cost yet
+- Removed Zepht's Energy icon because there isn't support for multiple image types per cost yet
+
 
 ## `Version: 0.3.0 - 7/2/2022`
 ### Added:
