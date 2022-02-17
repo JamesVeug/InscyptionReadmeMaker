@@ -91,71 +91,83 @@ namespace ReadmeMaker
 	        }
 	        
 	        // Evolution
-	        if (info.evolveParams != null && info.evolveParams.evolution != null)
+	        if (Plugin.ReadmeConfig.CardShowEvolutions)
 	        {
-		        builder.Append($" Evolves into {info.evolveParams.evolution.displayedName}");
+		        if (info.evolveParams != null && info.evolveParams.evolution != null)
+		        {
+			        builder.Append($" Evolves into {info.evolveParams.evolution.displayedName}");
+		        }
 	        }
 	        
 	        // Specials
-	        for (int i = 0; i < info.specialAbilities.Count; i++)
+	        if (Plugin.ReadmeConfig.CardShowSpecials)
 	        {
-		        if (i == 0)
+		        for (int i = 0; i < info.specialAbilities.Count; i++)
 		        {
-			        builder.Append($" Specials:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
+			        if (i == 0)
+			        {
+				        builder.Append($" Specials:");
+			        }
+			        else
+			        {
+				        builder.Append($",");
+			        }
 
-		        // TODO: Do this by getting the info from the rulebook?
-		        string abilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[i]);
-		        if (abilityName != null)
-		        {
-			        builder.Append($" {abilityName}");
-		        }
-		        
-		        if (i == info.abilities.Count - 1)
-		        {
-			        builder.Append($".");
+			        // TODO: Do this by getting the info from the rulebook?
+			        string abilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[i]);
+			        if (abilityName != null)
+			        {
+				        builder.Append($" {abilityName}");
+			        }
+
+			        if (i == info.abilities.Count - 1)
+			        {
+				        builder.Append($".");
+			        }
 		        }
 	        }
-	        
-	        // Traits
-	        for (int i = 0; i < info.traits.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Traits:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
 
-		        builder.Append($" {info.traits[i]}");
-		        if (i == info.traits.Count - 1)
+	        // Traits
+	        if (Plugin.ReadmeConfig.CardShowTraits)
+	        {
+		        for (int i = 0; i < info.traits.Count; i++)
 		        {
-			        builder.Append($".");
+			        if (i == 0)
+			        {
+				        builder.Append($" Traits:");
+			        }
+			        else
+			        {
+				        builder.Append($",");
+			        }
+
+			        builder.Append($" {info.traits[i]}");
+			        if (i == info.traits.Count - 1)
+			        {
+				        builder.Append($".");
+			        }
 		        }
 	        }
-	        
-	        // Traits
-	        for (int i = 0; i < info.tribes.Count; i++)
-	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Tribes:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
 
-		        builder.Append($" {info.tribes[i]}");
-		        if (i == info.tribes.Count - 1)
+	        // Tribes
+	        if (Plugin.ReadmeConfig.CardShowTribes)
+	        {
+		        for (int i = 0; i < info.tribes.Count; i++)
 		        {
-			        builder.Append($".");
+			        if (i == 0)
+			        {
+				        builder.Append($" Tribes:");
+			        }
+			        else
+			        {
+				        builder.Append($",");
+			        }
+
+			        builder.Append($" {info.tribes[i]}");
+			        if (i == info.tribes.Count - 1)
+			        {
+				        builder.Append($".");
+			        }
 		        }
 	        }
 
