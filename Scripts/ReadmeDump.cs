@@ -65,6 +65,13 @@ namespace ReadmeMaker
 
         private static string GetDumpString()
         {
+			// Fix Life Cost Manual
+			// Ability(x2)
+			// TODO: Display all Side Deck cards
+			// TODO: Display all non-new Cards
+			// TODO: Display modified Cards
+			// TODO: Sun Cost
+        
 	        //
 	        // Initialize everything for the Summary
 	        //
@@ -79,6 +86,9 @@ namespace ReadmeMaker
 	        
 	        List<CardInfo> rareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
 	        rareCards.Sort(SortCards);
+	        
+	        List<CardInfo> sideDeckCards = Plugin.ReadmeConfig.SideDeckShow ? allCards.FindAll((a) => a.traits.Contains((Trait)5103)) : new List<CardInfo>();
+	        sideDeckCards.Sort(SortCards);
 
 	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
 	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
@@ -93,9 +103,9 @@ namespace ReadmeMaker
 	        switch (Plugin.ReadmeConfig.CardDisplayByType)
 	        {
 		        case ReadmeConfig.DisplayType.List:
-			        return ReadmeListMaker.Dump(allCards, cards, rareCards, abilities, specialAbilities);
+			        return ReadmeListMaker.Dump(allCards, cards, rareCards, sideDeckCards, abilities, specialAbilities);
 		        case ReadmeConfig.DisplayType.Table:
-			        return ReadmeTableMaker.Dump(allCards, cards, rareCards, abilities, specialAbilities);
+			        return ReadmeTableMaker.Dump(allCards, cards, rareCards, sideDeckCards, abilities, specialAbilities);
 		        default:
 			        throw new ArgumentOutOfRangeException();
 	        }
@@ -278,6 +288,17 @@ namespace ReadmeMaker
 			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
 			string description = newAbility.info.rulebookDescription;
 			return description.Replace("[creature]", "A card bearing this sigil");
+		}
+
+		public static string GetTraitName(Trait trait)
+		{
+			switch (trait)
+			{
+				case (Trait)5103:
+					return "Side Deck";
+				default:
+					return trait.ToString();
+			}
 		}
     }
 }

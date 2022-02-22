@@ -7,7 +7,12 @@ namespace ReadmeMaker
 {
     public static class ReadmeTableMaker
     {
-        public static string Dump(List<CardInfo> allCards, List<CardInfo> cards, List<CardInfo> rareCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
+        public static string Dump(List<CardInfo> allCards, 
+            List<CardInfo> cards, 
+            List<CardInfo> rareCards, 
+            List<CardInfo> sideDeckCards, 
+            List<NewAbility> abilities, 
+            List<NewSpecialAbility> specialAbilities)
         {
             StringBuilder stringBuilder = new StringBuilder();
             ReadmeDump.AppendSummary(stringBuilder, allCards, abilities, specialAbilities);
@@ -24,6 +29,13 @@ namespace ReadmeMaker
             {
                 stringBuilder.Append("\n### Rare Cards:\n");
                 BuildCardTable(rareCards, stringBuilder);
+            }
+
+            // Side Deck Cards
+            if (sideDeckCards.Count > 0)
+            {
+                stringBuilder.Append("\n### Side Deck Cards:\n");
+                BuildCardTable(sideDeckCards, stringBuilder);
             }
 
             // Sigils
@@ -191,7 +203,8 @@ namespace ReadmeMaker
                             traitsBuilder.Append(", ");
                         }
 
-                        traitsBuilder.Append(info.traits[j]);
+                        string traitName = ReadmeDump.GetTraitName(info.traits[j]);
+                        traitsBuilder.Append(traitName);
                     }
 
                     data["Traits"] = traitsBuilder.ToString();
