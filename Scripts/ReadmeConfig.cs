@@ -31,6 +31,8 @@ namespace ReadmeMaker
         public bool CardShowSigils => Plugin.Instance.Config.Bind("Cards", "Show Sigils", true, new ConfigDescription("Show what each cards Sigils are. (Waterborne, Fledgling... etc).", null, Array.Empty<object>())).Value;
         public bool CardSigilsJoinDuplicates => Plugin.Instance.Config.Bind("Cards", "Join duplicate Sigils", true, new ConfigDescription("If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.", null, Array.Empty<object>())).Value;
         
+        public bool SideDeckShow => Plugin.Instance.Config.Bind("Side Deck", "Show Side Deck Section", true, new ConfigDescription("Show a section that lists all the custom side deck cards.", null, Array.Empty<object>())).Value;
+        
         public bool SigilsShow => Plugin.Instance.Config.Bind("Sigils", "Show Sigils", true, new ConfigDescription("Show all new sigils listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
         public bool SpecialAbilitiesShow => Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
