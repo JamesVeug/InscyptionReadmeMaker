@@ -10,6 +10,7 @@ namespace ReadmeMaker
         public static string Dump(List<CardInfo> allCards, 
             List<CardInfo> cards, 
             List<CardInfo> rareCards, 
+            List<CardInfo> modifiedCards, 
             List<CardInfo> sideDeckCards, 
             List<NewAbility> abilities, 
             List<NewSpecialAbility> specialAbilities)
@@ -29,6 +30,13 @@ namespace ReadmeMaker
             {
                 stringBuilder.Append("\n### Rare Cards:\n");
                 BuildCardTable(rareCards, stringBuilder);
+            }
+
+            // Modified Cards
+            if (modifiedCards.Count > 0)
+            {
+                stringBuilder.Append("\n### Modified Cards:\n");
+                BuildCardTable(modifiedCards, stringBuilder);
             }
 
             // Side Deck Cards

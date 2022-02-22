@@ -81,15 +81,19 @@ namespace ReadmeMaker
 		        allCards = allCards.FindAll((a) => a.metaCategories.Count > 0);
 	        }
 	        
-	        List<CardInfo> cards = allCards.FindAll((a) => !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        cards.Sort(SortCards);
+	        List<CardInfo> modifiedCards = Plugin.ReadmeConfig.ModifiedCardsShow ? GetModifiedCards() : new List<CardInfo>();
+	        modifiedCards.Sort(SortCards);
+
+	        List<CardInfo> newCards = allCards.FindAll((a) => !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
+	        newCards.Sort(SortCards);
 	        
-	        List<CardInfo> rareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        rareCards.Sort(SortCards);
+	        List<CardInfo> newRareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
+	        newRareCards.Sort(SortCards);
 	        
 	        List<CardInfo> sideDeckCards = Plugin.ReadmeConfig.SideDeckShow ? allCards.FindAll((a) => a.traits.Contains((Trait)5103)) : new List<CardInfo>();
 	        sideDeckCards.Sort(SortCards);
 
+	        
 	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
 	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
 	        
@@ -103,12 +107,29 @@ namespace ReadmeMaker
 	        switch (Plugin.ReadmeConfig.CardDisplayByType)
 	        {
 		        case ReadmeConfig.DisplayType.List:
-			        return ReadmeListMaker.Dump(allCards, cards, rareCards, sideDeckCards, abilities, specialAbilities);
+			        return ReadmeListMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
 		        case ReadmeConfig.DisplayType.Table:
-			        return ReadmeTableMaker.Dump(allCards, cards, rareCards, sideDeckCards, abilities, specialAbilities);
+			        return ReadmeTableMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
 		        default:
 			        throw new ArgumentOutOfRangeException();
 	        }
+        }
+
+        private static List<CardInfo> GetModifiedCards()
+        {
+	        List<CardInfo> allData = ScriptableObjectLoader<CardInfo>.AllData;
+	        
+	        List<CardInfo> modifiedCards = new List<CardInfo>();
+	        foreach (CustomCard card in CustomCard.cards)
+	        {
+		        int index = allData.FindIndex((Predicate<CardInfo>)(x => x.name == card.name));
+		        if (index >= 0)
+		        {
+			        modifiedCards.Add(allData[index]);
+		        }
+	        }
+
+	        return modifiedCards;
         }
 
         public static void AppendSummary(StringBuilder stringBuilder, List<CardInfo> allCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
