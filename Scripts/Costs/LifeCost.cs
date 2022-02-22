@@ -27,7 +27,7 @@ namespace ReadmeMaker
             LifeAPIAvailable = GetLifeCosts != null;
             if (LifeAPIAvailable)
             {
-                Plugin.Log.LogInfo("LifeAPI Detected!");
+                Plugin.Log.LogInfo("LifeAPI Ready for reading!");
             }
             else
             {
