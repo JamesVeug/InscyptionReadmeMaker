@@ -70,26 +70,11 @@ namespace ReadmeMaker
 	        ReadmeDump.AppendAllCosts(info, builder);
 
 	        // Abilities
-	        for (int i = 0; i < info.abilities.Count; i++)
+	        if (Plugin.ReadmeConfig.CardShowSigils)
 	        {
-		        if (i == 0)
-		        {
-			        builder.Append($" Sigils:");
-		        }
-		        else
-		        {
-			        builder.Append($",");
-		        }
-
-		        string abilityName = AbilitiesUtil.GetInfo(info.abilities[i]).rulebookName;
-		        builder.Append($" {abilityName}");
-
-		        if (i == info.abilities.Count - 1)
-		        {
-			        builder.Append($".");
-		        }
+		        AppendSigilInfo(info, builder);
 	        }
-	        
+
 	        // Evolution
 	        if (Plugin.ReadmeConfig.CardShowEvolutions)
 	        {
@@ -178,6 +163,47 @@ namespace ReadmeMaker
 	        }
 	        
 	        return builder.ToString();
+        }
+
+        private static void AppendSigilInfo(CardInfo info, StringBuilder builder)
+        {
+	        Dictionary<Ability, int> abilityCount = new Dictionary<Ability, int>();
+	        List<Ability> infoAbilities = info.abilities;
+	        if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
+	        {
+		        infoAbilities = Utils.RemoveDuplicates(info.abilities, ref abilityCount);
+	        }
+	        
+	        // Show all abilities one after the other
+	        for (int i = 0; i < infoAbilities.Count; i++)
+	        {
+		        if (i == 0)
+		        {
+			        builder.Append($" Sigils:");
+		        }
+		        else
+		        {
+			        builder.Append($",");
+		        }
+
+		        Ability ability = infoAbilities[i];
+		        string abilityName = AbilitiesUtil.GetInfo(ability).rulebookName;
+		        if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
+		        {
+			        // Show all abilities, but combine duplicates into Waterborne(x2)
+			        builder.Append($" {abilityName}(x{count}");
+		        }
+		        else
+		        {
+			        // Show all abilities 1 by 1 (Waterborne, Waterborne, Waterborne)
+			        builder.Append($" {abilityName}");
+		        }
+
+		        if (i == infoAbilities.Count - 1)
+		        {
+			        builder.Append($".");
+		        }
+	        }
         }
 
         public static string GetAbilityInfo(NewAbility newAbility)

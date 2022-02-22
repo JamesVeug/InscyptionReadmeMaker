@@ -127,5 +127,35 @@ namespace ReadmeMaker
             else
                 return mi.First<MethodInfo>();
         }
+
+        public static List<T> RemoveDuplicates<T>(List<T> list, ref Dictionary<T, int> count)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Plugin.Log.LogInfo("Before: " + i + ": " + list[i]);
+            }
+
+            List<T> newList = new List<T>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                T value = list[i];
+                if (count.TryGetValue(value, out int elementCount))
+                {
+                    count[value] = elementCount + 1;
+                }
+                else
+                {
+                    newList.Add(value);
+                    count[value] = 1;
+                }
+            }
+            
+            for (int i = 0; i < newList.Count; i++)
+            {
+                Plugin.Log.LogInfo("After: " + i + ": " + newList[i]);
+            }
+
+            return newList;
+        }
     }
 }
