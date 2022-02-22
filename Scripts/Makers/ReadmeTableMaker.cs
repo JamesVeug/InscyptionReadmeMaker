@@ -122,6 +122,7 @@ namespace ReadmeMaker
             RemoveHeaderIfDisabled(headers, "Specials", Plugin.ReadmeConfig.CardShowSpecials);
             RemoveHeaderIfDisabled(headers, "Traits", Plugin.ReadmeConfig.CardShowTraits);
             RemoveHeaderIfDisabled(headers, "Tribes", Plugin.ReadmeConfig.CardShowTribes);
+            RemoveHeaderIfDisabled(headers, "Sigils", Plugin.ReadmeConfig.CardShowSigils);
             
             splitCards = new List<Dictionary<string, string>>();
             for (int i = 0; i < cards.Count; i++)
@@ -153,18 +154,69 @@ namespace ReadmeMaker
                 }
 
                 // Sigils
-                StringBuilder sigilBuilder = new StringBuilder();
-                for (int j = 0; j < info.abilities.Count; j++)
+                if (Plugin.ReadmeConfig.CardShowSigils)
                 {
-                    if (j > 0)
+                    StringBuilder sigilBuilder = new StringBuilder();
+                    if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
                     {
-                        sigilBuilder.Append(", ");
+                        // Show all abilities, but combine duplicates into Waterborn(x2)
+                        Dictionary<Ability, int> abilityCount = new Dictionary<Ability, int>();
+                        for (int j = 0; j < info.abilities.Count; j++)
+                        {
+                            Ability ability = info.abilities[i];
+                            if (abilityCount.TryGetValue(ability, out int count))
+                            {
+                                abilityCount[ability] = count + 1;
+                            }
+                            else
+                            {
+                                abilityCount[ability] = 1;
+                            }
+                        }
+                        
+                        for (int j = 0; j < info.abilities.Count; j++)
+                        {
+                            if (j > 0)
+                            {
+                                sigilBuilder.Append(", ");
+                            }
+
+                            Ability ability = info.abilities[j];
+                            if(!abilityCount.TryGetValue(ability, out int count))
+                            {
+                                continue;
+                            }
+                            
+                            string abilityName = AbilitiesUtil.GetInfo(ability).rulebookName;
+                            if (count > 1)
+                            {
+                                sigilBuilder.Append($" {abilityName}(x{count})");
+                            }
+                            else
+                            {
+                                sigilBuilder.Append($" {abilityName}");
+                            }
+
+                            abilityCount.Remove(ability);
+                        }
                     }
-                    
-                    string abilityName = AbilitiesUtil.GetInfo(info.abilities[j]).rulebookName;
-                    sigilBuilder.Append($" {abilityName}");
+                    else
+                    {
+                        // Show all abilities one after the other
+                        for (int j = 0; j < info.abilities.Count; j++)
+                        {
+                            if (j > 0)
+                            {
+                                sigilBuilder.Append(", ");
+                            }
+
+                            string abilityName = AbilitiesUtil.GetInfo(info.abilities[j]).rulebookName;
+                            sigilBuilder.Append($" {abilityName}");
+                        }
+                    }
+
+                    data["Sigils"] = sigilBuilder.ToString();
                 }
-                data["Sigils"] = sigilBuilder.ToString();
 
                 // Specials
                 if (Plugin.ReadmeConfig.CardShowSpecials)
