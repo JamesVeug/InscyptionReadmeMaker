@@ -132,12 +132,22 @@ namespace ReadmeMaker
 	        return modifiedCards;
         }
 
-        public static void AppendSummary(StringBuilder stringBuilder, List<CardInfo> allCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
+        public static void AppendSummary(StringBuilder stringBuilder, List<CardInfo> newCards, List<CardInfo> modifiedCards, List<CardInfo> sideDeckCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
         {
 	        stringBuilder.Append("### Includes:\n");
-	        if (allCards.Count > 0)
+	        if (newCards.Count > 0)
 	        {
-		        stringBuilder.Append($"- {allCards.Count} New Cards:\n");
+		        stringBuilder.Append($"- {newCards.Count} New Cards:\n");
+	        }
+	        
+	        if (modifiedCards.Count > 0)
+	        {
+		        stringBuilder.Append($"- {modifiedCards.Count} Modified Cards:\n");
+	        }
+	        
+	        if (sideDeckCards.Count > 0)
+	        {
+		        stringBuilder.Append($"- {sideDeckCards.Count} Side Deck Cards:\n");
 	        }
 
 	        if (abilities.Count > 0)
