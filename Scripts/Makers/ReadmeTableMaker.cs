@@ -156,66 +156,7 @@ namespace ReadmeMaker
                 // Sigils
                 if (Plugin.ReadmeConfig.CardShowSigils)
                 {
-                    StringBuilder sigilBuilder = new StringBuilder();
-                    if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
-                    {
-                        // Show all abilities, but combine duplicates into Waterborn(x2)
-                        Dictionary<Ability, int> abilityCount = new Dictionary<Ability, int>();
-                        for (int j = 0; j < info.abilities.Count; j++)
-                        {
-                            Ability ability = info.abilities[i];
-                            if (abilityCount.TryGetValue(ability, out int count))
-                            {
-                                abilityCount[ability] = count + 1;
-                            }
-                            else
-                            {
-                                abilityCount[ability] = 1;
-                            }
-                        }
-                        
-                        for (int j = 0; j < info.abilities.Count; j++)
-                        {
-                            if (j > 0)
-                            {
-                                sigilBuilder.Append(", ");
-                            }
-
-                            Ability ability = info.abilities[j];
-                            if(!abilityCount.TryGetValue(ability, out int count))
-                            {
-                                continue;
-                            }
-                            
-                            string abilityName = AbilitiesUtil.GetInfo(ability).rulebookName;
-                            if (count > 1)
-                            {
-                                sigilBuilder.Append($" {abilityName}(x{count})");
-                            }
-                            else
-                            {
-                                sigilBuilder.Append($" {abilityName}");
-                            }
-
-                            abilityCount.Remove(ability);
-                        }
-                    }
-                    else
-                    {
-                        // Show all abilities one after the other
-                        for (int j = 0; j < info.abilities.Count; j++)
-                        {
-                            if (j > 0)
-                            {
-                                sigilBuilder.Append(", ");
-                            }
-
-                            string abilityName = AbilitiesUtil.GetInfo(info.abilities[j]).rulebookName;
-                            sigilBuilder.Append($" {abilityName}");
-                        }
-                    }
-
-                    data["Sigils"] = sigilBuilder.ToString();
+                    AppendSigils(info, data);
                 }
 
                 // Specials
@@ -273,6 +214,42 @@ namespace ReadmeMaker
                     data["Tribes"] = tribesBuilder.ToString();
                 }
             }
+        }
+
+        private static void AppendSigils(CardInfo info, Dictionary<string, string> data)
+        {
+            StringBuilder sigilBuilder = new StringBuilder();
+            
+            Dictionary<Ability, int> abilityCount = new Dictionary<Ability, int>();
+            List<Ability> infoAbilities = info.abilities;
+            if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
+            {
+                infoAbilities = Utils.RemoveDuplicates(info.abilities, ref abilityCount);
+            }
+
+            // Show all abilities one after the other
+            for (int i = 0; i < infoAbilities.Count; i++)
+            {
+                if (i > 0)
+                {
+                    sigilBuilder.Append(", ");
+                }
+
+                Ability ability = infoAbilities[i];
+                string abilityName = AbilitiesUtil.GetInfo(ability).rulebookName;
+                if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
+                {
+                    // Show all abilities, but combine duplicates into Waterborne(x2)
+                    sigilBuilder.Append($" {abilityName}(x{count}");
+                }
+                else
+                {
+                    // Show all abilities 1 by 1 (Waterborne, Waterborne, Waterborne)
+                    sigilBuilder.Append($" {abilityName}");
+                }
+            }
+            
+            data["Sigils"] = sigilBuilder.ToString();
         }
 
         private static void BuildAbilityTable(List<NewAbility> abilities, StringBuilder stringBuilder)
