@@ -80,17 +80,17 @@ namespace ReadmeMaker
 	        List<CardInfo> rareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
 	        rareCards.Sort(SortCards);
 
-	        List<NewAbility> abilities = NewAbility.abilities;
+	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
 	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
 	        
-	        List<NewSpecialAbility> specialAbilities = NewSpecialAbility.specialAbilities;
+	        List<NewSpecialAbility> specialAbilities = Plugin.ReadmeConfig.SpecialAbilitiesShow ? NewSpecialAbility.specialAbilities : new List<NewSpecialAbility>();
 	        specialAbilities.Sort((a, b)=>String.Compare(a.statIconInfo.rulebookName, b.statIconInfo.rulebookName, StringComparison.Ordinal));
 
 	        //
 	        // Build string
 	        //
 
-	        switch (Plugin.ReadmeConfig.DisplayByType)
+	        switch (Plugin.ReadmeConfig.CardDisplayByType)
 	        {
 		        case ReadmeConfig.DisplayType.List:
 			        return ReadmeListMaker.Dump(allCards, cards, rareCards, abilities, specialAbilities);
@@ -237,7 +237,7 @@ namespace ReadmeMaker
 			// Add Free if we don't get a cost
 			if (!hasCost)
 			{
-				if (Plugin.ReadmeConfig.DisplayByType == ReadmeConfig.DisplayType.Table)
+				if (Plugin.ReadmeConfig.CardDisplayByType == ReadmeConfig.DisplayType.Table)
 				{
 					builder.Append($"Free");
 				}
