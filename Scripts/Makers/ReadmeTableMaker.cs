@@ -16,7 +16,7 @@ namespace ReadmeMaker
             List<NewSpecialAbility> specialAbilities)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            ReadmeDump.AppendSummary(stringBuilder, allCards, abilities, specialAbilities);
+            ReadmeDump.AppendSummary(stringBuilder, allCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
 
             // Cards
             if (cards.Count > 0)
