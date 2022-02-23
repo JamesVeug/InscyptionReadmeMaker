@@ -67,38 +67,37 @@ namespace ReadmeMaker
         {
 			// Fix Life Cost Manual
 			// Ability(x2)
-			// TODO: Display all Side Deck cards
-			// TODO: Display all non-new Cards
-			// TODO: Display modified Cards
-			// TODO: Sun Cost
+			// Display all Side Deck cards
+			// Display modified Cards
+			// Initialization to when map starts
+			// TODO: Update Readme
+			// TODO: ???? 
+			// TODO: Sun Cost 
         
 	        //
 	        // Initialize everything for the Summary
 	        //
-	        List<CardInfo> allCards = NewCard.cards;
-	        if (!Plugin.ReadmeConfig.CardShowUnobtainable)
-	        {
-		        allCards = allCards.FindAll((a) => a.metaCategories.Count > 0);
-	        }
-	        
-	        List<CardInfo> modifiedCards = Plugin.ReadmeConfig.ModifiedCardsShow ? GetModifiedCards() : new List<CardInfo>();
-	        modifiedCards.Sort(SortCards);
+	        List<CardInfo> allCards = GetAllCards();
+	        Plugin.Log.LogInfo(allCards.Count + " All Cards");
 
-	        List<CardInfo> newCards = allCards.FindAll((a) => !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        newCards.Sort(SortCards);
+	        List<CardInfo> modifiedCards = GetModifiedCards();
+	        Plugin.Log.LogInfo(modifiedCards.Count + " Modified Cards");
+
+	        List<CardInfo> newCards = GetNewCards(allCards);
+	        Plugin.Log.LogInfo(newCards.Count + " New Cards");
 	        
-	        List<CardInfo> newRareCards = allCards.FindAll((a) => a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
-	        newRareCards.Sort(SortCards);
+	        List<CardInfo> newRareCards = GetNewRareCards(allCards);
+	        Plugin.Log.LogInfo(newRareCards.Count + " New Rare Cards");
 	        
-	        List<CardInfo> sideDeckCards = Plugin.ReadmeConfig.SideDeckShow ? allCards.FindAll((a) => a.traits.Contains((Trait)5103)) : new List<CardInfo>();
-	        sideDeckCards.Sort(SortCards);
+	        List<CardInfo> sideDeckCards = GetSideDeckCards();
+	        Plugin.Log.LogInfo(sideDeckCards.Count + " Side Deck Cards");
 
 	        
-	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
-	        abilities.Sort((a, b)=>String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
+	        List<NewAbility> abilities = GetNewAbilities();
+	        Plugin.Log.LogInfo(abilities.Count + " New Abilities");
 	        
-	        List<NewSpecialAbility> specialAbilities = Plugin.ReadmeConfig.SpecialAbilitiesShow ? NewSpecialAbility.specialAbilities : new List<NewSpecialAbility>();
-	        specialAbilities.Sort((a, b)=>String.Compare(a.statIconInfo.rulebookName, b.statIconInfo.rulebookName, StringComparison.Ordinal));
+	        List<NewSpecialAbility> specialAbilities = GetNewSpecialAbilities();
+	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
 
 	        //
 	        // Build string
@@ -115,11 +114,74 @@ namespace ReadmeMaker
 	        }
         }
 
+        private static List<NewSpecialAbility> GetNewSpecialAbilities()
+        {
+	        if (!Plugin.ReadmeConfig.SpecialAbilitiesShow)
+		        return new List<NewSpecialAbility>();
+	        
+		    List<NewSpecialAbility> specialAbilities = NewSpecialAbility.specialAbilities;
+	        specialAbilities.RemoveAll((a) => a.statIconInfo == null || string.IsNullOrEmpty(a.statIconInfo.rulebookName));
+	        specialAbilities.Sort((a, b) => String.Compare(a.statIconInfo.rulebookName, b.statIconInfo.rulebookName, StringComparison.Ordinal));
+	        return specialAbilities;
+        }
+
+        private static List<CardInfo> GetAllCards()
+        {
+	        List<CardInfo> allCards = NewCard.cards;
+	        if (!Plugin.ReadmeConfig.CardShowUnobtainable)
+	        {
+		        allCards = allCards.FindAll((a) => a.metaCategories.Count > 0);
+	        }
+
+	        return allCards;
+        }
+
+        private static List<CardInfo> GetNewCards(List<CardInfo> allCards)
+        {
+	        List<CardInfo> newCards = allCards.FindAll((a) =>
+		        !a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
+	        newCards.Sort(SortCards);
+	        return newCards;
+        }
+
+        private static List<CardInfo> GetNewRareCards(List<CardInfo> allCards)
+        {
+	        List<CardInfo> newRareCards = allCards.FindAll((a) =>
+		        a.appearanceBehaviour.Contains(CardAppearanceBehaviour.Appearance.RareCardBackground));
+	        newRareCards.Sort(SortCards);
+	        return newRareCards;
+        }
+
+        private static List<CardInfo> GetSideDeckCards()
+        {
+	        if (!Plugin.ReadmeConfig.SideDeckShow)
+	        {
+		        return new List<CardInfo>();
+	        }
+	        
+	        List<CardInfo> allCards = ScriptableObjectLoader<CardInfo>.AllData;
+	        List<CardInfo> sideDeckCards = allCards.FindAll((a) => a.HasTrait((Trait)5103));
+	        sideDeckCards.Sort(SortCards);
+	        return sideDeckCards;
+        }
+
+        private static List<NewAbility> GetNewAbilities()
+        {
+	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
+	        abilities.RemoveAll((a) => a.info == null || string.IsNullOrEmpty(a.info.rulebookName));
+	        abilities.Sort((a, b) => String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
+	        return abilities;
+        }
+
         private static List<CardInfo> GetModifiedCards()
         {
-	        List<CardInfo> allData = ScriptableObjectLoader<CardInfo>.AllData;
-	        
 	        List<CardInfo> modifiedCards = new List<CardInfo>();
+	        if (!Plugin.ReadmeConfig.ModifiedCardsShow)
+	        {
+		        return modifiedCards;
+	        }
+	     
+	        List<CardInfo> allData = ScriptableObjectLoader<CardInfo>.AllData;   
 	        foreach (CustomCard card in CustomCard.cards)
 	        {
 		        int index = allData.FindIndex((Predicate<CardInfo>)(x => x.name == card.name));
@@ -129,6 +191,7 @@ namespace ReadmeMaker
 		        }
 	        }
 
+	        modifiedCards.Sort(SortCards);
 	        return modifiedCards;
         }
 
