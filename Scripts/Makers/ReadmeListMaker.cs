@@ -90,7 +90,7 @@ namespace ReadmeMaker
         {
 	        StringBuilder builder = new StringBuilder();
 	        builder.Append($" - **{info.displayedName}** - ");
-	        builder.Append($"{info.baseAttack},{info.baseHealth} -");
+	        builder.Append($"{ReadmeDump.GetPower(info)},{ReadmeDump.GetHealth(info)} -");
 
 	        // Cost
 	        ReadmeDump.AppendAllCosts(info, builder);

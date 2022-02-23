@@ -152,8 +152,8 @@ namespace ReadmeMaker
                 splitCards.Add(data);
                 
                 data["Name"] = info.displayedName;
-                data["Power"] = info.Attack.ToString();
-                data["Health"] = info.Health.ToString();
+                data["Power"] = ReadmeDump.GetPower(info);
+                data["Health"] = ReadmeDump.GetHealth(info);
 
                 // Cost
                 StringBuilder costBuilder = new StringBuilder();

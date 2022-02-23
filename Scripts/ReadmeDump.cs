@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using APIPlugin;
+using BepInEx.Bootstrap;
 using DiskCardGame;
 
 namespace ReadmeMaker
@@ -24,14 +27,26 @@ namespace ReadmeMaker
 		    new LifeCost(),
 	    };
 
+	    // Custom Traits made by mods that we want to show the name of instead of a number
 	    private static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
 	    {
 		    { (Trait)5103, "Side Deck" }
 	    };
 
+	    // Custom Tribes made by mods that we want to show the name of instead of a number
 	    private static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
 	    {
 		    
+	    };
+	    
+	    private static List<SpecialTriggeredAbility> PowerModifyingSpecials = new List<SpecialTriggeredAbility>()
+	    {
+		    SpecialTriggeredAbility.Ant, SpecialTriggeredAbility.Mirror, SpecialTriggeredAbility.Lammergeier
+	    };
+	    
+	    private static List<SpecialTriggeredAbility> HealthModifyingSpecials = new List<SpecialTriggeredAbility>()
+	    {
+		    SpecialTriggeredAbility.Lammergeier
 	    };
 
         public static void Dump()
@@ -75,20 +90,13 @@ namespace ReadmeMaker
 
         private static string GetDumpString()
         {
-			// Fix Life Cost Manual
-			// Ability(x2)
-			// Display all Side Deck cards
-			// Display modified Cards
-			// Initialization to when map starts
-			// TODO: Update Readme
-			// TODO: ???? 
-			// TODO: Sun Cost 
-        
+			// TODO: Dynamically find Power&Health modifiers: eg: Mirror, Ants, Lammergeier
+			
 	        //
 	        // Initialize everything for the Summary
 	        //
 	        List<CardInfo> allCards = GetAllCards();
-	        Plugin.Log.LogInfo(allCards.Count + " All Cards");
+	        Plugin.Log.LogInfo(allCards.Count + " All New Cards");
 
 	        List<CardInfo> modifiedCards = GetModifiedCards();
 	        Plugin.Log.LogInfo(modifiedCards.Count + " Modified Cards");
@@ -109,6 +117,9 @@ namespace ReadmeMaker
 	        List<NewSpecialAbility> specialAbilities = GetNewSpecialAbilities();
 	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
 
+	        // Does not work.
+	        //GetPowerAndHealthModifiers();
+	        
 	        //
 	        // Build string
 	        //
@@ -121,6 +132,29 @@ namespace ReadmeMaker
 			        return ReadmeTableMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
 		        default:
 			        throw new ArgumentOutOfRangeException();
+	        }
+        }
+
+        /// <summary>
+        /// Uses reflection or something to find all subclasses of VariableStatBehaviour and record them for the readme maker to show properly.
+        /// TODO: Investigate how to get classes from different mods more
+        /// </summary>
+        private static void GetPowerAndHealthModifiers()
+        {
+	        foreach (Type type in typeof(VariableStatBehaviour).Assembly.GetTypes()
+		        .Where(type => type.IsSubclassOf(typeof(VariableStatBehaviour))))
+	        {
+		        Plugin.Log.LogInfo("Sub type: '" + type + "'");
+		        
+		        FieldInfo info = type.GetField("specialStatIcon", BindingFlags.NonPublic | BindingFlags.Static);
+		        Plugin.Log.LogInfo("Field '" + info + "'");
+		        if (info == null)
+		        {
+			        continue;
+		        }
+
+		        object value = info.GetValue(null);
+		        Plugin.Log.LogInfo("Got '" + value + "'");
 	        }
         }
 
@@ -412,6 +446,64 @@ namespace ReadmeMaker
 			}
 			
 			return tribe.ToString();
+		}
+
+		public static string GetPower(CardInfo info)
+		{
+			string power = "";
+			for (int i = 0; i < PowerModifyingSpecials.Count; i++)
+			{
+				if(info.SpecialAbilities.Contains(PowerModifyingSpecials[i]))
+				{
+					if (!string.IsNullOrEmpty(power))
+					{
+						power += ", ";
+					}
+					power += GetSpecialAbilityName(PowerModifyingSpecials[i]);
+				}
+			}
+
+			if (string.IsNullOrEmpty(power))
+			{
+				return info.Attack.ToString();
+			}
+			else if (info.Attack > 0)
+			{
+				return power + " + " + info.Attack;
+			}
+			else
+			{
+				return power;
+			}
+		}
+
+		public static string GetHealth(CardInfo info)
+		{
+			string health = "";
+			for (int i = 0; i < HealthModifyingSpecials.Count; i++)
+			{
+				if(info.SpecialAbilities.Contains(HealthModifyingSpecials[i]))
+				{
+					if (!string.IsNullOrEmpty(health))
+					{
+						health += ", ";
+					}
+					health += GetSpecialAbilityName(HealthModifyingSpecials[i]);
+				}
+			}
+
+			if (string.IsNullOrEmpty(health))
+			{
+				return info.Health.ToString();
+			}
+			else if (info.Health > 0)
+			{
+				return health + " + " + info.Health;
+			}
+			else
+			{
+				return health;
+			}
 		}
     }
 }
