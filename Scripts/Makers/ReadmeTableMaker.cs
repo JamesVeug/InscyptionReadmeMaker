@@ -257,7 +257,18 @@ namespace ReadmeMaker
                 }
 
                 Ability ability = infoAbilities[i];
-                string abilityName = AbilitiesUtil.GetInfo(ability).rulebookName;
+                AbilityInfo abilityInfo = AbilitiesUtil.GetInfo(ability);
+                if (abilityInfo == null)
+                {
+                    continue;
+                }
+                
+                string abilityName = abilityInfo.rulebookName;
+                if (string.IsNullOrEmpty(abilityName))
+                {
+                    continue;
+                }
+                
                 if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
                 {
                     // Show all abilities, but combine duplicates into Waterborne(x2)
