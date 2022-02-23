@@ -229,7 +229,7 @@ namespace ReadmeMaker
                             tribesBuilder.Append(", ");
                         }
 
-                        tribesBuilder.Append(info.tribes[j]);
+                        tribesBuilder.Append(ReadmeDump.GetTribeName(info.tribes[j]));
                     }
 
                     data["Tribes"] = tribesBuilder.ToString();
