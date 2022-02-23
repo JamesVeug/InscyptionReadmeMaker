@@ -228,7 +228,7 @@ namespace ReadmeMaker
 		        if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
 		        {
 			        // Show all abilities, but combine duplicates into Waterborne(x2)
-			        builder.Append($" {abilityName}(x{count}");
+			        builder.Append($" {abilityName}(x{count})");
 		        }
 		        else
 		        {
