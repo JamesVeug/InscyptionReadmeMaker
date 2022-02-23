@@ -1,6 +1,7 @@
 using System.Collections;
 using BepInEx;
 using BepInEx.Logging;
+using HarmonyLib;
 using UnityEngine;
 
 namespace ReadmeMaker
@@ -23,20 +24,12 @@ namespace ReadmeMaker
 	        Log = Logger;
 	        Instance = this;
 	        ReadmeConfig = new ReadmeConfig();
-            Logger.LogInfo($"Loading {PluginName}...");
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
-        }
-
-        private IEnumerator Start()
-        {
-	        Logger.LogInfo($"Waiting 5 seconds before making a Readme...");
-	        
-	        // 5 seconds because too lazy to find out when all the mods are actually loaded to 
-	        yield return new WaitForSeconds(5);
-
-	        ReadmeDump.Dump();
-	        
-	        Logger.LogInfo($"Loaded {PluginName}!");
+            
+            
+            Harmony harmony = new Harmony(PluginGuid);
+            harmony.PatchAll();
+            Logger.LogInfo($"Loaded {PluginName}. Waiting for game to start before generating the readme...");
         }
     }
 }
