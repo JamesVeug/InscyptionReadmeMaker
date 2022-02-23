@@ -130,11 +130,6 @@ namespace ReadmeMaker
 
         public static List<T> RemoveDuplicates<T>(List<T> list, ref Dictionary<T, int> count)
         {
-            for (int i = 0; i < list.Count; i++)
-            {
-                Plugin.Log.LogInfo("Before: " + i + ": " + list[i]);
-            }
-
             List<T> newList = new List<T>();
             for (int i = 0; i < list.Count; i++)
             {
@@ -150,11 +145,6 @@ namespace ReadmeMaker
                 }
             }
             
-            for (int i = 0; i < newList.Count; i++)
-            {
-                Plugin.Log.LogInfo("After: " + i + ": " + newList[i]);
-            }
-
             return newList;
         }
     }
