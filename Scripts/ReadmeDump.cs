@@ -23,7 +23,17 @@ namespace ReadmeMaker
 		    // List Custom costs here
 		    new LifeCost(),
 	    };
-	    
+
+	    private static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
+	    {
+		    { (Trait)5103, "Side Deck" }
+	    };
+
+	    private static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
+	    {
+		    
+	    };
+
         public static void Dump()
         {
 	        Plugin.Log.LogInfo("Generating Readme...");
@@ -386,13 +396,22 @@ namespace ReadmeMaker
 
 		public static string GetTraitName(Trait trait)
 		{
-			switch (trait)
+			if (TraitToName.TryGetValue(trait, out string name))
 			{
-				case (Trait)5103:
-					return "Side Deck";
-				default:
-					return trait.ToString();
+				return name;
 			}
+			
+			return trait.ToString();
+		}
+
+		public static string GetTribeName(Tribe tribe)
+		{
+			if (TribeToName.TryGetValue(tribe, out string name))
+			{
+				return name;
+			}
+			
+			return tribe.ToString();
 		}
     }
 }

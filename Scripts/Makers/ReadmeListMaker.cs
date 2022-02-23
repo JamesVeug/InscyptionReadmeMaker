@@ -174,7 +174,7 @@ namespace ReadmeMaker
 				        builder.Append($",");
 			        }
 
-			        builder.Append($" {info.tribes[i]}");
+			        builder.Append($" {ReadmeDump.GetTribeName(info.tribes[i])}");
 			        if (i == info.tribes.Count - 1)
 			        {
 				        builder.Append($".");
