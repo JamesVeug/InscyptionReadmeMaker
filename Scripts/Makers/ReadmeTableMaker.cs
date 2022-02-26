@@ -21,43 +21,55 @@ namespace ReadmeMaker
             // Cards
             if (cards.Count > 0)
             {
-                stringBuilder.Append("\n### Cards:\n");
-                BuildCardTable(cards, stringBuilder);
+                using (new HeaderScope("Cards:\n", stringBuilder, true))
+                {
+                    BuildCardTable(cards, stringBuilder);
+                }
             }
 
             // Rare Cards
             if (rareCards.Count > 0)
             {
-                stringBuilder.Append("\n### Rare Cards:\n");
-                BuildCardTable(rareCards, stringBuilder);
+                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                {
+                    BuildCardTable(rareCards, stringBuilder);
+                }
             }
 
             // Modified Cards
             if (modifiedCards.Count > 0)
             {
-                stringBuilder.Append("\n### Modified Cards:\n");
-                BuildCardTable(modifiedCards, stringBuilder);
+                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                {
+                    BuildCardTable(modifiedCards, stringBuilder);
+                }
             }
 
             // Side Deck Cards
             if (sideDeckCards.Count > 0)
             {
-                stringBuilder.Append("\n### Side Deck Cards:\n");
-                BuildCardTable(sideDeckCards, stringBuilder);
+                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                {
+                    BuildCardTable(sideDeckCards, stringBuilder);
+                }
             }
 
             // Sigils
             if (abilities.Count > 0)
             {
-                stringBuilder.Append("\n### Sigils:\n");
-                BuildAbilityTable(abilities, stringBuilder);
+                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                {
+                    BuildAbilityTable(abilities, stringBuilder);
+                }
             }
 
             // Special Abilities
             if (specialAbilities.Count > 0)
             {
-                stringBuilder.Append("\n### Special Abilities:\n");
-                BuildSpecialAbilityTable(specialAbilities, stringBuilder);
+                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                {
+                    BuildSpecialAbilityTable(specialAbilities, stringBuilder);
+                }
             }
 
             return stringBuilder.ToString();
@@ -245,7 +257,7 @@ namespace ReadmeMaker
             List<Ability> infoAbilities = info.abilities;
             if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
             {
-                infoAbilities = Utils.RemoveDuplicates(info.abilities, ref abilityCount);
+                infoAbilities = Helpers.RemoveDuplicates(info.abilities, ref abilityCount);
             }
 
             // Show all abilities one after the other
