@@ -33,6 +33,8 @@ namespace ReadmeMaker
             Cost
         }
         
+        public bool ReadmeMakerEnabled => Plugin.Instance.Config.Bind("_ReadmeMaker", "Enabled", false, new ConfigDescription("Should the ReadmeMaker create a GeneratedReadme?", null, Array.Empty<object>())).Value;
+        
         public HeaderType GeneralHeaderType => Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
         public HeaderSize GeneralHeaderSize => Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
         
