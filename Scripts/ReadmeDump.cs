@@ -91,6 +91,9 @@ namespace ReadmeMaker
         private static string GetDumpString()
         {
 			// TODO: Dynamically find Power&Health modifiers: eg: Mirror, Ants, Lammergeier
+			// TODO: Fix vanilla Special abilities not using their rulebook name 
+			// TODO: Section to show all configs 
+			// TODO: Support for mods to add their own names and descriptions for costs/tribes/trait... etc renames 
 			
 	        //
 	        // Initialize everything for the Summary
