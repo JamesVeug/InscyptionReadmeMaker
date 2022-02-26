@@ -21,61 +21,73 @@ namespace ReadmeMaker
             // Cards
             if (cards.Count > 0)
             {
-                stringBuilder.Append("\n### Cards:\n");
-                for (int i = 0; i < cards.Count; i++)
-                {
-                    stringBuilder.Append(GetCardInfo(cards[i]) + "\n");
-                }
+	            using (new HeaderScope("Cards:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < cards.Count; i++)
+		            {
+			            stringBuilder.Append(GetCardInfo(cards[i]) + "\n");
+		            }
+	            }
             }
 
             // Rare Cards
             if (rareCards.Count > 0)
             {
-                stringBuilder.Append("\n### Rare Cards:\n");
-                for (int i = 0; i < rareCards.Count; i++)
-                {
-                    stringBuilder.Append(GetCardInfo(rareCards[i]) + "\n");
-                }
+	            using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < rareCards.Count; i++)
+		            {
+			            stringBuilder.Append(GetCardInfo(rareCards[i]) + "\n");
+		            }
+	            }
             }
 
             // Modified Cards
             if (modifiedCards.Count > 0)
             {
-	            stringBuilder.Append("\n### Modified Cards:\n");
-	            for (int i = 0; i < modifiedCards.Count; i++)
+	            using (new HeaderScope("Modified Cards:\n", stringBuilder, true))
 	            {
-		            stringBuilder.Append(GetCardInfo(modifiedCards[i]) + "\n");
+		            for (int i = 0; i < modifiedCards.Count; i++)
+		            {
+			            stringBuilder.Append(GetCardInfo(modifiedCards[i]) + "\n");
+		            }
 	            }
             }
 
             // Side Deck Cards
             if (sideDeckCards.Count > 0)
             {
-	            stringBuilder.Append("\n### Side Deck Cards:\n");
-	            for (int i = 0; i < sideDeckCards.Count; i++)
+	            using (new HeaderScope("Side Deck Cards:\n", stringBuilder, true))
 	            {
-		            stringBuilder.Append(GetCardInfo(sideDeckCards[i]) + "\n");
+		            for (int i = 0; i < sideDeckCards.Count; i++)
+		            {
+			            stringBuilder.Append(GetCardInfo(sideDeckCards[i]) + "\n");
+		            }
 	            }
             }
 
             // Sigils
             if (abilities.Count > 0)
             {
-                stringBuilder.Append("\n### Sigils:\n");
-                for (int i = 0; i < abilities.Count; i++)
-                {
-                    stringBuilder.Append(GetAbilityInfo(abilities[i]) + "\n");
-                }
+	            using (new HeaderScope("Sigils:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < abilities.Count; i++)
+		            {
+			            stringBuilder.Append(GetAbilityInfo(abilities[i]) + "\n");
+		            }
+	            }
             }
 
             // Special Abilities
             if (specialAbilities.Count > 0)
             {
-                stringBuilder.Append("\n### Special Abilities:\n");
-                for (int i = 0; i < specialAbilities.Count; i++)
-                {
-                    stringBuilder.Append(GetSpecialAbilityInfo(specialAbilities[i]) + "\n");
-                }
+	            using (new HeaderScope("Special Abilities:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < specialAbilities.Count; i++)
+		            {
+			            stringBuilder.Append(GetSpecialAbilityInfo(specialAbilities[i]) + "\n");
+		            }
+	            }
             }
 
             return stringBuilder.ToString();
