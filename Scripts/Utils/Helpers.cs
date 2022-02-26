@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ReadmeMaker
 {
-    public static class Utils
+    public static class Helpers
     {
         public static Dictionary<Texture2D, string> TextureToPath = new Dictionary<Texture2D, string>();
         public static Texture2D GetTextureFromPath(string path)

@@ -197,7 +197,7 @@ namespace ReadmeMaker
 	        List<Ability> infoAbilities = info.abilities;
 	        if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates)
 	        {
-		        infoAbilities = Utils.RemoveDuplicates(info.abilities, ref abilityCount);
+		        infoAbilities = Helpers.RemoveDuplicates(info.abilities, ref abilityCount);
 	        }
 	        
 	        // Show all abilities one after the other

@@ -6,6 +6,21 @@ namespace ReadmeMaker
 {
     public class ReadmeConfig
     {
+        public enum HeaderType
+        {
+            Label,
+            Foldout,
+        }
+        public enum HeaderSize
+        {
+            Biggest,
+            Bigger,
+            Big,
+            Small,
+            Smaller,
+            Smallest,
+        }
+        
         public enum DisplayType
         {
             Table,
@@ -17,6 +32,9 @@ namespace ReadmeMaker
             Name,
             Cost
         }
+        
+        public HeaderType GeneralHeaderType => Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
+        public HeaderSize GeneralHeaderSize => Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
         
         public DisplayType CardDisplayByType => Plugin.Instance.Config.Bind("Cards", "Display By", DisplayType.Table, new ConfigDescription("Changes how the cards, abilities and special abilities are displayed.", null, Array.Empty<object>())).Value;
         public SortByType CardSortBy => Plugin.Instance.Config.Bind("Cards", "Sort Type", SortByType.Cost, new ConfigDescription("Changes the order that the cards will be displayed in.", null, Array.Empty<object>())).Value;
