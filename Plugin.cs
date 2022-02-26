@@ -24,6 +24,12 @@ namespace ReadmeMaker
 	        Log = Logger;
 	        Instance = this;
 	        ReadmeConfig = new ReadmeConfig();
+	        if (!ReadmeConfig.ReadmeMakerEnabled)
+	        {
+		        Logger.LogInfo($"ReadmeMaker disabled in the Config so it will not generate a Readme.");
+		        return;
+	        }
+	        
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
             
             
