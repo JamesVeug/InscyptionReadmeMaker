@@ -41,7 +41,7 @@ namespace ReadmeMaker
                 }
                 else
                 {
-                    stringBuilder.Append("</details>");
+                    stringBuilder.Append("</details>\n");
                 }
             }
         }

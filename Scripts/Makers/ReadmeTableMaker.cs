@@ -39,7 +39,7 @@ namespace ReadmeMaker
             // Modified Cards
             if (modifiedCards.Count > 0)
             {
-                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                using (new HeaderScope("Modified Cards:\n", stringBuilder, true))
                 {
                     BuildCardTable(modifiedCards, stringBuilder);
                 }
@@ -48,7 +48,7 @@ namespace ReadmeMaker
             // Side Deck Cards
             if (sideDeckCards.Count > 0)
             {
-                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                using (new HeaderScope("Side Deck Cards:\n", stringBuilder, true))
                 {
                     BuildCardTable(sideDeckCards, stringBuilder);
                 }
@@ -57,7 +57,7 @@ namespace ReadmeMaker
             // Sigils
             if (abilities.Count > 0)
             {
-                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                using (new HeaderScope("Sigils:\n", stringBuilder, true))
                 {
                     BuildAbilityTable(abilities, stringBuilder);
                 }
@@ -66,7 +66,7 @@ namespace ReadmeMaker
             // Special Abilities
             if (specialAbilities.Count > 0)
             {
-                using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
+                using (new HeaderScope("Special Abilities:\n", stringBuilder, true))
                 {
                     BuildSpecialAbilityTable(specialAbilities, stringBuilder);
                 }
