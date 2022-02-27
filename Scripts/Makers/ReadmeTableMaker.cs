@@ -2,77 +2,155 @@
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
 {
     public static class ReadmeTableMaker
     {
-        public static string Dump(List<CardInfo> allCards, 
-            List<CardInfo> cards, 
-            List<CardInfo> rareCards, 
-            List<CardInfo> modifiedCards, 
-            List<CardInfo> sideDeckCards, 
-            List<NewAbility> abilities, 
-            List<NewSpecialAbility> specialAbilities)
+        public static string Dump(MakerData makerData)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            ReadmeDump.AppendSummary(stringBuilder, allCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
+            ReadmeDump.AppendSummary(stringBuilder, makerData);
 
             // Cards
-            if (cards.Count > 0)
+            if (makerData.cards.Count > 0)
             {
                 using (new HeaderScope("Cards:\n", stringBuilder, true))
                 {
-                    BuildCardTable(cards, stringBuilder);
+                    BuildCardTable(makerData.cards, stringBuilder);
                 }
             }
 
             // Rare Cards
-            if (rareCards.Count > 0)
+            if (makerData.rareCards.Count > 0)
             {
                 using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
                 {
-                    BuildCardTable(rareCards, stringBuilder);
+                    BuildCardTable(makerData.rareCards, stringBuilder);
                 }
             }
 
             // Modified Cards
-            if (modifiedCards.Count > 0)
+            if (makerData.modifiedCards.Count > 0)
             {
                 using (new HeaderScope("Modified Cards:\n", stringBuilder, true))
                 {
-                    BuildCardTable(modifiedCards, stringBuilder);
+                    BuildCardTable(makerData.modifiedCards, stringBuilder);
                 }
             }
 
             // Side Deck Cards
-            if (sideDeckCards.Count > 0)
+            if (makerData.sideDeckCards.Count > 0)
             {
                 using (new HeaderScope("Side Deck Cards:\n", stringBuilder, true))
                 {
-                    BuildCardTable(sideDeckCards, stringBuilder);
+                    BuildCardTable(makerData.sideDeckCards, stringBuilder);
                 }
             }
 
             // Sigils
-            if (abilities.Count > 0)
+            if (makerData.abilities.Count > 0)
             {
                 using (new HeaderScope("Sigils:\n", stringBuilder, true))
                 {
-                    BuildAbilityTable(abilities, stringBuilder);
+                    BuildAbilityTable(makerData.abilities, stringBuilder);
                 }
             }
 
             // Special Abilities
-            if (specialAbilities.Count > 0)
+            if (makerData.specialAbilities.Count > 0)
             {
                 using (new HeaderScope("Special Abilities:\n", stringBuilder, true))
                 {
-                    BuildSpecialAbilityTable(specialAbilities, stringBuilder);
+                    BuildSpecialAbilityTable(makerData.specialAbilities, stringBuilder);
                 }
             }
 
+
+            // Configs
+            if (makerData.configs.Count > 0)
+            {
+                using (new HeaderScope("Configs:\n", stringBuilder, true))
+                {
+                    BuildConfigTable(makerData.configs, stringBuilder);
+                }
+            }
             return stringBuilder.ToString();
+        }
+
+        private static void BuildConfigTable(List<ConfigData> configs, StringBuilder builder)
+        {
+            // Headers
+            //|Left columns|Right columns|
+            BreakdownConfigs(configs, out var headers, out var splitConfigs);
+            for (int i = 0; i < headers.Count; i++)
+            {
+                builder.Append("|" + headers[i]);
+                if (i == headers.Count - 1)
+                {
+                    builder.Append("|\n");
+                }
+            }
+
+            // Sorting types
+            //|-------------|:-------------:|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                builder.Append("|-");
+                if (i == headers.Count - 1)
+                {
+                    builder.Append("|\n");
+                }
+            }
+
+            // Cards
+            //|alien|thingy|
+            //|baby|other thing|
+            for (int i = 0; i < splitConfigs.Count; i++)
+            {
+                for (int j = 0; j < headers.Count; j++)
+                {
+                    Dictionary<string, string> cardData = splitConfigs[i];
+                    cardData.TryGetValue(headers[j], out string value);
+                    string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
+                    builder.Append("|" + parsedValue);
+
+                    if (j == headers.Count - 1)
+                    {
+                        builder.Append("|\n");
+                    }
+                }
+            }
+        }
+
+        private static void BreakdownConfigs(List<ConfigData> configs, out List<string> headers, out List<Dictionary<string, string>> splitConfigs)
+        {
+            headers = new List<string>()
+            {
+                "GUID",
+                "Section",
+                "Key",
+                "Description",
+            };
+            RemoveHeaderIfDisabled(headers, "GUID", Plugin.ReadmeConfig.ConfigShowGUID);
+            
+            splitConfigs = new List<Dictionary<string, string>>();
+            for (int i = 0; i < configs.Count; i++)
+            {
+                ConfigData config = configs[i];
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                splitConfigs.Add(data);
+
+                if (Plugin.ReadmeConfig.ConfigShowGUID)
+                {
+                    data["GUID"] = config.PluginGUID;
+                }
+
+                data["Section"] = config.Entry.Definition.Section;
+                data["Key"] = config.Entry.Definition.Key;
+                data["Description"] = config.Entry.Description.Description;
+            }
         }
 
         private static void BuildCardTable(List<CardInfo> cards, StringBuilder stringBuilder)

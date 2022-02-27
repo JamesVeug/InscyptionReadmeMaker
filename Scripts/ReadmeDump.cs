@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using APIPlugin;
+using BepInEx;
+using BepInEx.Configuration;
 using DiskCardGame;
+using ReadmeMaker.Configs;
+using UnityEngine;
 
 namespace ReadmeMaker
 {
@@ -124,9 +128,7 @@ namespace ReadmeMaker
 
         private static string GetDumpString()
         {
-			// TODO: Dynamically find Power&Health modifiers: eg: Mirror, Ants, Lammergeier
 			// TODO: Fix vanilla Special abilities not using their rulebook name 
-			// TODO: Section to show all configs 
 			// TODO: Support for mods to add their own names and descriptions for costs/tribes/trait... etc renames 
 			
 	        //
@@ -153,20 +155,104 @@ namespace ReadmeMaker
 	        
 	        List<NewSpecialAbility> specialAbilities = GetNewSpecialAbilities();
 	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
+		        
+	        
+	        List<ConfigData> configs = GetNewConfigs();
+	        Plugin.Log.LogInfo(configs.Count + " New Configs");
 	        
 	        //
 	        // Build string
 	        //
 
+	        MakerData makerData = new MakerData()
+	        {
+		        allCards=allCards, 
+		        cards=newCards, 
+		        rareCards= newRareCards, 
+		        modifiedCards=modifiedCards, 
+		        sideDeckCards=sideDeckCards, 
+		        abilities=abilities, 
+		        specialAbilities=specialAbilities,
+		        configs = configs
+	        };
+
 	        switch (Plugin.ReadmeConfig.CardDisplayByType)
 	        {
 		        case ReadmeConfig.DisplayType.List:
-			        return ReadmeListMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
+			        return ReadmeListMaker.Dump(makerData);
 		        case ReadmeConfig.DisplayType.Table:
-			        return ReadmeTableMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
+			        return ReadmeTableMaker.Dump(makerData);
 		        default:
 			        throw new ArgumentOutOfRangeException();
 	        }
+        }
+
+        private static List<ConfigData> GetNewConfigs()
+        {
+	        List<ConfigData> configDefinitions = new List<ConfigData>();
+	        if (!Plugin.ReadmeConfig.ConfigSectionEnabled)
+	        {
+		        return configDefinitions;
+	        }
+
+	        List<string> validModGUIDS = null;
+	        if (!string.IsNullOrEmpty(Plugin.ReadmeConfig.ConfigOnlyShowModGUID))
+	        {
+		        string[] guids = Plugin.ReadmeConfig.ConfigOnlyShowModGUID.Split(',');
+		        validModGUIDS = new List<string>(guids);
+	        }
+	        
+	        foreach (BaseUnityPlugin plugin in GameObject.FindObjectsOfType<BaseUnityPlugin>())
+	        {
+		        if (plugin.Config == null)
+		        {
+			        continue;
+		        }
+
+		        string guid = plugin.Info.Instance.Info.Metadata.GUID;
+		        if (validModGUIDS != null && !validModGUIDS.Contains(guid))
+		        {
+			        continue;
+		        }
+
+		        ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();
+		        foreach (ConfigEntryBase definition in entries)
+		        {
+			        configDefinitions.Add(new ConfigData()
+			        {
+				        PluginGUID = guid,
+				        Entry = definition,
+			        });
+		        }
+	        }
+
+	        // Sort by
+	        // GUID
+	        // Section
+	        // Key
+	        configDefinitions.Sort((a, b) =>
+	        {
+		        int guid = String.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
+		        if (guid != 0)
+		        {
+			        return guid;
+		        }
+		        
+		        int section = String.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
+		        if (section != 0)
+		        {
+			        return section;
+		        }
+		        
+		        int key = String.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
+		        if (key != 0)
+		        {
+			        return key;
+		        }
+
+		        return 0;
+	        });
+	        return configDefinitions;
         }
 
         private static List<NewSpecialAbility> GetNewSpecialAbilities()
@@ -250,32 +336,37 @@ namespace ReadmeMaker
 	        return modifiedCards;
         }
 
-        public static void AppendSummary(StringBuilder stringBuilder, List<CardInfo> newCards, List<CardInfo> modifiedCards, List<CardInfo> sideDeckCards, List<NewAbility> abilities, List<NewSpecialAbility> specialAbilities)
+        public static void AppendSummary(StringBuilder stringBuilder, MakerData makerData)
         {
 	        stringBuilder.Append("### Includes:\n");
-	        if (newCards.Count > 0)
+	        if (makerData.allCards.Count > 0)
 	        {
-		        stringBuilder.Append($"- {newCards.Count} New Cards:\n");
+		        stringBuilder.Append($"- {makerData.allCards.Count} New Cards:\n");
 	        }
 	        
-	        if (modifiedCards.Count > 0)
+	        if (makerData.modifiedCards.Count > 0)
 	        {
-		        stringBuilder.Append($"- {modifiedCards.Count} Modified Cards:\n");
+		        stringBuilder.Append($"- {makerData.modifiedCards.Count} Modified Cards:\n");
 	        }
 	        
-	        if (sideDeckCards.Count > 0)
+	        if (makerData.sideDeckCards.Count > 0)
 	        {
-		        stringBuilder.Append($"- {sideDeckCards.Count} Side Deck Cards:\n");
+		        stringBuilder.Append($"- {makerData.sideDeckCards.Count} Side Deck Cards:\n");
 	        }
 
-	        if (abilities.Count > 0)
+	        if (makerData.abilities.Count > 0)
 	        {
-		        stringBuilder.Append($"- {abilities.Count} New Sigils:\n");
+		        stringBuilder.Append($"- {makerData.abilities.Count} New Sigils:\n");
 	        }
 
-	        if (specialAbilities.Count > 0)
+	        if (makerData.specialAbilities.Count > 0)
 	        {
-		        stringBuilder.Append($"- {specialAbilities.Count} New Special Abilities:\n");
+		        stringBuilder.Append($"- {makerData.specialAbilities.Count} New Special Abilities:\n");
+	        }
+
+	        if (makerData.configs.Count > 0)
+	        {
+		        stringBuilder.Append($"- {makerData.configs.Count} New Config Options:\n");
 	        }
         }
 
