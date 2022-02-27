@@ -38,12 +38,14 @@ namespace ReadmeMaker
             if (string.IsNullOrEmpty(singleIconPath))
             {
                 builder.Append(CostName);
+                return true;
             }
             
             // Try displaying multiple icons
-            if (cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
+            if (cost == 1 || cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
             {
                 ShowMultipleIcons(cost, builder);
+                return true;
             }
 
             //
@@ -55,7 +57,7 @@ namespace ReadmeMaker
             bool canShowNumbers = true;
             foreach (char c in costString)
             {
-                int numberValue = c;
+                int numberValue = c - '0';
                 if (!IntToImage.ContainsKey(numberValue))
                 {
                     canShowNumbers = false;
@@ -81,7 +83,7 @@ namespace ReadmeMaker
                 // 13
                 foreach (char c in costString)
                 {
-                    int numberValue = c;
+                    int numberValue = c - '0';
                     string formattedNumberIcon = IntToImage[numberValue];
                     string formattedNumber = FormatUrl(formattedNumberIcon);
 
