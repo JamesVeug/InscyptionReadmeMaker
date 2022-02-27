@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
@@ -53,15 +51,37 @@ namespace ReadmeMaker
 		    TribeToName[trait] = traitName;
 	    }
 	    
-	    private static List<SpecialTriggeredAbility> PowerModifyingSpecials = new List<SpecialTriggeredAbility>()
+	    private static Dictionary<SpecialTriggeredAbility, string> PowerModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
 	    {
-		    SpecialTriggeredAbility.Ant, SpecialTriggeredAbility.Mirror, SpecialTriggeredAbility.Lammergeier
+		    { SpecialTriggeredAbility.Ant, null }, 
+		    { SpecialTriggeredAbility.BellProximity, null }, 
+		    { SpecialTriggeredAbility.CardsInHand, null }, 
+		    { SpecialTriggeredAbility.Mirror, null }, 
+			{ SpecialTriggeredAbility.Lammergeier, null }
 	    };
 	    
-	    private static List<SpecialTriggeredAbility> HealthModifyingSpecials = new List<SpecialTriggeredAbility>()
+	    private static Dictionary<SpecialTriggeredAbility, string> HealthModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
 	    {
-		    SpecialTriggeredAbility.Lammergeier
+		    { SpecialTriggeredAbility.Lammergeier, null } 
 	    };
+
+	    /// <summary>
+	    /// When the ReadmeMaker shows a card that has a SpecialStatIcon that changes the Power & Health of a card, this function allows the card to show the proper name of a number for the SpecialStatIcon.
+	    /// If you have a SpecialStatIcon on a card and this is not applied then it will not be shown in the Power and/or Health column on the card.
+	    /// If the SpecialStatIcon has an entry in the rule book then Name can be null and the Readme Maker will use that instead.
+	    /// </summary>
+	    public static void RenameSpecialStatIcon(SpecialTriggeredAbility specialTriggeredAbility, string name, bool powerModifier, bool healthModifier)
+	    {
+		    if (powerModifier)
+		    {
+			    PowerModifyingSpecials[specialTriggeredAbility] = name;
+		    }
+		    
+		    if (healthModifier)
+		    {
+			    HealthModifyingSpecials[specialTriggeredAbility] = name;
+		    }
+	    }
 
         public static void Dump()
         {
@@ -133,9 +153,6 @@ namespace ReadmeMaker
 	        
 	        List<NewSpecialAbility> specialAbilities = GetNewSpecialAbilities();
 	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
-
-	        // Does not work.
-	        //GetPowerAndHealthModifiers();
 	        
 	        //
 	        // Build string
@@ -149,29 +166,6 @@ namespace ReadmeMaker
 			        return ReadmeTableMaker.Dump(allCards, newCards, newRareCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
 		        default:
 			        throw new ArgumentOutOfRangeException();
-	        }
-        }
-
-        /// <summary>
-        /// Uses reflection or something to find all subclasses of VariableStatBehaviour and record them for the readme maker to show properly.
-        /// TODO: Investigate how to get classes from different mods more
-        /// </summary>
-        private static void GetPowerAndHealthModifiers()
-        {
-	        foreach (Type type in typeof(VariableStatBehaviour).Assembly.GetTypes()
-		        .Where(type => type.IsSubclassOf(typeof(VariableStatBehaviour))))
-	        {
-		        Plugin.Log.LogInfo("Sub type: '" + type + "'");
-		        
-		        FieldInfo info = type.GetField("specialStatIcon", BindingFlags.NonPublic | BindingFlags.Static);
-		        Plugin.Log.LogInfo("Field '" + info + "'");
-		        if (info == null)
-		        {
-			        continue;
-		        }
-
-		        object value = info.GetValue(null);
-		        Plugin.Log.LogInfo("Got '" + value + "'");
 	        }
         }
 
@@ -468,15 +462,23 @@ namespace ReadmeMaker
 		public static string GetPower(CardInfo info)
 		{
 			string power = "";
-			for (int i = 0; i < PowerModifyingSpecials.Count; i++)
+			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in PowerModifyingSpecials)
 			{
-				if(info.SpecialAbilities.Contains(PowerModifyingSpecials[i]))
+				if(info.SpecialAbilities.Contains(pair.Key))
 				{
 					if (!string.IsNullOrEmpty(power))
 					{
 						power += ", ";
 					}
-					power += GetSpecialAbilityName(PowerModifyingSpecials[i]);
+
+					if (string.IsNullOrEmpty(pair.Value))
+					{
+						power += GetSpecialAbilityName(pair.Key);
+					}
+					else
+					{
+						power += pair.Value;
+					}
 				}
 			}
 
@@ -497,15 +499,23 @@ namespace ReadmeMaker
 		public static string GetHealth(CardInfo info)
 		{
 			string health = "";
-			for (int i = 0; i < HealthModifyingSpecials.Count; i++)
+			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in HealthModifyingSpecials)
 			{
-				if(info.SpecialAbilities.Contains(HealthModifyingSpecials[i]))
+				if(info.SpecialAbilities.Contains(pair.Key))
 				{
 					if (!string.IsNullOrEmpty(health))
 					{
 						health += ", ";
 					}
-					health += GetSpecialAbilityName(HealthModifyingSpecials[i]);
+
+					if (string.IsNullOrEmpty(pair.Value))
+					{
+						health += GetSpecialAbilityName(pair.Key);
+					}
+					else
+					{
+						health += pair.Value;
+					}
 				}
 			}
 
