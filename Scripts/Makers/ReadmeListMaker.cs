@@ -2,97 +2,116 @@
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
 {
     public static class ReadmeListMaker
     {
-        public static string Dump(List<CardInfo> allCards, 
-	        List<CardInfo> cards, 
-	        List<CardInfo> rareCards, 
-	        List<CardInfo> modifiedCards, 
-	        List<CardInfo> sideDeckCards, 
-	        List<NewAbility> abilities, 
-	        List<NewSpecialAbility> specialAbilities)
+        public static string Dump(MakerData makerData)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            ReadmeDump.AppendSummary(stringBuilder, allCards, modifiedCards, sideDeckCards, abilities, specialAbilities);
+            ReadmeDump.AppendSummary(stringBuilder, makerData);
 
             // Cards
-            if (cards.Count > 0)
+            if (makerData.cards.Count > 0)
             {
 	            using (new HeaderScope("Cards:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < cards.Count; i++)
+		            for (int i = 0; i < makerData.cards.Count; i++)
 		            {
-			            stringBuilder.Append(GetCardInfo(cards[i]) + "\n");
+			            stringBuilder.Append(GetCardInfo(makerData.cards[i]) + "\n");
 		            }
 	            }
             }
 
             // Rare Cards
-            if (rareCards.Count > 0)
+            if (makerData.rareCards.Count > 0)
             {
 	            using (new HeaderScope("Rare Cards:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < rareCards.Count; i++)
+		            for (int i = 0; i < makerData.rareCards.Count; i++)
 		            {
-			            stringBuilder.Append(GetCardInfo(rareCards[i]) + "\n");
+			            stringBuilder.Append(GetCardInfo(makerData.rareCards[i]) + "\n");
 		            }
 	            }
             }
 
             // Modified Cards
-            if (modifiedCards.Count > 0)
+            if (makerData.modifiedCards.Count > 0)
             {
 	            using (new HeaderScope("Modified Cards:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < modifiedCards.Count; i++)
+		            for (int i = 0; i < makerData.modifiedCards.Count; i++)
 		            {
-			            stringBuilder.Append(GetCardInfo(modifiedCards[i]) + "\n");
+			            stringBuilder.Append(GetCardInfo(makerData.modifiedCards[i]) + "\n");
 		            }
 	            }
             }
 
             // Side Deck Cards
-            if (sideDeckCards.Count > 0)
+            if (makerData.sideDeckCards.Count > 0)
             {
 	            using (new HeaderScope("Side Deck Cards:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < sideDeckCards.Count; i++)
+		            for (int i = 0; i < makerData.sideDeckCards.Count; i++)
 		            {
-			            stringBuilder.Append(GetCardInfo(sideDeckCards[i]) + "\n");
+			            stringBuilder.Append(GetCardInfo(makerData.sideDeckCards[i]) + "\n");
 		            }
 	            }
             }
 
             // Sigils
-            if (abilities.Count > 0)
+            if (makerData.abilities.Count > 0)
             {
 	            using (new HeaderScope("Sigils:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < abilities.Count; i++)
+		            for (int i = 0; i < makerData.abilities.Count; i++)
 		            {
-			            stringBuilder.Append(GetAbilityInfo(abilities[i]) + "\n");
+			            stringBuilder.Append(GetAbilityInfo(makerData.abilities[i]) + "\n");
 		            }
 	            }
             }
 
             // Special Abilities
-            if (specialAbilities.Count > 0)
+            if (makerData.specialAbilities.Count > 0)
             {
 	            using (new HeaderScope("Special Abilities:\n", stringBuilder, true))
 	            {
-		            for (int i = 0; i < specialAbilities.Count; i++)
+		            for (int i = 0; i < makerData.specialAbilities.Count; i++)
 		            {
-			            stringBuilder.Append(GetSpecialAbilityInfo(specialAbilities[i]) + "\n");
+			            stringBuilder.Append(GetSpecialAbilityInfo(makerData.specialAbilities[i]) + "\n");
+		            }
+	            }
+            }
+
+            // Configs
+            if (makerData.configs.Count > 0)
+            {
+	            using (new HeaderScope("Configs:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < makerData.configs.Count; i++)
+		            {
+			            stringBuilder.Append(GetConfigInfo(makerData.configs[i]) + "\n");
 		            }
 	            }
             }
 
             return stringBuilder.ToString();
         }
-        
+
+        private static string GetConfigInfo(ConfigData makerDataConfig)
+        {
+	        if (Plugin.ReadmeConfig.ConfigShowGUID)
+	        {
+		        return $" - **[{makerDataConfig.PluginGUID}][{makerDataConfig.Entry.Definition.Section}][{makerDataConfig.Entry.Definition.Key}]** - {makerDataConfig.Entry.Description.Description}";
+	        }
+	        else
+	        {
+		        return $" - **[{makerDataConfig.Entry.Definition.Section}][{makerDataConfig.Entry.Definition.Key}]** - {makerDataConfig.Entry.Description.Description}";
+	        }
+        }
+
         private static string GetSpecialAbilityInfo(NewSpecialAbility newAbility)
         {
 	        return $" - **{newAbility.statIconInfo.rulebookName}** - {newAbility.statIconInfo.rulebookDescription}";

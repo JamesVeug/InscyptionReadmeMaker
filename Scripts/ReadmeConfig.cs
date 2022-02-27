@@ -59,6 +59,10 @@ namespace ReadmeMaker
         
         public bool SpecialAbilitiesShow => Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
+        public bool ConfigSectionEnabled => Plugin.Instance.Config.Bind("Config", "Show Configs", true, new ConfigDescription("Should the Readme Maker show a section listing all the new configs added?", null, Array.Empty<object>())).Value;
+        public string ConfigOnlyShowModGUID => Plugin.Instance.Config.Bind("Config", "Only Show Plugin", "", new ConfigDescription("If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: \"jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod\"", null, Array.Empty<object>())).Value;
+        public bool ConfigShowGUID => Plugin.Instance.Config.Bind("Config", "Show GUID", true, new ConfigDescription("Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?", null, Array.Empty<object>())).Value;
+        
         public string SavePath => Plugin.Instance.Config.Bind("Saving", "Path", "", new ConfigDescription("Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme", null, Array.Empty<object>())).Value;
 
         public ReadmeConfig()
