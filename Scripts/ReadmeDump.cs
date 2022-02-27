@@ -214,7 +214,7 @@ namespace ReadmeMaker
 		        {
 			        continue;
 		        }
-
+		        
 		        ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();
 		        foreach (ConfigEntryBase definition in entries)
 		        {
