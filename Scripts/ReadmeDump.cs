@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using APIPlugin;
-using BepInEx.Bootstrap;
 using DiskCardGame;
 
 namespace ReadmeMaker
@@ -14,7 +13,7 @@ namespace ReadmeMaker
     {
 	    // List if different costs the mod supports
 	    // Ordered by what will be shown. Vanilla first then Custom last
-	    public static List<ACost> Costs = new List<ACost>()
+	    private static List<ACost> Costs = new List<ACost>()
 	    {
 		    new BloodCost(),
 		    new BoneCost(),
@@ -27,17 +26,32 @@ namespace ReadmeMaker
 		    new LifeCost(),
 	    };
 
+	    public static void AddCustomCost(ACost cost)
+	    {
+		    Costs.Add(cost);
+	    }
+
 	    // Custom Traits made by mods that we want to show the name of instead of a number
 	    private static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
 	    {
 		    { (Trait)5103, "Side Deck" }
 	    };
 
+	    public static void RenameTrait(Trait trait, string traitName)
+	    {
+		    TraitToName[trait] = traitName;
+	    }
+
 	    // Custom Tribes made by mods that we want to show the name of instead of a number
 	    private static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
 	    {
 		    
 	    };
+
+	    public static void RenameTribe(Tribe trait, string traitName)
+	    {
+		    TribeToName[trait] = traitName;
+	    }
 	    
 	    private static List<SpecialTriggeredAbility> PowerModifyingSpecials = new List<SpecialTriggeredAbility>()
 	    {
