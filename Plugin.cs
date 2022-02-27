@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -12,7 +13,7 @@ namespace ReadmeMaker
     {
 	    public const string PluginGuid = "jamesgames.inscryption.readmemaker";
 	    public const string PluginName = "Readme Maker";
-	    public const string PluginVersion = "0.5.0.0";
+	    public const string PluginVersion = "0.6.0.0";
 
         public static string Directory;
         public static ManualLogSource Log;
@@ -35,6 +36,7 @@ namespace ReadmeMaker
             
             Harmony harmony = new Harmony(PluginGuid);
             harmony.PatchAll();
+            
             Logger.LogInfo($"Loaded {PluginName}. Waiting for game to start before generating the readme...");
         }
     }
