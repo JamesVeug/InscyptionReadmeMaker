@@ -268,10 +268,26 @@ namespace ReadmeMaker
 
         private static List<CardInfo> GetAllCards()
         {
-	        List<CardInfo> allCards = NewCard.cards;
+	        List<CardInfo> allCards = new List<CardInfo>(NewCard.cards);
+
+	        HashSet<string> evolutionFrozenAwayCards = new HashSet<string>();
+	        for (int i = 0; i < allCards.Count; i++)
+	        {
+		        CardInfo cardInfo = allCards[i];
+		        if (cardInfo.evolveParams != null && cardInfo.evolveParams != null)
+		        {
+			        evolutionFrozenAwayCards.Add(cardInfo.evolveParams.evolution.name);
+		        }
+		        
+		        if (cardInfo.iceCubeParams != null && cardInfo.iceCubeParams.creatureWithin != null)
+		        {
+			        evolutionFrozenAwayCards.Add(cardInfo.iceCubeParams.creatureWithin.name);
+		        }
+	        }
+	        
 	        if (!Plugin.ReadmeConfig.CardShowUnobtainable)
 	        {
-		        allCards = allCards.FindAll((a) => a.metaCategories.Count > 0);
+		        allCards.RemoveAll((a) => a.metaCategories.Count == 0 && !evolutionFrozenAwayCards.Contains(a.name));
 	        }
 
 	        return allCards;
