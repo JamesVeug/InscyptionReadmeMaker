@@ -575,11 +575,11 @@ namespace ReadmeMaker
 
 			if (string.IsNullOrEmpty(power))
 			{
-				return info.Attack.ToString();
+				return info.baseAttack.ToString();
 			}
-			else if (info.Attack > 0)
+			else if (info.baseAttack > 0)
 			{
-				return power + " + " + info.Attack;
+				return power + " + " + info.baseAttack;
 			}
 			else
 			{
@@ -612,11 +612,11 @@ namespace ReadmeMaker
 
 			if (string.IsNullOrEmpty(health))
 			{
-				return info.Health.ToString();
+				return info.baseHealth.ToString();
 			}
-			else if (info.Health > 0)
+			else if (info.baseHealth > 0)
 			{
-				return health + " + " + info.Health;
+				return health + " + " + info.baseHealth;
 			}
 			else
 			{
