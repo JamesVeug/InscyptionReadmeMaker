@@ -321,6 +321,7 @@ namespace ReadmeMaker
 	        List<CardInfo> allCards = ScriptableObjectLoader<CardInfo>.AllData;
 	        List<CardInfo> sideDeckCards = allCards.FindAll((a) => a.HasTrait((Trait)5103));
 	        sideDeckCards.Sort(SortCards);
+	        
 	        return sideDeckCards;
         }
 
@@ -328,6 +329,15 @@ namespace ReadmeMaker
         {
 	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
 	        abilities.RemoveAll((a) => a.info == null || string.IsNullOrEmpty(a.info.rulebookName));
+
+	        /*int oldAbilityCount = abilities.Count;
+	        
+	        List<string> modsToIgnore = Plugin.ReadmeConfig.ModsToIgnore();
+	        abilities.RemoveAll(a => modsToIgnore.Contains(a.id.GetPrivateFieldValue<string>("guid")));
+	        
+	        int newAbilityCount = abilities.Count;
+	        Plugin.Log.LogInfo("Abilities removed due to filtered GUID: " + (newAbilityCount - oldAbilityCount));*/
+
 	        abilities.Sort((a, b) => String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
 	        return abilities;
         }
