@@ -140,6 +140,15 @@ namespace ReadmeMaker
 			        builder.Append($" Evolves into {info.evolveParams.evolution.displayedName}");
 		        }
 	        }
+
+	        // Frozen Away
+	        if (Plugin.ReadmeConfig.CardShowFrozenAway)
+	        {
+		        if (info.iceCubeParams != null && info.iceCubeParams.creatureWithin != null)
+		        {
+			        builder.Append($" Creature Within {info.iceCubeParams.creatureWithin.displayedName}");
+		        }
+	        }
 	        
 	        // Specials
 	        if (Plugin.ReadmeConfig.CardShowSpecials)

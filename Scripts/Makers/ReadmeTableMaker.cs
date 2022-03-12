@@ -223,12 +223,14 @@ namespace ReadmeMaker
                 "Health",
                 "Cost",
                 "Evolution",
+                "Frozen Away",
                 "Sigils",
                 "Specials",
                 "Traits",
                 "Tribes",
             };
             RemoveHeaderIfDisabled(headers, "Evolution", Plugin.ReadmeConfig.CardShowEvolutions);
+            RemoveHeaderIfDisabled(headers, "Frozen Away", Plugin.ReadmeConfig.CardShowFrozenAway);
             RemoveHeaderIfDisabled(headers, "Specials", Plugin.ReadmeConfig.CardShowSpecials);
             RemoveHeaderIfDisabled(headers, "Traits", Plugin.ReadmeConfig.CardShowTraits);
             RemoveHeaderIfDisabled(headers, "Tribes", Plugin.ReadmeConfig.CardShowTribes);
@@ -260,6 +262,19 @@ namespace ReadmeMaker
                     else
                     {
                         data["Evolution"] = "";
+                    }
+                }
+                
+                // Frozen
+                if (Plugin.ReadmeConfig.CardShowFrozenAway)
+                {
+                    if (info.iceCubeParams != null && info.iceCubeParams.creatureWithin != null)
+                    {
+                        data["Frozen Away"] = info.iceCubeParams.creatureWithin.displayedName;
+                    }
+                    else
+                    {
+                        data["Frozen Away"] = "";
                     }
                 }
 
