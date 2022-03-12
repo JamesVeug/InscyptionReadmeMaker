@@ -61,12 +61,14 @@ namespace ReadmeMaker
 		    { SpecialTriggeredAbility.BellProximity, null }, 
 		    { SpecialTriggeredAbility.CardsInHand, null }, 
 		    { SpecialTriggeredAbility.Mirror, null }, 
-			{ SpecialTriggeredAbility.Lammergeier, null }
+			{ SpecialTriggeredAbility.Lammergeier, null },
+			{ SpecialTriggeredAbility.Ouroboros, null }
 	    };
 	    
 	    private static Dictionary<SpecialTriggeredAbility, string> HealthModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
 	    {
-		    { SpecialTriggeredAbility.Lammergeier, null } 
+		    { SpecialTriggeredAbility.Lammergeier, null },
+		    { SpecialTriggeredAbility.Ouroboros, null }
 	    };
 
 	    /// <summary>
