@@ -58,6 +58,13 @@ namespace ReadmeMaker
             return (T)fi.GetValue(obj);
         }
 
+        public static T GetStaticPrivateField<T>(Type classType, string fieldName)
+        {
+            FieldInfo info = classType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static);
+            object value = info.GetValue(null);
+            return (T)value;
+        }
+
         /// <summary>
         /// Sets a _private_ Property Value from a given Object. Uses Reflection.
         /// Throws a ArgumentOutOfRangeException if the Property is not found.

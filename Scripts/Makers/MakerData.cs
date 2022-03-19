@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
@@ -12,8 +13,8 @@ namespace ReadmeMaker
         public List<CardInfo> rareCards;
         public List<CardInfo> modifiedCards;
         public List<CardInfo> sideDeckCards;
-        public List<NewAbility> abilities;
-        public List<NewSpecialAbility> specialAbilities;
+        public List<AbilityManager.FullAbility> abilities;
+        public List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities;
         public List<ConfigData> configs;
     }
 }

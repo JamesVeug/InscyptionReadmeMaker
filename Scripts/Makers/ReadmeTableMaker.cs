@@ -2,6 +2,7 @@
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
@@ -244,8 +245,8 @@ namespace ReadmeMaker
                 splitCards.Add(data);
                 
                 data["Name"] = info.displayedName;
-                data["Power"] = ReadmeDump.GetPower(info);
-                data["Health"] = ReadmeDump.GetHealth(info);
+                data["Power"] = ReadmeHelpers.GetPower(info);
+                data["Health"] = ReadmeHelpers.GetHealth(info);
 
                 // Cost
                 StringBuilder costBuilder = new StringBuilder();
@@ -295,7 +296,7 @@ namespace ReadmeMaker
                             specialsBuilder.Append(", ");
                         }
 
-                        string specialAbilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[j]);
+                        string specialAbilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[j]);
                         if (specialAbilityName != null)
                         {
                             specialsBuilder.Append($" {specialAbilityName}");
@@ -316,7 +317,7 @@ namespace ReadmeMaker
                             traitsBuilder.Append(", ");
                         }
 
-                        string traitName = ReadmeDump.GetTraitName(info.traits[j]);
+                        string traitName = ReadmeHelpers.GetTraitName(info.traits[j]);
                         traitsBuilder.Append(traitName);
                     }
 
@@ -334,7 +335,7 @@ namespace ReadmeMaker
                             tribesBuilder.Append(", ");
                         }
 
-                        tribesBuilder.Append(ReadmeDump.GetTribeName(info.tribes[j]));
+                        tribesBuilder.Append(ReadmeHelpers.GetTribeName(info.tribes[j]));
                     }
 
                     data["Tribes"] = tribesBuilder.ToString();
@@ -389,7 +390,7 @@ namespace ReadmeMaker
             data["Sigils"] = sigilBuilder.ToString();
         }
 
-        private static void BuildAbilityTable(List<NewAbility> abilities, StringBuilder stringBuilder)
+        private static void BuildAbilityTable(List<AbilityManager.FullAbility> abilities, StringBuilder stringBuilder)
         {
             BreakdownAbilities(abilities, out var headers, out var data);
             
@@ -435,7 +436,7 @@ namespace ReadmeMaker
             }
         }
 
-        private static void BreakdownAbilities(List<NewAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        private static void BreakdownAbilities(List<AbilityManager.FullAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
         {
             headers = new List<string>()
             {
@@ -446,15 +447,15 @@ namespace ReadmeMaker
             splitCards = new List<Dictionary<string, string>>();
             for (int i = 0; i < cards.Count; i++)
             {
-                NewAbility newAbility = cards[i];
+                AbilityManager.FullAbility ability = cards[i];
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 splitCards.Add(data);
-                data["Name"] = ReadmeDump.GetAbilityName(newAbility);
-                data["Description"] = ReadmeDump.GetAbilityDescription(newAbility);
+                data["Name"] = ReadmeHelpers.GetAbilityName(ability);
+                data["Description"] = ReadmeHelpers.GetAbilityDescription(ability);
             }
         }
         
-        private static void BuildSpecialAbilityTable(List<NewSpecialAbility> abilities, StringBuilder stringBuilder)
+        private static void BuildSpecialAbilityTable(List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> abilities, StringBuilder stringBuilder)
         {
             BreakdownSpecialAbilities(abilities, out var headers, out var data);
             
@@ -500,7 +501,7 @@ namespace ReadmeMaker
             }
         }
 
-        private static void BreakdownSpecialAbilities(List<NewSpecialAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        private static void BreakdownSpecialAbilities(List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
         {
             headers = new List<string>()
             {
@@ -511,11 +512,11 @@ namespace ReadmeMaker
             splitCards = new List<Dictionary<string, string>>();
             for (int i = 0; i < cards.Count; i++)
             {
-                NewSpecialAbility newAbility = cards[i];
+                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability = cards[i];
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 splitCards.Add(data);
-                data["Name"] = newAbility.statIconInfo.rulebookName;
-                data["Description"] = newAbility.statIconInfo.rulebookDescription;
+                data["Name"] = ReadmeHelpers.GetSpecialAbilityName(ability);
+                data["Description"] = ReadmeHelpers.GetSpecialAbilityDescription(ability);
             }
         }
     }
