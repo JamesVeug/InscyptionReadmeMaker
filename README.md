@@ -32,7 +32,6 @@ To see what your Readme looks like when its on the store.
 ### Making a Readme
 - Start the game
 - Wait for console to say that it has dumped the GENERATED_RTEADME.md
-- Y
 
 # !NOTE!
 - Thunderstore will not accept a Readme with more than 32,768 characters. So if your mod has a lot of cards and sigils it's likely you'll hit this limit.
@@ -46,6 +45,7 @@ To see what your Readme looks like when its on the store.
 |Cards|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
 |Cards|Show Cost Min Collapse Amount|Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc|
 |Cards|Show Evolutions|Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).|
+|Cards|Show Frozen Away|Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).|
 |Cards|Show Sigils|Show what each cards Sigils are. (Waterborne, Fledgling... etc).|
 |Cards|Show Specials|Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).|
 |Cards|Show Traits|Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).|
@@ -79,6 +79,20 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 0.7.0 - 12/3/2022`
+### General:
+- Power for cards now uses baseDamage instead. No longer modified by the game.
+- Health for cards now uses baseDamage instead. No longer modified by the game.
+
+### Added:
+- Frozen Away column added with config
+
+### Fixed:
+- Evolution cards not appearing in card list when `Show Unobtainable Cards` is off. 
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 0.6.0 - 27/2/2022`
 ### General:
 - Mods can now override the names of custom tribes/traits/SpecialStatInfo to be shown correctly.
@@ -96,9 +110,6 @@ To see what your Readme looks like when its on the store.
 ### Fixed:
 - Error when trying to show costs that do not have a single image to show.
 - Double up costs when larger than a the largest single image.
-
-<details>
-  <summary>See older changes</summary>
 
 
 ## `Version: 0.5.0 - 23/2/2022`
