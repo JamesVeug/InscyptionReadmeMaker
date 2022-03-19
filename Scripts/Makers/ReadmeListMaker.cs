@@ -2,6 +2,7 @@
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
@@ -112,16 +113,16 @@ namespace ReadmeMaker
 	        }
         }
 
-        private static string GetSpecialAbilityInfo(NewSpecialAbility newAbility)
+        private static string GetSpecialAbilityInfo(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
-	        return $" - **{newAbility.statIconInfo.rulebookName}** - {newAbility.statIconInfo.rulebookDescription}";
+	        return $" - **{ReadmeHelpers.GetSpecialAbilityName(ability)}** - {ReadmeHelpers.GetSpecialAbilityDescription(ability)}";
         }
 
         private static string GetCardInfo(CardInfo info)
         {
 	        StringBuilder builder = new StringBuilder();
 	        builder.Append($" - **{info.displayedName}** - ");
-	        builder.Append($"{ReadmeDump.GetPower(info)},{ReadmeDump.GetHealth(info)} -");
+	        builder.Append($"{ReadmeHelpers.GetPower(info)},{ReadmeHelpers.GetHealth(info)} -");
 
 	        // Cost
 	        ReadmeDump.AppendAllCosts(info, builder);
@@ -165,7 +166,7 @@ namespace ReadmeMaker
 			        }
 
 			        // TODO: Do this by getting the info from the rulebook?
-			        string abilityName = ReadmeDump.GetSpecialAbilityName(info.specialAbilities[i]);
+			        string abilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[i]);
 			        if (abilityName != null)
 			        {
 				        builder.Append($" {abilityName}");
@@ -192,7 +193,7 @@ namespace ReadmeMaker
 				        builder.Append($",");
 			        }
 
-			        builder.Append($" {ReadmeDump.GetTraitName(info.traits[i])}");
+			        builder.Append($" {ReadmeHelpers.GetTraitName(info.traits[i])}");
 			        if (i == info.traits.Count - 1)
 			        {
 				        builder.Append($".");
@@ -214,7 +215,7 @@ namespace ReadmeMaker
 				        builder.Append($",");
 			        }
 
-			        builder.Append($" {ReadmeDump.GetTribeName(info.tribes[i])}");
+			        builder.Append($" {ReadmeHelpers.GetTribeName(info.tribes[i])}");
 			        if (i == info.tribes.Count - 1)
 			        {
 				        builder.Append($".");
@@ -283,10 +284,10 @@ namespace ReadmeMaker
 	        }
         }
 
-        public static string GetAbilityInfo(NewAbility newAbility)
+        public static string GetAbilityInfo(AbilityManager.FullAbility ability)
         {
-	        string nam = ReadmeDump.GetAbilityName(newAbility);
-	        string desc = ReadmeDump.GetAbilityDescription(newAbility);
+	        string nam = ReadmeHelpers.GetAbilityName(ability);
+	        string desc = ReadmeHelpers.GetAbilityDescription(ability);
 	        return $" - **{nam}** - {desc}";
         }
     }

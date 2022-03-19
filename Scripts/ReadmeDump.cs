@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using APIPlugin;
 using BepInEx;
 using BepInEx.Configuration;
 using DiskCardGame;
+using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 using UnityEngine;
 
@@ -33,43 +34,15 @@ namespace ReadmeMaker
 		    Costs.Add(cost);
 	    }
 
-	    // Custom Traits made by mods that we want to show the name of instead of a number
-	    private static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
-	    {
-		    { (Trait)5103, "Side Deck" }
-	    };
-
 	    public static void RenameTrait(Trait trait, string traitName)
 	    {
 		    TraitToName[trait] = traitName;
 	    }
 
-	    // Custom Tribes made by mods that we want to show the name of instead of a number
-	    private static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
-	    {
-		    
-	    };
-
 	    public static void RenameTribe(Tribe trait, string traitName)
 	    {
 		    TribeToName[trait] = traitName;
 	    }
-	    
-	    private static Dictionary<SpecialTriggeredAbility, string> PowerModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
-	    {
-		    { SpecialTriggeredAbility.Ant, null }, 
-		    { SpecialTriggeredAbility.BellProximity, null }, 
-		    { SpecialTriggeredAbility.CardsInHand, null }, 
-		    { SpecialTriggeredAbility.Mirror, null }, 
-			{ SpecialTriggeredAbility.Lammergeier, null },
-			{ SpecialTriggeredAbility.Ouroboros, null }
-	    };
-	    
-	    private static Dictionary<SpecialTriggeredAbility, string> HealthModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
-	    {
-		    { SpecialTriggeredAbility.Lammergeier, null },
-		    { SpecialTriggeredAbility.Ouroboros, null }
-	    };
 
 	    /// <summary>
 	    /// When the ReadmeMaker shows a card that has a SpecialStatIcon that changes the Power & Health of a card, this function allows the card to show the proper name of a number for the SpecialStatIcon.
@@ -88,6 +61,34 @@ namespace ReadmeMaker
 			    HealthModifyingSpecials[specialTriggeredAbility] = name;
 		    }
 	    }
+
+	    // Custom Traits made by mods that we want to show the name of instead of a number
+	    internal static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
+	    {
+		    { (Trait)5103, "Side Deck" }
+	    };
+
+	    // Custom Tribes made by mods that we want to show the name of instead of a number
+	    internal static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
+	    {
+		    
+	    };
+
+	    internal static Dictionary<SpecialTriggeredAbility, string> PowerModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
+	    {
+		    { SpecialTriggeredAbility.Ant, null }, 
+		    { SpecialTriggeredAbility.BellProximity, null }, 
+		    { SpecialTriggeredAbility.CardsInHand, null }, 
+		    { SpecialTriggeredAbility.Mirror, null }, 
+			{ SpecialTriggeredAbility.Lammergeier, null },
+			{ SpecialTriggeredAbility.Ouroboros, null }
+	    };
+
+	    internal static Dictionary<SpecialTriggeredAbility, string> HealthModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
+	    {
+		    { SpecialTriggeredAbility.Lammergeier, null },
+		    { SpecialTriggeredAbility.Ouroboros, null }
+	    };
 
         public static void Dump()
         {
@@ -152,10 +153,10 @@ namespace ReadmeMaker
 	        Plugin.Log.LogInfo(sideDeckCards.Count + " Side Deck Cards");
 
 	        
-	        List<NewAbility> abilities = GetNewAbilities();
+	        List<AbilityManager.FullAbility> abilities = GetNewAbilities();
 	        Plugin.Log.LogInfo(abilities.Count + " New Abilities");
 	        
-	        List<NewSpecialAbility> specialAbilities = GetNewSpecialAbilities();
+	        List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities = GetNewSpecialAbilities();
 	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
 		        
 	        
@@ -257,20 +258,42 @@ namespace ReadmeMaker
 	        return configDefinitions;
         }
 
-        private static List<NewSpecialAbility> GetNewSpecialAbilities()
+        private static List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> GetNewSpecialAbilities()
         {
 	        if (!Plugin.ReadmeConfig.SpecialAbilitiesShow)
-		        return new List<NewSpecialAbility>();
+		        return new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
 	        
-		    List<NewSpecialAbility> specialAbilities = NewSpecialAbility.specialAbilities;
-	        specialAbilities.RemoveAll((a) => a.statIconInfo == null || string.IsNullOrEmpty(a.statIconInfo.rulebookName));
-	        specialAbilities.Sort((a, b) => String.Compare(a.statIconInfo.rulebookName, b.statIconInfo.rulebookName, StringComparison.Ordinal));
+	        
+	        List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities = ReadmeHelpers.GetAllNewSpecialAbilities();
+	        
+	        // Remove special abilities that have no rulebook entry
+	        var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
+	        for (int i = 0; i < specialAbilities.Count; i++)
+	        {
+		        SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = specialAbilities[i];
+		        StatIconManager.FullStatIcon fullStatIcon = icons.Find((b) => b.VariableStatBehavior == specialAbility.AbilityBehaviour);
+		        if (fullStatIcon == null || fullStatIcon.Info == null || string.IsNullOrEmpty(fullStatIcon.Info.rulebookName))
+		        {
+			        specialAbilities.RemoveAt(i--);
+		        }
+	        }
+	        
+	        specialAbilities.Sort(SortNewSpecialAbilities);
 	        return specialAbilities;
+        }
+
+        private static int SortNewSpecialAbilities(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
+        {
+	        var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
+	        StatIconManager.FullStatIcon aStatIcon = icons.Find((icon) => icon.VariableStatBehavior == a.AbilityBehaviour);
+	        StatIconManager.FullStatIcon bStatIcon = icons.Find((icon) => icon.VariableStatBehavior == b.AbilityBehaviour);
+	        return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
 
         private static List<CardInfo> GetAllCards()
         {
-	        List<CardInfo> allCards = new List<CardInfo>(NewCard.cards);
+	        ObservableCollection<CardInfo> newCards = Helpers.GetStaticPrivateField <ObservableCollection<CardInfo>>(typeof(CardManager), "NewCards");
+	        List<CardInfo> allCards = new List<CardInfo>(newCards);
 
 	        HashSet<string> evolutionFrozenAwayCards = new HashSet<string>();
 	        for (int i = 0; i < allCards.Count; i++)
@@ -325,42 +348,30 @@ namespace ReadmeMaker
 	        return sideDeckCards;
         }
 
-        private static List<NewAbility> GetNewAbilities()
+        private static List<AbilityManager.FullAbility> GetNewAbilities()
         {
-	        List<NewAbility> abilities = Plugin.ReadmeConfig.SigilsShow ? NewAbility.abilities : new List<NewAbility>();
-	        abilities.RemoveAll((a) => a.info == null || string.IsNullOrEmpty(a.info.rulebookName));
-
-	        /*int oldAbilityCount = abilities.Count;
+	        if (!Plugin.ReadmeConfig.SigilsShow)
+	        {
+		        return new List<AbilityManager.FullAbility>();
+	        }
 	        
-	        List<string> modsToIgnore = Plugin.ReadmeConfig.ModsToIgnore();
-	        abilities.RemoveAll(a => modsToIgnore.Contains(a.id.GetPrivateFieldValue<string>("guid")));
-	        
-	        int newAbilityCount = abilities.Count;
-	        Plugin.Log.LogInfo("Abilities removed due to filtered GUID: " + (newAbilityCount - oldAbilityCount));*/
-
-	        abilities.Sort((a, b) => String.Compare(a.info.rulebookName, b.info.rulebookName, StringComparison.Ordinal));
+	        ObservableCollection<AbilityManager.FullAbility> newCards = Helpers.GetStaticPrivateField<ObservableCollection<AbilityManager.FullAbility>>(typeof(AbilityManager), "NewAbilities");
+	        List<AbilityManager.FullAbility> abilities = new List<AbilityManager.FullAbility>(newCards);
+	        abilities.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
+	        abilities.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
 	        return abilities;
         }
 
         private static List<CardInfo> GetModifiedCards()
         {
 	        List<CardInfo> modifiedCards = new List<CardInfo>();
+	        
 	        if (!Plugin.ReadmeConfig.ModifiedCardsShow)
 	        {
 		        return modifiedCards;
 	        }
 	     
-	        List<CardInfo> allData = ScriptableObjectLoader<CardInfo>.AllData;   
-	        foreach (CustomCard card in CustomCard.cards)
-	        {
-		        int index = allData.FindIndex((Predicate<CardInfo>)(x => x.name == card.name));
-		        if (index >= 0)
-		        {
-			        modifiedCards.Add(allData[index]);
-		        }
-	        }
-
-	        modifiedCards.Sort(SortCards);
+	        // Not supported in v2.0 at the moment
 	        return modifiedCards;
         }
 
@@ -523,132 +534,6 @@ namespace ReadmeMaker
 				{
 					builder.Append($" Free.");
 				}
-			}
-		}
-
-		public static string GetSpecialAbilityName(SpecialTriggeredAbility ability)
-		{
-			if (ability <= SpecialTriggeredAbility.NUM_ABILITIES)
-			{
-				return ability.ToString();
-			}
-
-			for (int i = 0; i < NewSpecialAbility.specialAbilities.Count; i++)
-			{
-				if (NewSpecialAbility.specialAbilities[i].specialTriggeredAbility == ability)
-				{
-					return NewSpecialAbility.specialAbilities[i].statIconInfo.rulebookName;
-				}
-			}
-
-			return null;
-		}
-		
-		public static string GetAbilityName(NewAbility newAbility)
-		{
-			return newAbility.info.rulebookName;
-		}
-        
-		// In-game, when the rulebook description for a sigil is being displyed all instances of "[creature]" are replaced with "A card bearing this sigil".
-		// We do this when generating the readme as well for the sake of consistency.
-		public static string GetAbilityDescription(NewAbility newAbility)
-		{
-			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
-			string description = newAbility.info.rulebookDescription;
-			return description.Replace("[creature]", "A card bearing this sigil");
-		}
-
-		public static string GetTraitName(Trait trait)
-		{
-			if (TraitToName.TryGetValue(trait, out string name))
-			{
-				return name;
-			}
-			
-			return trait.ToString();
-		}
-
-		public static string GetTribeName(Tribe tribe)
-		{
-			if (TribeToName.TryGetValue(tribe, out string name))
-			{
-				return name;
-			}
-			
-			return tribe.ToString();
-		}
-
-		public static string GetPower(CardInfo info)
-		{
-			string power = "";
-			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in PowerModifyingSpecials)
-			{
-				if(info.SpecialAbilities.Contains(pair.Key))
-				{
-					if (!string.IsNullOrEmpty(power))
-					{
-						power += ", ";
-					}
-
-					if (string.IsNullOrEmpty(pair.Value))
-					{
-						power += GetSpecialAbilityName(pair.Key);
-					}
-					else
-					{
-						power += pair.Value;
-					}
-				}
-			}
-
-			if (string.IsNullOrEmpty(power))
-			{
-				return info.baseAttack.ToString();
-			}
-			else if (info.baseAttack > 0)
-			{
-				return power + " + " + info.baseAttack;
-			}
-			else
-			{
-				return power;
-			}
-		}
-
-		public static string GetHealth(CardInfo info)
-		{
-			string health = "";
-			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in HealthModifyingSpecials)
-			{
-				if(info.SpecialAbilities.Contains(pair.Key))
-				{
-					if (!string.IsNullOrEmpty(health))
-					{
-						health += ", ";
-					}
-
-					if (string.IsNullOrEmpty(pair.Value))
-					{
-						health += GetSpecialAbilityName(pair.Key);
-					}
-					else
-					{
-						health += pair.Value;
-					}
-				}
-			}
-
-			if (string.IsNullOrEmpty(health))
-			{
-				return info.baseHealth.ToString();
-			}
-			else if (info.baseHealth > 0)
-			{
-				return health + " + " + info.baseHealth;
-			}
-			else
-			{
-				return health;
 			}
 		}
     }
