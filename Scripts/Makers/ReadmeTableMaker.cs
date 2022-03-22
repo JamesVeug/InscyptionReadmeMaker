@@ -225,6 +225,7 @@ namespace ReadmeMaker
                 "Cost",
                 "Evolution",
                 "Frozen Away",
+                "Tail",
                 "Sigils",
                 "Specials",
                 "Traits",
@@ -232,6 +233,7 @@ namespace ReadmeMaker
             };
             RemoveHeaderIfDisabled(headers, "Evolution", Plugin.ReadmeConfig.CardShowEvolutions);
             RemoveHeaderIfDisabled(headers, "Frozen Away", Plugin.ReadmeConfig.CardShowFrozenAway);
+            RemoveHeaderIfDisabled(headers, "Tail", Plugin.ReadmeConfig.CardShowTail);
             RemoveHeaderIfDisabled(headers, "Specials", Plugin.ReadmeConfig.CardShowSpecials);
             RemoveHeaderIfDisabled(headers, "Traits", Plugin.ReadmeConfig.CardShowTraits);
             RemoveHeaderIfDisabled(headers, "Tribes", Plugin.ReadmeConfig.CardShowTribes);
@@ -263,7 +265,6 @@ namespace ReadmeMaker
                     else
                     {
                         data["Evolution"] = "";
-                        Plugin.Log.LogWarning( $"{info.displayedName} does not have an evolution. {info.evolveParams} {info.evolveParams?.evolution} ");
                     }
                 }
                 
@@ -277,6 +278,19 @@ namespace ReadmeMaker
                     else
                     {
                         data["Frozen Away"] = "";
+                    }
+                }
+                
+                // Tail
+                if (Plugin.ReadmeConfig.CardShowTail)
+                {
+                    if (info.tailParams != null && info.tailParams.tail != null)
+                    {
+                        data["Tail"] = info.tailParams.tail.displayedName;
+                    }
+                    else
+                    {
+                        data["Tail"] = "";
                     }
                 }
 
