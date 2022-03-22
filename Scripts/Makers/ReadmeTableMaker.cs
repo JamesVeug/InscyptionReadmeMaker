@@ -263,6 +263,7 @@ namespace ReadmeMaker
                     else
                     {
                         data["Evolution"] = "";
+                        Plugin.Log.LogWarning( $"{info.displayedName} does not have an evolution. {info.evolveParams} {info.evolveParams?.evolution} ");
                     }
                 }
                 
@@ -355,24 +356,27 @@ namespace ReadmeMaker
             }
 
             // Show all abilities one after the other
+            int totalShownAbilities = 0;
             for (int i = 0; i < infoAbilities.Count; i++)
             {
-                if (i > 0)
-                {
-                    sigilBuilder.Append(", ");
-                }
-
                 Ability ability = infoAbilities[i];
-                AbilityInfo abilityInfo = AbilitiesUtil.GetInfo(ability);
+                AbilityInfo abilityInfo = ReadmeHelpers.GetAbilityInfo(ability);
                 if (abilityInfo == null)
                 {
+                    Plugin.Log.LogWarning("Could not get Ability info for ability: '" + ability + "'");
                     continue;
                 }
                 
                 string abilityName = abilityInfo.rulebookName;
                 if (string.IsNullOrEmpty(abilityName))
                 {
+                    Plugin.Log.LogWarning("Ability does not have rulebookName: '" + ability + "'");
                     continue;
+                }
+                
+                if (totalShownAbilities++ > 0)
+                {
+                    sigilBuilder.Append(", ");
                 }
                 
                 if (Plugin.ReadmeConfig.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)

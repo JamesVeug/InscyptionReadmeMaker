@@ -254,7 +254,7 @@ namespace ReadmeMaker
 		        }
 
 		        Ability ability = infoAbilities[i];
-		        AbilityInfo abilityInfo = AbilitiesUtil.GetInfo(ability);
+		        AbilityInfo abilityInfo = ReadmeHelpers.GetAbilityInfo(ability);
 		        if (abilityInfo == null)
 		        {
 			        continue;
