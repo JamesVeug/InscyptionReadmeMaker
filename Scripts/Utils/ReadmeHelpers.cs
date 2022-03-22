@@ -168,5 +168,29 @@ namespace ReadmeMaker
 				return health;
 			}
 		}
+
+		public static AbilityInfo GetAbilityInfo(Ability ability)
+		{
+			AbilityInfo abilityInfo = AbilitiesUtil.GetInfo(ability);
+			if (abilityInfo != null)
+			{
+				return abilityInfo;
+			}
+			
+			var newAbilities = Helpers.GetStaticPrivateField <ObservableCollection<AbilityManager.FullAbility>>(typeof(AbilityManager), "NewAbilities");
+			var abilities = new List<AbilityManager.FullAbility>(newAbilities);
+			for (int i = 0; i < abilities.Count; i++)
+			{
+				AbilityManager.FullAbility fullAbility = abilities[i];
+				Plugin.Log.LogWarning("[ReadmeHelpers] Could not get AbilityInfo for '" + fullAbility.Info.rulebookName + "' " + fullAbility.AbilityBehavior.ToString());
+				if (fullAbility.Id == ability)
+				{
+					return fullAbility.Info;
+				}
+			}
+
+			Plugin.Log.LogWarning("[ReadmeHelpers] Could not get AbilityInfo for '" + ability + "'");
+			return null;
+		}
     }
 }
