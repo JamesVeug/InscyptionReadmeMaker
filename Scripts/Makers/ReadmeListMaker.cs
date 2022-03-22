@@ -147,7 +147,16 @@ namespace ReadmeMaker
 	        {
 		        if (info.iceCubeParams != null && info.iceCubeParams.creatureWithin != null)
 		        {
-			        builder.Append($" Creature Within {info.iceCubeParams.creatureWithin.displayedName}");
+			        builder.Append($" Creature Within: {info.iceCubeParams.creatureWithin.displayedName}");
+		        }
+	        }
+                
+	        // Tail
+	        if (Plugin.ReadmeConfig.CardShowTail)
+	        {
+		        if (info.tailParams != null && info.tailParams.tail != null)
+		        {
+			        builder.Append($" Tail: {info.tailParams.tail.displayedName}");
 		        }
 	        }
 	        
