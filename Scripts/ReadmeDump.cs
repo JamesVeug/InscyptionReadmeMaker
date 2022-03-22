@@ -81,7 +81,8 @@ namespace ReadmeMaker
 		    { SpecialTriggeredAbility.CardsInHand, null }, 
 		    { SpecialTriggeredAbility.Mirror, null }, 
 			{ SpecialTriggeredAbility.Lammergeier, null },
-			{ SpecialTriggeredAbility.Ouroboros, null }
+			{ SpecialTriggeredAbility.Ouroboros, null },
+			{ SpecialTriggeredAbility.SacrificesThisTurn, null }
 	    };
 
 	    internal static Dictionary<SpecialTriggeredAbility, string> HealthModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
