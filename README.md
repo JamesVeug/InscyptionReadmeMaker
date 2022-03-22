@@ -38,32 +38,33 @@ To see what your Readme looks like when its on the store.
 
 
 ## Configs
-|Section|Key|Description|
-|-|-|-|
-|Cards|Align Cost|Centers the cost of the costs. (Adds a lot of characters)|
-|Cards|Display By|Changes how the cards, abilities and special abilities are displayed.|
-|Cards|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
-|Cards|Show Cost Min Collapse Amount|Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc|
-|Cards|Show Evolutions|Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).|
-|Cards|Show Frozen Away|Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).|
-|Cards|Show Sigils|Show what each cards Sigils are. (Waterborne, Fledgling... etc).|
-|Cards|Show Specials|Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).|
-|Cards|Show Traits|Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).|
-|Cards|Show Tribes|Show what Tribes each card has (Insect, Canine... etc).|
-|Cards|Show Unobtainable Cards|Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)|
-|Cards|Sort Type|Changes the order that the cards will be displayed in.|
-|Cards|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
-|Config|Only Show Plugin|If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: "jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod"|
-|Config|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
-|Config|Show GUID|Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?|
-|General|Header Size|How big should the header be? (Does not work for type Foldout!|
-|General|Header Type|How should the header be shown? (Unaffected by Size)|
-|Modified Cards|Show Modified Cards Section|Show a section that lists all the cards modified.|
-|Saving|Path|Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme|
-|Side Deck|Show Side Deck Section|Show a section that lists all the custom side deck cards.|
-|Sigils|Show Sigils|Show all new sigils listed on cards in its own section.|
-|Special Abilities|Show Special Abilities|Show all new special abilities listed on cards in its own section.|
-|_ReadmeMaker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
+|GUID|Section|Key|Description|
+|-|-|-|-|
+|jamesgames.inscryption.readmemaker|Cards|Align Cost|Centers the cost of the costs. (Adds a lot of characters)|
+|jamesgames.inscryption.readmemaker|Cards|Display By|Changes how the cards, abilities and special abilities are displayed.|
+|jamesgames.inscryption.readmemaker|Cards|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
+|jamesgames.inscryption.readmemaker|Cards|Show Cost Min Collapse Amount|Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc|
+|jamesgames.inscryption.readmemaker|Cards|Show Evolutions|Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Frozen Away|Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Sigils|Show what each cards Sigils are. (Waterborne, Fledgling... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Specials|Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Tail|Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Traits|Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Tribes|Show what Tribes each card has (Insect, Canine... etc).|
+|jamesgames.inscryption.readmemaker|Cards|Show Unobtainable Cards|Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)|
+|jamesgames.inscryption.readmemaker|Cards|Sort Type|Changes the order that the cards will be displayed in.|
+|jamesgames.inscryption.readmemaker|Cards|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
+|jamesgames.inscryption.readmemaker|Config|Only Show Plugin|If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: "jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod"|
+|jamesgames.inscryption.readmemaker|Config|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
+|jamesgames.inscryption.readmemaker|Config|Show GUID|Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?|
+|jamesgames.inscryption.readmemaker|General|Header Size|How big should the header be? (Does not work for type Foldout!|
+|jamesgames.inscryption.readmemaker|General|Header Type|How should the header be shown? (Unaffected by Size)|
+|jamesgames.inscryption.readmemaker|Modified Cards|Show Modified Cards Section|Show a section that lists all the cards modified.|
+|jamesgames.inscryption.readmemaker|Saving|Path|Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme|
+|jamesgames.inscryption.readmemaker|Side Deck|Show Side Deck Section|Show a section that lists all the custom side deck cards.|
+|jamesgames.inscryption.readmemaker|Sigils|Show Sigils|Show all new sigils listed on cards in its own section.|
+|jamesgames.inscryption.readmemaker|Special Abilities|Show Special Abilities|Show all new special abilities listed on cards in its own section.|
+|jamesgames.inscryption.readmemaker|_ReadmeMaker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
 
 
 
@@ -79,6 +80,16 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 0.8.0 - 22/3/2022`
+### General:
+- Api v2.0/Kaycees mod support (Modified Cards not supported yet)
+
+### Added:
+- Tail column added with config
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 0.7.0 - 12/3/2022`
 ### General:
 - Power for cards now uses baseDamage instead. No longer modified by the game.
@@ -89,9 +100,6 @@ To see what your Readme looks like when its on the store.
 
 ### Fixed:
 - Evolution cards not appearing in card list when `Show Unobtainable Cards` is off. 
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 0.6.0 - 27/2/2022`
 ### General:

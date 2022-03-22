@@ -1,10 +1,10 @@
 {
     "name": "ReadmeMaker",
-    "version_number": "0.7.0",
-    "website_url": "https://github.com/JamesVeug/InscyptionReadmeMaker",
+    "version_number": "0.8.0",
+    "website_url": "https://github.com/JamesVeug/InscyptionReadmeMaker/tree/develop",
     "description": "Creates a file that lists all new cards/abilities and special abilities to be easily viewed.",
     "dependencies": [
-        "BepInEx-BepInExPack_Inscryption-5.4.1701",
-        "API_dev-API-1.13.0"
+        "BepInEx-BepInExPack_Inscryption-5.4.1901",
+        "API_dev-API-2.0.2"
     ]
 }
