@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
@@ -371,6 +372,24 @@ namespace ReadmeMaker
 	        {
 		        return modifiedCards;
 	        }
+	        
+	        
+	        /*List<CardInfo> originalCards = CardManager.BaseGameCards.Concat(CardManager.NewCards).Select(x => CardLoader.Clone(x)).ToList();
+	        List<CardInfo> allCards = CardManager.AllCardsCopy;
+
+	        foreach (CardInfo originalCard in originalCards)
+	        {
+		        foreach (CardInfo card in allCards)
+		        {
+			        if (card.name == originalCard.name)
+			        {
+				        if (card.displayedName != originalCard.displayedName)
+				        {
+					        modifiedCards.Add(card);
+				        }
+			        }
+		        }
+	        }*/
 	     
 	        // Not supported in v2.0 at the moment
 	        return modifiedCards;

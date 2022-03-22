@@ -13,7 +13,7 @@ namespace ReadmeMaker
     {
 	    public const string PluginGuid = "jamesgames.inscryption.readmemaker";
 	    public const string PluginName = "Readme Maker";
-	    public const string PluginVersion = "0.6.0.0";
+	    public const string PluginVersion = "0.8.0.0";
 
         public static string Directory;
         public static ManualLogSource Log;
