@@ -68,6 +68,14 @@ namespace ReadmeMaker
                 }
             }
 
+            // Ascension Challenges
+            if (makerData.newAscensionChallenges.Count > 0)
+            {
+                using (new HeaderScope("Ascension Challenges:\n", stringBuilder, true))
+                {
+                    BuildAscensionChallengesTable(makerData.newAscensionChallenges, stringBuilder);
+                }
+            }
 
             // Configs
             if (makerData.configs.Count > 0)
@@ -518,6 +526,52 @@ namespace ReadmeMaker
                 }
             }
         }
+        
+        private static void BuildAscensionChallengesTable(List<AscensionChallengeInfo> abilities, StringBuilder stringBuilder)
+        {
+            BreakdownAscensionChallenges(abilities, out var headers, out var data);
+            
+            // Headers
+            //|Left columns|Right columns|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|" + headers[i]);
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Sorting types
+            //|-------------|:-------------:|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|-");
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Cards
+            //|alien|thingy|
+            //|baby|other thing|
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < headers.Count; j++)
+                {
+                    Dictionary<string, string> cardData = data[i];
+                    cardData.TryGetValue(headers[j], out string value);
+                    string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
+                    stringBuilder.Append("|" + parsedValue);
+
+                    if (j == headers.Count - 1)
+                    {
+                        stringBuilder.Append("|\n");
+                    }
+                }
+            }
+        }
 
         private static void BreakdownSpecialAbilities(List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
         {
@@ -535,6 +589,27 @@ namespace ReadmeMaker
                 splitCards.Add(data);
                 data["Name"] = ReadmeHelpers.GetSpecialAbilityName(ability);
                 data["Description"] = ReadmeHelpers.GetSpecialAbilityDescription(ability);
+            }
+        }
+
+        private static void BreakdownAscensionChallenges(List<AscensionChallengeInfo> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        {
+            headers = new List<string>()
+            {
+                "Name",
+                "Points",
+                "Description",
+            };
+
+            splitCards = new List<Dictionary<string, string>>();
+            for (int i = 0; i < cards.Count; i++)
+            {
+                AscensionChallengeInfo ability = cards[i];
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                splitCards.Add(data);
+                data["Name"] = ability.title;
+                data["Points"] = ability.pointValue.ToString();
+                data["Description"] = ability.description;
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
 using DiskCardGame;
+using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using InscryptionAPI.Encounters;
 using ReadmeMaker.Configs;
@@ -163,6 +164,9 @@ namespace ReadmeMaker
 	        
 	        List<NodeManager.NodeInfo> newMapNodes = GetNewMapNodes();
 	        Plugin.Log.LogInfo(newMapNodes.Count + " New Map Nodes");
+	        
+	        List<AscensionChallengeInfo> newAscensionChallenges = GetNewAscensionChallenges();
+	        Plugin.Log.LogInfo(newAscensionChallenges.Count + " New Ascension Challenges");
 		        
 	        
 	        List<ConfigData> configs = GetNewConfigs();
@@ -182,6 +186,7 @@ namespace ReadmeMaker
 		        abilities=abilities, 
 		        specialAbilities=specialAbilities,
 		        mapNodes=newMapNodes,
+		        newAscensionChallenges=newAscensionChallenges,
 		        configs = configs
 	        };
 
@@ -380,6 +385,23 @@ namespace ReadmeMaker
 	        return nodes;
         }
 
+        private static List<AscensionChallengeInfo> GetNewAscensionChallenges()
+        {
+	        if (!Plugin.ReadmeConfig.AscensionChallengesShow)
+	        {
+		        return new List<AscensionChallengeInfo>();
+	        }
+
+	        List<AscensionChallengeInfo> nodes = new List<AscensionChallengeInfo>(ChallengeManager.NewInfos);
+	        nodes.Sort(SortAscensionChallenges);
+	        return nodes;
+        }
+
+        private static int SortAscensionChallenges(AscensionChallengeInfo a, AscensionChallengeInfo b)
+        {
+	        return String.Compare(a.title, b.title, StringComparison.Ordinal);
+        }
+
         private static List<CardInfo> GetModifiedCards()
         {
 	        List<CardInfo> modifiedCards = new List<CardInfo>();
@@ -442,6 +464,11 @@ namespace ReadmeMaker
 	        if (makerData.mapNodes.Count > 0)
 	        {
 		        stringBuilder.Append($"- {makerData.mapNodes.Count} New Map Nodes:\n");
+	        }
+
+	        if (makerData.newAscensionChallenges.Count > 0)
+	        {
+		        stringBuilder.Append($"- {makerData.newAscensionChallenges.Count} New Ascension Challenges:\n");
 	        }
 
 	        if (makerData.configs.Count > 0)
