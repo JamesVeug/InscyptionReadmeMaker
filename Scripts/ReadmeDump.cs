@@ -167,6 +167,9 @@ namespace ReadmeMaker
 	        
 	        List<AscensionChallengeInfo> newAscensionChallenges = GetNewAscensionChallenges();
 	        Plugin.Log.LogInfo(newAscensionChallenges.Count + " New Ascension Challenges");
+	        
+	        List<StarterDeckManager.FullStarterDeck> newStarterDecks = GetStarterDecks();
+	        Plugin.Log.LogInfo(newStarterDecks.Count + " New Starer Decks");
 		        
 	        
 	        List<ConfigData> configs = GetNewConfigs();
@@ -187,6 +190,7 @@ namespace ReadmeMaker
 		        specialAbilities=specialAbilities,
 		        mapNodes=newMapNodes,
 		        newAscensionChallenges=newAscensionChallenges,
+		        newStarterDecks=newStarterDecks,
 		        configs = configs
 	        };
 
@@ -397,6 +401,18 @@ namespace ReadmeMaker
 	        return nodes;
         }
 
+        private static List<StarterDeckManager.FullStarterDeck> GetStarterDecks()
+        {
+	        if (!Plugin.ReadmeConfig.AscensionStarterDecks)
+	        {
+		        return new List<StarterDeckManager.FullStarterDeck>();
+	        }
+
+	        List<StarterDeckManager.FullStarterDeck> nodes = new List<StarterDeckManager.FullStarterDeck>(StarterDeckManager.NewDecks);
+	        nodes.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
+	        return nodes;
+        }
+
         private static int SortAscensionChallenges(AscensionChallengeInfo a, AscensionChallengeInfo b)
         {
 	        return String.Compare(a.title, b.title, StringComparison.Ordinal);
@@ -469,6 +485,11 @@ namespace ReadmeMaker
 	        if (makerData.newAscensionChallenges.Count > 0)
 	        {
 		        stringBuilder.Append($"- {makerData.newAscensionChallenges.Count} New Ascension Challenges:\n");
+	        }
+
+	        if (makerData.newStarterDecks.Count > 0)
+	        {
+		        stringBuilder.Append($"- {makerData.newStarterDecks.Count} New Ascension Stater Decks:\n");
 	        }
 
 	        if (makerData.configs.Count > 0)

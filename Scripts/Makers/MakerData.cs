@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using InscryptionAPI.Encounters;
 using ReadmeMaker.Configs;
@@ -18,6 +19,7 @@ namespace ReadmeMaker
         public List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities;
         public List<NodeManager.NodeInfo> mapNodes;
         public List<AscensionChallengeInfo> newAscensionChallenges;
+        public List<StarterDeckManager.FullStarterDeck> newStarterDecks;
         public List<ConfigData> configs;
     }
 }

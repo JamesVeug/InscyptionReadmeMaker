@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 
@@ -93,7 +95,19 @@ namespace ReadmeMaker
 	            {
 		            for (int i = 0; i < makerData.newAscensionChallenges.Count; i++)
 		            {
-			            stringBuilder.Append(GetAscensionChallenges(makerData.newAscensionChallenges[i]) + "\n");
+			            stringBuilder.Append(GetAscensionChallenge(makerData.newAscensionChallenges[i]) + "\n");
+		            }
+	            }
+            }
+
+            // Ascension Starter Decks
+            if (makerData.newStarterDecks.Count > 0)
+            {
+	            using (new HeaderScope("Ascension Starter Decks:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < makerData.newStarterDecks.Count; i++)
+		            {
+			            stringBuilder.Append(GetAscensionStarterDeck(makerData.newStarterDecks[i]) + "\n");
 		            }
 	            }
             }
@@ -130,9 +144,15 @@ namespace ReadmeMaker
 	        return $" - **{ReadmeHelpers.GetSpecialAbilityName(ability)}** - {ReadmeHelpers.GetSpecialAbilityDescription(ability)}";
         }
 
-        private static string GetAscensionChallenges(AscensionChallengeInfo ability)
+        private static string GetAscensionChallenge(AscensionChallengeInfo ability)
         {
 	        return $" - **{ability.title}** - {ability.pointValue}pts - {ability.description}";
+        }
+
+        private static string GetAscensionStarterDeck(StarterDeckManager.FullStarterDeck ability)
+        {
+	        string cards = String.Join(",", ability.CardNames);
+	        return $" - **{ability.Info.title}** - Unlocks at {ability.UnlockLevel}, Cards: {cards}";
         }
 
         private static string GetCardInfo(CardInfo info)
