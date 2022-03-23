@@ -17,6 +17,7 @@ namespace ReadmeMaker
         public List<AbilityManager.FullAbility> abilities;
         public List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities;
         public List<NodeManager.NodeInfo> mapNodes;
+        public List<AscensionChallengeInfo> newAscensionChallenges;
         public List<ConfigData> configs;
     }
 }

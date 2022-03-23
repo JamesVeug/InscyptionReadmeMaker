@@ -86,6 +86,18 @@ namespace ReadmeMaker
 	            }
             }
 
+            // Ascension Challenges
+            if (makerData.newAscensionChallenges.Count > 0)
+            {
+	            using (new HeaderScope("Ascension Challenges:\n", stringBuilder, true))
+	            {
+		            for (int i = 0; i < makerData.newAscensionChallenges.Count; i++)
+		            {
+			            stringBuilder.Append(GetAscensionChallenges(makerData.newAscensionChallenges[i]) + "\n");
+		            }
+	            }
+            }
+
             // Configs
             if (makerData.configs.Count > 0)
             {
@@ -116,6 +128,11 @@ namespace ReadmeMaker
         private static string GetSpecialAbilityInfo(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
 	        return $" - **{ReadmeHelpers.GetSpecialAbilityName(ability)}** - {ReadmeHelpers.GetSpecialAbilityDescription(ability)}";
+        }
+
+        private static string GetAscensionChallenges(AscensionChallengeInfo ability)
+        {
+	        return $" - **{ability.title}** - {ability.pointValue}pts - {ability.description}";
         }
 
         private static string GetCardInfo(CardInfo info)
