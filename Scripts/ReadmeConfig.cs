@@ -76,7 +76,8 @@ namespace ReadmeMaker
         
         public bool NodesShow = Plugin.Instance.Config.Bind("Nodes", "Show Nodes", true, new ConfigDescription("Show all new map nodes added in its own section..", null, Array.Empty<object>())).Value;
         
-        public bool AscensionChallengesShow = Plugin.Instance.Config.Bind("Ascension Challenge", "Show Ascension Challenges", true, new ConfigDescription("Show all new challenges added for Kaycees mod.", null, Array.Empty<object>())).Value;
+        public bool AscensionChallengesShow = Plugin.Instance.Config.Bind("Ascension", "Show Ascension Challenges", true, new ConfigDescription("Show all new challenges added for Kaycees mod.", null, Array.Empty<object>())).Value;
+        public bool AscensionStarterDecks = Plugin.Instance.Config.Bind("Ascension", "Show Starter Decks", true, new ConfigDescription("Show all new starter decks for Kaycees mod.", null, Array.Empty<object>())).Value;
         
         public bool SpecialAbilitiesShow = Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
         

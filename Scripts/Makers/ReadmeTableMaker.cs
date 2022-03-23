@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using APIPlugin;
 using DiskCardGame;
+using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using ReadmeMaker.Configs;
 
@@ -74,6 +76,15 @@ namespace ReadmeMaker
                 using (new HeaderScope("Ascension Challenges:\n", stringBuilder, true))
                 {
                     BuildAscensionChallengesTable(makerData.newAscensionChallenges, stringBuilder);
+                }
+            }
+
+            // Ascension Starter Decks
+            if (makerData.newStarterDecks.Count > 0)
+            {
+                using (new HeaderScope("Ascension Starter Decks:\n", stringBuilder, true))
+                {
+                    BuildAscensionStarterDecks(makerData.newStarterDecks, stringBuilder);
                 }
             }
 
@@ -572,6 +583,52 @@ namespace ReadmeMaker
                 }
             }
         }
+        
+        private static void BuildAscensionStarterDecks(List<StarterDeckManager.FullStarterDeck> abilities, StringBuilder stringBuilder)
+        {
+            BreakdownAscensionStarterDecks(abilities, out var headers, out var data);
+            
+            // Headers
+            //|Left columns|Right columns|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|" + headers[i]);
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Sorting types
+            //|-------------|:-------------:|
+            for (int i = 0; i < headers.Count; i++)
+            {
+                stringBuilder.Append("|-");
+                if (i == headers.Count - 1)
+                {
+                    stringBuilder.Append("|\n");
+                }
+            }
+
+            // Cards
+            //|alien|thingy|
+            //|baby|other thing|
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < headers.Count; j++)
+                {
+                    Dictionary<string, string> cardData = data[i];
+                    cardData.TryGetValue(headers[j], out string value);
+                    string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
+                    stringBuilder.Append("|" + parsedValue);
+
+                    if (j == headers.Count - 1)
+                    {
+                        stringBuilder.Append("|\n");
+                    }
+                }
+            }
+        }
 
         private static void BreakdownSpecialAbilities(List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
         {
@@ -610,6 +667,29 @@ namespace ReadmeMaker
                 data["Name"] = ability.title;
                 data["Points"] = ability.pointValue.ToString();
                 data["Description"] = ability.description;
+            }
+        }
+
+        private static void BreakdownAscensionStarterDecks(List<StarterDeckManager.FullStarterDeck> cards, out List<string> headers, out List<Dictionary<string, string>> splitCards)
+        {
+            headers = new List<string>()
+            {
+                "Name",
+                "Unlock Level",
+                "Cards",
+            };
+
+            splitCards = new List<Dictionary<string, string>>();
+            for (int i = 0; i < cards.Count; i++)
+            {
+                StarterDeckManager.FullStarterDeck ability = cards[i];
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                splitCards.Add(data);
+                data["Name"] = ability.Info.title;
+                data["Unlock Level"] = ability.UnlockLevel.ToString();
+
+                string cardList = string.Join(",", ability.CardNames);
+                data["Cards"] = cardList;
             }
         }
     }
