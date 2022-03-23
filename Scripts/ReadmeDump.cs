@@ -8,6 +8,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using InscryptionAPI.Encounters;
 using ReadmeMaker.Configs;
 using UnityEngine;
 
@@ -154,12 +155,14 @@ namespace ReadmeMaker
 	        List<CardInfo> sideDeckCards = GetSideDeckCards();
 	        Plugin.Log.LogInfo(sideDeckCards.Count + " Side Deck Cards");
 
-	        
 	        List<AbilityManager.FullAbility> abilities = GetNewAbilities();
 	        Plugin.Log.LogInfo(abilities.Count + " New Abilities");
 	        
 	        List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities = GetNewSpecialAbilities();
 	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
+	        
+	        List<NodeManager.NodeInfo> newMapNodes = GetNewMapNodes();
+	        Plugin.Log.LogInfo(newMapNodes.Count + " New Map Nodes");
 		        
 	        
 	        List<ConfigData> configs = GetNewConfigs();
@@ -178,6 +181,7 @@ namespace ReadmeMaker
 		        sideDeckCards=sideDeckCards, 
 		        abilities=abilities, 
 		        specialAbilities=specialAbilities,
+		        mapNodes=newMapNodes,
 		        configs = configs
 	        };
 
@@ -364,6 +368,18 @@ namespace ReadmeMaker
 	        return abilities;
         }
 
+        private static List<NodeManager.NodeInfo> GetNewMapNodes()
+        {
+	        if (!Plugin.ReadmeConfig.NodesShow)
+	        {
+		        return new List<NodeManager.NodeInfo>();
+	        }
+
+	        List<NodeManager.NodeInfo> nodes = new List<NodeManager.NodeInfo>(NodeManager.AllNodes);
+	        nodes.Sort((a, b) => String.Compare(a.guid, b.guid, StringComparison.Ordinal));
+	        return nodes;
+        }
+
         private static List<CardInfo> GetModifiedCards()
         {
 	        List<CardInfo> modifiedCards = new List<CardInfo>();
@@ -421,6 +437,11 @@ namespace ReadmeMaker
 	        if (makerData.specialAbilities.Count > 0)
 	        {
 		        stringBuilder.Append($"- {makerData.specialAbilities.Count} New Special Abilities:\n");
+	        }
+
+	        if (makerData.mapNodes.Count > 0)
+	        {
+		        stringBuilder.Append($"- {makerData.mapNodes.Count} New Map Nodes:\n");
 	        }
 
 	        if (makerData.configs.Count > 0)
