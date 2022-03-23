@@ -2,6 +2,7 @@
 using APIPlugin;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using InscryptionAPI.Encounters;
 using ReadmeMaker.Configs;
 
 namespace ReadmeMaker
@@ -15,6 +16,7 @@ namespace ReadmeMaker
         public List<CardInfo> sideDeckCards;
         public List<AbilityManager.FullAbility> abilities;
         public List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities;
+        public List<NodeManager.NodeInfo> mapNodes;
         public List<ConfigData> configs;
     }
 }
