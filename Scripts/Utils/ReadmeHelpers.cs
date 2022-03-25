@@ -187,7 +187,6 @@ namespace ReadmeMaker
 				}
 			}
 
-			Plugin.Log.LogWarning("[ReadmeHelpers] Could not get AbilityInfo for '" + ability + "'");
 			return null;
 		}
     }

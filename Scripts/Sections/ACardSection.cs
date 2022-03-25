@@ -152,7 +152,6 @@ namespace ReadmeMaker.Sections
                 AbilityInfo abilityInfo = ReadmeHelpers.GetAbilityInfo(ability);
                 if (abilityInfo == null)
                 {
-                    Plugin.Log.LogWarning("Could not get Ability info for ability: '" + ability + "'");
                     continue;
                 }
                 
