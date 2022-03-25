@@ -1,12 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using BepInEx.Configuration;
 
 namespace ReadmeMaker
 {
     public class ReadmeConfig
     {
+        public static ReadmeConfig Instance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new ReadmeConfig();
+                    if (!m_instance.ReadmeMakerEnabled)
+                    {
+                        Plugin.Log.LogInfo($"ReadmeMaker disabled in the Config so it will not generate a Readme.");
+                    }
+                }
+
+                return m_instance;
+            }
+        }
+
+        private static ReadmeConfig m_instance = null;
+        private static readonly ReadmeConfig Instance1;
+
         public enum HeaderType
         {
             Label,
@@ -25,7 +43,6 @@ namespace ReadmeMaker
         public enum DisplayType
         {
             Table,
-            List,
         }
         
         public enum SortByType

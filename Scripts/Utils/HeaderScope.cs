@@ -10,7 +10,7 @@ namespace ReadmeMaker
         public HeaderScope(string text, StringBuilder stringBuilder, bool appendNewLinePrefix=false)
         {
             this.stringBuilder = stringBuilder;
-            switch (Plugin.ReadmeConfig.GeneralHeaderType)
+            switch (ReadmeConfig.Instance.GeneralHeaderType)
             {
                 case ReadmeConfig.HeaderType.Foldout:
                     // <details>
@@ -20,7 +20,7 @@ namespace ReadmeMaker
                     break;
                 case ReadmeConfig.HeaderType.Label:
                     // ## New Cards:
-                    string header = HeaderSizeToPrefix(Plugin.ReadmeConfig.GeneralHeaderSize, appendNewLinePrefix) + text;
+                    string header = HeaderSizeToPrefix(ReadmeConfig.Instance.GeneralHeaderSize, appendNewLinePrefix) + text;
                     stringBuilder.Append(GetPrefix(appendNewLinePrefix) + header);
                     break;
             }
@@ -33,7 +33,7 @@ namespace ReadmeMaker
         
         public void Dispose()
         {
-            if (Plugin.ReadmeConfig.GeneralHeaderType == ReadmeConfig.HeaderType.Foldout)
+            if (ReadmeConfig.Instance.GeneralHeaderType == ReadmeConfig.HeaderType.Foldout)
             {
                 if (stringBuilder[stringBuilder.Length - 1] != '\n')
                 {
