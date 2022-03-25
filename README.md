@@ -40,6 +40,8 @@ To see what your Readme looks like when its on the store.
 ## Configs
 |GUID|Section|Key|Description|
 |-|-|-|-|
+|jamesgames.inscryption.readmemaker|Ascension|Show Ascension Challenges|Show all new challenges added for Kaycees mod.|
+|jamesgames.inscryption.readmemaker|Ascension|Show Starter Decks|Show all new starter decks for Kaycees mod.|
 |jamesgames.inscryption.readmemaker|Cards|Align Cost|Centers the cost of the costs. (Adds a lot of characters)|
 |jamesgames.inscryption.readmemaker|Cards|Display By|Changes how the cards, abilities and special abilities are displayed.|
 |jamesgames.inscryption.readmemaker|Cards|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
@@ -60,6 +62,7 @@ To see what your Readme looks like when its on the store.
 |jamesgames.inscryption.readmemaker|General|Header Size|How big should the header be? (Does not work for type Foldout!|
 |jamesgames.inscryption.readmemaker|General|Header Type|How should the header be shown? (Unaffected by Size)|
 |jamesgames.inscryption.readmemaker|Modified Cards|Show Modified Cards Section|Show a section that lists all the cards modified.|
+|jamesgames.inscryption.readmemaker|Nodes|Show Nodes|Show all new map nodes added in its own section..|
 |jamesgames.inscryption.readmemaker|Saving|Path|Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme|
 |jamesgames.inscryption.readmemaker|Side Deck|Show Side Deck Section|Show a section that lists all the custom side deck cards.|
 |jamesgames.inscryption.readmemaker|Sigils|Show Sigils|Show all new sigils listed on cards in its own section.|
@@ -80,15 +83,31 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 0.9.0 - 25/3/2022`
+### General:
+- Combined Summary and dropdowns
+- Removed List display type
+
+### Added:
+- Added custom Map node section with Config support
+- Added custom Ascension Challenge section with Config support
+- Added custom Ascension Starter Deck section with Config support
+- Added Money cost support
+- Added Life cost support
+
+### Fixed:
+- Fixed LifeMoney cost not working
+- Added cards only accessible by tail not showing in list
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 0.8.0 - 22/3/2022`
 ### General:
 - Api v2.0/Kaycees mod support (Modified Cards not supported yet)
 
 ### Added:
 - Tail column added with config
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 0.7.0 - 12/3/2022`
 ### General:
