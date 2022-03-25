@@ -4,36 +4,14 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 using DiskCardGame;
+using InscryptionAPI.Card;
 
 namespace ReadmeMaker
 {
     public class LifeCost : ACost
     {
-        private bool LifeAPIAvailable = false;
-        private MethodInfo GetLifeCosts = null;
-
         public LifeCost()
-        {
-            bool lifeAPIInstalled = Chainloader.PluginInfos.ContainsKey("extraVoid.inscryption.LifeCost");
-            if (!lifeAPIInstalled)
-            {
-                Plugin.Log.LogInfo("LifeCost API not detected.");
-                return;
-            }
-
-            Plugin.Log.LogInfo("Detected LifeCost API!");
-                
-            GetLifeCosts = typeof(CardInfo).GetExtensionMethod("LifeCostz");
-            LifeAPIAvailable = GetLifeCosts != null;
-            if (LifeAPIAvailable)
-            {
-                Plugin.Log.LogInfo("LifeAPI Ready for reading!");
-            }
-            else
-            {
-                Plugin.Log.LogInfo("LifeAPI Detected but could not get LifeCostz extension method!");
-            }
-            
+        {            
             CostName = "Life";
             CustomIconX = "https://tinyurl.com/2s44xjen";
             IntToImage = new Dictionary<int, string>()
@@ -71,15 +49,13 @@ namespace ReadmeMaker
         
         public override int GetCost(CardInfo cardInfo)
         {
-            if (!LifeAPIAvailable)
+            int? cost = cardInfo.GetExtendedPropertyAsInt("LifeCost");
+            if (!cost.HasValue)
             {
                 return 0;
             }
             
-            object result = GetLifeCosts.Invoke(cardInfo, new object[] { cardInfo, -1 });
-
-            int lifeCost = (int)result;
-            return lifeCost;
+            return cost.Value;
         }
     }
 }
