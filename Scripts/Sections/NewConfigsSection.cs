@@ -12,6 +12,9 @@ namespace ReadmeMaker.Sections
 {
     public class NewConfigsSection : ASection
     {
+        public override string SectionName => "New Configs";
+        public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
+        
         private List<ConfigData> configs = null;
         
         public override void Initialize()
@@ -88,17 +91,12 @@ namespace ReadmeMaker.Sections
             StatIconManager.FullStatIcon bStatIcon = icons.Find((icon) => icon.VariableStatBehavior == b.AbilityBehaviour);
             return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
-        
-        public override string GetSectionName()
-        {
-            return "New Configs";
-        }
 
         public override void DumpSummary(StringBuilder stringBuilder)
         {
             if (configs.Count > 0)
             {
-                stringBuilder.Append($"- {configs.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {configs.Count} {SectionName}\n");
             }
         }
 
@@ -106,7 +104,7 @@ namespace ReadmeMaker.Sections
         {
             splitCards = BreakdownForTable(configs, out headers, new TableColumn<ConfigData>[]
             {
-                new TableColumn<ConfigData>("GUID", (a)=>a.PluginGUID),
+                new TableColumn<ConfigData>("GUID", (a)=>a.PluginGUID, ReadmeConfig.Instance.ConfigShowGUID),
                 new TableColumn<ConfigData>("Section", (a)=>a.Entry.Definition.Section),
                 new TableColumn<ConfigData>("Key", (a)=>a.Entry.Definition.Key),
                 new TableColumn<ConfigData>("Description", (a)=>a.Entry.Description.Description)

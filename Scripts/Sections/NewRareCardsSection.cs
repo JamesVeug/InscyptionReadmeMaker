@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
-using InscryptionAPI.Card;
 
 namespace ReadmeMaker.Sections
 {
-    public class NewRareCardsSection : NewCardsSection
+    public class NewRareCardsSection : AllNewCards
     {
-        public override string GetSectionName()
-        {
-            return "New Rare Cards";
-        }
+        public override string SectionName => "New Rare Cards";
 
         protected override List<CardInfo> GetCards()
         {

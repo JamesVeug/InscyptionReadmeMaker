@@ -8,6 +8,9 @@ namespace ReadmeMaker.Sections
 {
     public class NewSigilsSection : ASection
     {
+        public override string SectionName => "New Sigils";
+        public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
+
         private List<FullAbility> allAbilities = null;
         
         public override void Initialize()
@@ -22,17 +25,12 @@ namespace ReadmeMaker.Sections
             allAbilities.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
             allAbilities.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
         }
-        
-        public override string GetSectionName()
-        {
-            return "New Sigils";
-        }
 
         public override void DumpSummary(StringBuilder stringBuilder)
         {
             if (allAbilities.Count > 0)
             {
-                stringBuilder.Append($"- {allAbilities.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {allAbilities.Count} {SectionName}\n");
             }
         }
 

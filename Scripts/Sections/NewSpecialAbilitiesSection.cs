@@ -8,6 +8,9 @@ namespace ReadmeMaker.Sections
 {
     public class NewSpecialAbilitiesSection : ASection
     {
+        public override string SectionName => "New Special Abilities";
+        public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
+
         private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = null;
         
         public override void Initialize()
@@ -43,17 +46,12 @@ namespace ReadmeMaker.Sections
             StatIconManager.FullStatIcon bStatIcon = icons.Find((icon) => icon.VariableStatBehavior == b.AbilityBehaviour);
             return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
-        
-        public override string GetSectionName()
-        {
-            return "New Special Abilities";
-        }
 
         public override void DumpSummary(StringBuilder stringBuilder)
         {
             if (allAbilities.Count > 0)
             {
-                stringBuilder.Append($"- {allAbilities.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {allAbilities.Count} {SectionName}\n");
             }
         }
 

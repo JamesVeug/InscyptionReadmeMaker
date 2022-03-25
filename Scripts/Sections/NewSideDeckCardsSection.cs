@@ -6,10 +6,8 @@ namespace ReadmeMaker.Sections
 {
     public class NewSideDeckCardsSection : NewCardsSection
     {
-        public override string GetSectionName()
-        {
-            return "New Side Deck Cards";
-        }
+        public override string SectionName => "New Side Deck Cards";
+        public override bool Enabled => ReadmeConfig.Instance.SideDeckShow;
 
         protected override List<CardInfo> GetCards()
         {

@@ -12,7 +12,7 @@ namespace ReadmeMaker.Sections
         public override void Initialize()
         {
             allCards = GetCards();
-            allCards.Sort();
+            allCards.Sort(SortCards);
         }
 
         protected abstract List<CardInfo> GetCards();
@@ -21,7 +21,7 @@ namespace ReadmeMaker.Sections
         {
             if (allCards.Count > 0)
             {
-                stringBuilder.Append($"- {allCards.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {allCards.Count} {SectionName}\n");
             }
         }
 
@@ -37,7 +37,7 @@ namespace ReadmeMaker.Sections
                 new TableColumn<CardInfo>("Frozen Away", GetFrozenAway, ReadmeConfig.Instance.CardShowFrozenAway),
                 new TableColumn<CardInfo>("Tail", GetTail, ReadmeConfig.Instance.CardShowTail),
                 new TableColumn<CardInfo>("Sigils", GetSigils, ReadmeConfig.Instance.CardShowSigils),
-                new TableColumn<CardInfo>("Specials", GetSpecialAbilities, ReadmeConfig.Instance.SpecialAbilitiesShow),
+                new TableColumn<CardInfo>("Specials", GetSpecialAbilities, ReadmeConfig.Instance.CardShowSpecials),
                 new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
                 new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
             });
