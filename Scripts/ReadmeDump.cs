@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
@@ -11,12 +10,29 @@ using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using InscryptionAPI.Encounters;
 using ReadmeMaker.Configs;
+using ReadmeMaker.Sections;
 using UnityEngine;
 
 namespace ReadmeMaker
 {
     public static class ReadmeDump
     {
+	    // List if different costs the mod supports
+	    // Ordered by what will be shown. Vanilla first then Custom last
+	    private static List<ASection> Sections = new List<ASection>()
+	    {
+		    new NewCardsSection(),
+		    new ModifiedCardsSection(),
+		    new NewRareCardsSection(),
+		    new NewSideDeckCardsSection(),
+		    new NewSigilsSection(),
+		    new NewSpecialAbilitiesSection(),
+		    new NewAscensionChallengesSection(),
+		    new NewAscensionStarterDecksSection(),
+		    new NewMapNodesSection(),
+		    new NewConfigsSection(),
+	    };
+	    
 	    // List if different costs the mod supports
 	    // Ordered by what will be shown. Vanilla first then Custom last
 	    private static List<ACost> Costs = new List<ACost>()
@@ -108,7 +124,7 @@ namespace ReadmeMaker
         private static string GetOutputFullPath()
         {
 	        string defaultPath = Path.Combine(Plugin.Directory, "GENERATED_README.md");
-	        string path = Plugin.ReadmeConfig.SavePath;
+	        string path = ReadmeConfig.Instance.SavePath;
 	        if (string.IsNullOrEmpty(path))
 	        {
 		        path = defaultPath;
@@ -135,71 +151,17 @@ namespace ReadmeMaker
 
         private static string GetDumpString()
         {
-			// TODO: Fix vanilla Special abilities not using their rulebook name 
-			// TODO: Support for mods to add their own names and descriptions for costs/tribes/trait... etc renames 
-			
-	        //
 	        // Initialize everything for the Summary
-	        //
-	        List<CardInfo> allCards = GetAllCards();
-	        Plugin.Log.LogInfo(allCards.Count + " All New Cards");
-
-	        List<CardInfo> modifiedCards = GetModifiedCards();
-	        Plugin.Log.LogInfo(modifiedCards.Count + " Modified Cards");
-
-	        List<CardInfo> newCards = GetNewCards(allCards);
-	        Plugin.Log.LogInfo(newCards.Count + " New Cards");
-	        
-	        List<CardInfo> newRareCards = GetNewRareCards(allCards);
-	        Plugin.Log.LogInfo(newRareCards.Count + " New Rare Cards");
-	        
-	        List<CardInfo> sideDeckCards = GetSideDeckCards();
-	        Plugin.Log.LogInfo(sideDeckCards.Count + " Side Deck Cards");
-
-	        List<AbilityManager.FullAbility> abilities = GetNewAbilities();
-	        Plugin.Log.LogInfo(abilities.Count + " New Abilities");
-	        
-	        List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> specialAbilities = GetNewSpecialAbilities();
-	        Plugin.Log.LogInfo(specialAbilities.Count + " New Special Abilities");
-	        
-	        List<NodeManager.NodeInfo> newMapNodes = GetNewMapNodes();
-	        Plugin.Log.LogInfo(newMapNodes.Count + " New Map Nodes");
-	        
-	        List<AscensionChallengeInfo> newAscensionChallenges = GetNewAscensionChallenges();
-	        Plugin.Log.LogInfo(newAscensionChallenges.Count + " New Ascension Challenges");
-	        
-	        List<StarterDeckManager.FullStarterDeck> newStarterDecks = GetStarterDecks();
-	        Plugin.Log.LogInfo(newStarterDecks.Count + " New Starer Decks");
-		        
-	        
-	        List<ConfigData> configs = GetNewConfigs();
-	        Plugin.Log.LogInfo(configs.Count + " New Configs");
-	        
-	        //
-	        // Build string
-	        //
-
-	        MakerData makerData = new MakerData()
+	        for (int i = 0; i < Sections.Count; i++)
 	        {
-		        allCards=allCards, 
-		        cards=newCards, 
-		        rareCards= newRareCards, 
-		        modifiedCards=modifiedCards, 
-		        sideDeckCards=sideDeckCards, 
-		        abilities=abilities, 
-		        specialAbilities=specialAbilities,
-		        mapNodes=newMapNodes,
-		        newAscensionChallenges=newAscensionChallenges,
-		        newStarterDecks=newStarterDecks,
-		        configs = configs
-	        };
+		        Sections[i].Initialize();
+	        }
 
-	        switch (Plugin.ReadmeConfig.CardDisplayByType)
+	        // Build everything
+	        switch (ReadmeConfig.Instance.CardDisplayByType)
 	        {
-		        case ReadmeConfig.DisplayType.List:
-			        return ReadmeListMaker.Dump(makerData);
 		        case ReadmeConfig.DisplayType.Table:
-			        return ReadmeTableMaker.Dump(makerData);
+			        return ReadmeTableMaker.Dump(Sections);
 		        default:
 			        throw new ArgumentOutOfRangeException();
 	        }
@@ -208,15 +170,15 @@ namespace ReadmeMaker
         private static List<ConfigData> GetNewConfigs()
         {
 	        List<ConfigData> configDefinitions = new List<ConfigData>();
-	        if (!Plugin.ReadmeConfig.ConfigSectionEnabled)
+	        if (!ReadmeConfig.Instance.ConfigSectionEnabled)
 	        {
 		        return configDefinitions;
 	        }
 
 	        List<string> validModGUIDS = null;
-	        if (!string.IsNullOrEmpty(Plugin.ReadmeConfig.ConfigOnlyShowModGUID))
+	        if (!string.IsNullOrEmpty(ReadmeConfig.Instance.ConfigOnlyShowModGUID))
 	        {
-		        string[] guids = Plugin.ReadmeConfig.ConfigOnlyShowModGUID.Split(',');
+		        string[] guids = ReadmeConfig.Instance.ConfigOnlyShowModGUID.Split(',');
 		        validModGUIDS = new List<string>(guids);
 	        }
 	        
@@ -275,7 +237,7 @@ namespace ReadmeMaker
 
         private static List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> GetNewSpecialAbilities()
         {
-	        if (!Plugin.ReadmeConfig.SpecialAbilitiesShow)
+	        if (!ReadmeConfig.Instance.SpecialAbilitiesShow)
 		        return new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
 	        
 	        
@@ -325,7 +287,7 @@ namespace ReadmeMaker
 		        }
 	        }
 	        
-	        if (!Plugin.ReadmeConfig.CardShowUnobtainable)
+	        if (!ReadmeConfig.Instance.CardShowUnobtainable)
 	        {
 		        allCards.RemoveAll((a) => a.metaCategories.Count == 0 && !evolutionFrozenAwayCards.Contains(a.name));
 	        }
@@ -351,7 +313,7 @@ namespace ReadmeMaker
 
         private static List<CardInfo> GetSideDeckCards()
         {
-	        if (!Plugin.ReadmeConfig.SideDeckShow)
+	        if (!ReadmeConfig.Instance.SideDeckShow)
 	        {
 		        return new List<CardInfo>();
 	        }
@@ -365,7 +327,7 @@ namespace ReadmeMaker
 
         private static List<AbilityManager.FullAbility> GetNewAbilities()
         {
-	        if (!Plugin.ReadmeConfig.SigilsShow)
+	        if (!ReadmeConfig.Instance.SigilsShow)
 	        {
 		        return new List<AbilityManager.FullAbility>();
 	        }
@@ -379,7 +341,7 @@ namespace ReadmeMaker
 
         private static List<NodeManager.NodeInfo> GetNewMapNodes()
         {
-	        if (!Plugin.ReadmeConfig.NodesShow)
+	        if (!ReadmeConfig.Instance.NodesShow)
 	        {
 		        return new List<NodeManager.NodeInfo>();
 	        }
@@ -391,7 +353,7 @@ namespace ReadmeMaker
 
         private static List<AscensionChallengeInfo> GetNewAscensionChallenges()
         {
-	        if (!Plugin.ReadmeConfig.AscensionChallengesShow)
+	        if (!ReadmeConfig.Instance.AscensionChallengesShow)
 	        {
 		        return new List<AscensionChallengeInfo>();
 	        }
@@ -403,7 +365,7 @@ namespace ReadmeMaker
 
         private static List<StarterDeckManager.FullStarterDeck> GetStarterDecks()
         {
-	        if (!Plugin.ReadmeConfig.AscensionStarterDecks)
+	        if (!ReadmeConfig.Instance.AscensionStarterDecks)
 	        {
 		        return new List<StarterDeckManager.FullStarterDeck>();
 	        }
@@ -422,7 +384,7 @@ namespace ReadmeMaker
         {
 	        List<CardInfo> modifiedCards = new List<CardInfo>();
 	        
-	        if (!Plugin.ReadmeConfig.ModifiedCardsShow)
+	        if (!ReadmeConfig.Instance.ModifiedCardsShow)
 	        {
 		        return modifiedCards;
 	        }
@@ -449,59 +411,19 @@ namespace ReadmeMaker
 	        return modifiedCards;
         }
 
-        public static void AppendSummary(StringBuilder stringBuilder, MakerData makerData)
+        public static void AppendSummary(StringBuilder stringBuilder, List<ASection> sections)
         {
 	        stringBuilder.Append("### Includes:\n");
-	        if (makerData.allCards.Count > 0)
+	        for (int i = 0; i < sections.Count; i++)
 	        {
-		        stringBuilder.Append($"- {makerData.allCards.Count} New Cards:\n");
-	        }
-	        
-	        if (makerData.modifiedCards.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.modifiedCards.Count} Modified Cards:\n");
-	        }
-	        
-	        if (makerData.sideDeckCards.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.sideDeckCards.Count} Side Deck Cards:\n");
-	        }
-
-	        if (makerData.abilities.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.abilities.Count} New Sigils:\n");
-	        }
-
-	        if (makerData.specialAbilities.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.specialAbilities.Count} New Special Abilities:\n");
-	        }
-
-	        if (makerData.mapNodes.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.mapNodes.Count} New Map Nodes:\n");
-	        }
-
-	        if (makerData.newAscensionChallenges.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.newAscensionChallenges.Count} New Ascension Challenges:\n");
-	        }
-
-	        if (makerData.newStarterDecks.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.newStarterDecks.Count} New Ascension Stater Decks:\n");
-	        }
-
-	        if (makerData.configs.Count > 0)
-	        {
-		        stringBuilder.Append($"- {makerData.configs.Count} New Config Options:\n");
+		        sections[i].DumpSummary(stringBuilder);
 	        }
         }
 
         private static int SortCards(CardInfo a, CardInfo b)
         {
 	        int sorted = 0;
-	        switch (Plugin.ReadmeConfig.CardSortBy)
+	        switch (ReadmeConfig.Instance.CardSortBy)
 	        {
 		        case ReadmeConfig.SortByType.Cost:
 			        sorted = CompareByCost(a, b); 
@@ -511,7 +433,7 @@ namespace ReadmeMaker
 			        break;
 	        }
 
-	        if (!Plugin.ReadmeConfig.CardSortAscending)
+	        if (!ReadmeConfig.Instance.CardSortAscending)
 	        {
 		        return sorted * -1;
 	        }
@@ -615,7 +537,7 @@ namespace ReadmeMaker
 			// Add Free if we don't get a cost
 			if (!hasCost)
 			{
-				if (Plugin.ReadmeConfig.CardDisplayByType == ReadmeConfig.DisplayType.Table)
+				if (ReadmeConfig.Instance.CardDisplayByType == ReadmeConfig.DisplayType.Table)
 				{
 					builder.Append($"Free");
 				}

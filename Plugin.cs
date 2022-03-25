@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using UnityEngine;
 
 namespace ReadmeMaker
 {
@@ -18,14 +15,12 @@ namespace ReadmeMaker
         public static string Directory;
         public static ManualLogSource Log;
         public static Plugin Instance;
-        public static ReadmeConfig ReadmeConfig;
 
         private void Awake()
         {
 	        Log = Logger;
 	        Instance = this;
-	        ReadmeConfig = new ReadmeConfig();
-	        if (!ReadmeConfig.ReadmeMakerEnabled)
+	        if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
 	        {
 		        Logger.LogInfo($"ReadmeMaker disabled in the Config so it will not generate a Readme.");
 		        return;

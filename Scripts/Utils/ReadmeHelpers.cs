@@ -14,7 +14,7 @@ namespace ReadmeMaker
 
         public static List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> GetAllNewSpecialAbilities()
         {
-            var newSpecialAbilities = Helpers.GetStaticPrivateField <ObservableCollection<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>>(typeof(SpecialTriggeredAbilityManager), "NewSpecialTriggers");
+            var newSpecialAbilities = SpecialTriggeredAbilityManager.NewSpecialTriggers;
             var specialAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>(newSpecialAbilities);
             return specialAbilities;
         }

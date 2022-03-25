@@ -42,7 +42,7 @@ namespace ReadmeMaker
             }
             
             // Try displaying multiple icons
-            if (cost == 1 || cost <= Plugin.ReadmeConfig.CostMinCollapseAmount)
+            if (cost == 1 || cost <= ReadmeConfig.Instance.CostMinCollapseAmount)
             {
                 ShowMultipleIcons(cost, builder);
                 return true;
@@ -104,7 +104,7 @@ namespace ReadmeMaker
 
         private string FormatUrl(string url)
         {
-            if (Plugin.ReadmeConfig.CostAlignImages)
+            if (ReadmeConfig.Instance.CostAlignImages)
             {
                 return string.Format("<img align=\"center\" src=\"{0}\">", url);
             }
