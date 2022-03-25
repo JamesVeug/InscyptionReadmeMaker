@@ -10,6 +10,9 @@ namespace ReadmeMaker.Sections
 {
     public class NewAscensionChallengesSection : ASection
     {
+        public override string SectionName => "Ascension Challenges";
+        public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
+
         private List<AscensionChallengeInfo> challenges = null;
         
         public override void Initialize()
@@ -29,17 +32,12 @@ namespace ReadmeMaker.Sections
         {
             return String.Compare(a.title, b.title, StringComparison.Ordinal);
         }
-        
-        public override string GetSectionName()
-        {
-            return "Ascension Challenges";
-        }
 
         public override void DumpSummary(StringBuilder stringBuilder)
         {
             if (challenges.Count > 0)
             {
-                stringBuilder.Append($"- {challenges.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {challenges.Count} {SectionName}\n");
             }
         }
 

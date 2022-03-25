@@ -9,19 +9,19 @@ namespace ReadmeMaker
         public static string Dump(List<ASection> sections)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            ReadmeDump.AppendSummary(stringBuilder, sections);
-
+            stringBuilder.Append("### Includes:\n");
             for (int i = 0; i < sections.Count; i++)
             {
                 ASection section = sections[i];
-                
-                using (new HeaderScope($"{section.GetSectionName()}:\n", stringBuilder, true))
+                section.GetTableDump(out List<ASection.TableHeader> headers, out List<Dictionary<string, string>> rows);
+                if (rows == null || rows.Count == 0)
                 {
-                    section.GetTableDump(out List<ASection.TableHeader> headers, out List<Dictionary<string, string>> rows);
-                    for (int j = 0; j < rows.Count; j++)
-                    {
-                        BuildTable(stringBuilder, headers, rows);
-                    }
+                    continue;
+                }
+                
+                using (new HeaderScope($"{rows.Count} {section.SectionName}:\n", stringBuilder, true))
+                {
+                    BuildTable(stringBuilder, headers, rows);
                 }
             }
             
@@ -34,7 +34,7 @@ namespace ReadmeMaker
             //|Left columns|Right columns|
             for (int i = 0; i < headers.Count; i++)
             {
-                builder.Append("|" + headers[i]);
+                builder.Append("|" + headers[i].HeaderName);
                 if (i == headers.Count - 1)
                 {
                     builder.Append("|\n");

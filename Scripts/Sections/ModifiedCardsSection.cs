@@ -1,26 +1,17 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
-using InscryptionAPI.Card;
 
 namespace ReadmeMaker.Sections
 {
     public class ModifiedCardsSection : NewCardsSection
     {
-        public override string GetSectionName()
-        {
-            return "Modified Cards";
-        }
+        public override string SectionName => "Modified Cards";
+        public override bool Enabled => ReadmeConfig.Instance.ModifiedCardsShow;
 
         protected override List<CardInfo> GetCards()
         {
             List<CardInfo> modifiedCards = new List<CardInfo>();
-	        
-            if (!ReadmeConfig.Instance.ModifiedCardsShow)
-            {
-                return modifiedCards;
-            }
-	        
-	        
+
             /*List<CardInfo> originalCards = CardManager.BaseGameCards.Concat(CardManager.NewCards).Select(x => CardLoader.Clone(x)).ToList();
             List<CardInfo> allCards = CardManager.AllCardsCopy;
 

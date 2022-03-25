@@ -23,7 +23,6 @@ namespace ReadmeMaker
         }
 
         private static ReadmeConfig m_instance = null;
-        private static readonly ReadmeConfig Instance1;
 
         public enum HeaderType
         {
@@ -68,7 +67,6 @@ namespace ReadmeMaker
 
         public HeaderType GeneralHeaderType = Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
         public HeaderSize GeneralHeaderSize = Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
-        //private string IgnoreMods = Plugin.Instance.Config.Bind("General", "Mods", DefaultModsToIgnore, new ConfigDescription("List of mods to ignore from the readme dump. eg: \"jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod\"", null, Array.Empty<object>())).Value;
         
         public DisplayType CardDisplayByType = Plugin.Instance.Config.Bind("Cards", "Display By", DisplayType.Table, new ConfigDescription("Changes how the cards, abilities and special abilities are displayed.", null, Array.Empty<object>())).Value;
         public SortByType CardSortBy = Plugin.Instance.Config.Bind("Cards", "Sort Type", SortByType.Name, new ConfigDescription("Changes the order that the cards will be displayed in.", null, Array.Empty<object>())).Value;

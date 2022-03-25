@@ -7,6 +7,9 @@ namespace ReadmeMaker.Sections
 {
     public class NewMapNodesSection : ASection
     {
+        public override string SectionName => "New Map Nodes";
+        public override bool Enabled => ReadmeConfig.Instance.NodesShow;
+
         private List<NodeManager.NodeInfo> allNodes = null;
         
         public override void Initialize()
@@ -20,22 +23,19 @@ namespace ReadmeMaker.Sections
             allNodes.Sort((a, b) => String.Compare(a.guid, b.guid, StringComparison.Ordinal));
         }
         
-        public override string GetSectionName()
-        {
-            return "New Map Nodes";
-        }
-
         public override void DumpSummary(StringBuilder stringBuilder)
         {
             if (allNodes.Count > 0)
             {
-                stringBuilder.Append($"- {allNodes.Count} {GetSectionName()}\n");
+                stringBuilder.Append($"- {allNodes.Count} {SectionName}\n");
             }
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
         {
-            throw new NotImplementedException();
+            // Nothing to show
+            headers = new List<TableHeader>();
+            rows = new List<Dictionary<string, string>>();
         }
     }
 }

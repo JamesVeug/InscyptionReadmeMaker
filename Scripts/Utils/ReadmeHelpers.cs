@@ -177,12 +177,10 @@ namespace ReadmeMaker
 				return abilityInfo;
 			}
 			
-			var newAbilities = Helpers.GetStaticPrivateField <ObservableCollection<AbilityManager.FullAbility>>(typeof(AbilityManager), "NewAbilities");
-			var abilities = new List<AbilityManager.FullAbility>(newAbilities);
+			var abilities = new List<AbilityManager.FullAbility>(AbilityManager.NewAbilities);
 			for (int i = 0; i < abilities.Count; i++)
 			{
 				AbilityManager.FullAbility fullAbility = abilities[i];
-				Plugin.Log.LogWarning("[ReadmeHelpers] Could not get AbilityInfo for '" + fullAbility.Info.rulebookName + "' " + fullAbility.AbilityBehavior.ToString());
 				if (fullAbility.Id == ability)
 				{
 					return fullAbility.Info;

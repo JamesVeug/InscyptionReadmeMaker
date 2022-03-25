@@ -38,10 +38,11 @@ namespace ReadmeMaker.Sections
                 Enabled = enabled;
             }
         }
-        
+
+        public abstract string SectionName { get; }
+        public virtual bool Enabled => true;
+
         public abstract void Initialize();
-        
-        public abstract string GetSectionName();
 
         public abstract void DumpSummary(StringBuilder stringBuilder);
         public abstract void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows);
