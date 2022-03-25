@@ -46,6 +46,8 @@ namespace ReadmeMaker
 		    
 		    // List Custom costs here
 		    new LifeCost(),
+		    new MoneyCost(),
+		    new LifeMoneyCost(),
 	    };
 
 	    public static void AddCustomCost(ACost cost)
