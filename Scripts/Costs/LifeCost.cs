@@ -13,37 +13,31 @@ namespace ReadmeMaker
         public LifeCost()
         {            
             CostName = "Life";
-            CustomIconX = "https://tinyurl.com/2s44xjen";
+            CustomIconX = "https://tinyurl.com/2p96t6x5";
             IntToImage = new Dictionary<int, string>()
             {
-                { 0, "https://tinyurl.com/33evecbe" },
-                { 1, "https://tinyurl.com/vnu6j6t6" },
-                { 2, "https://tinyurl.com/4v7mfezu" },
-                { 3, "https://tinyurl.com/yr6fv3rv" },
-                { 4, "https://tinyurl.com/y4dszn4t" },
-                { 5, "https://tinyurl.com/mr2cxzv6" },
-                { 6, "https://tinyurl.com/4ebd6hh9" },
-                { 7, "https://tinyurl.com/2p97yt39" },
-                { 8, "https://tinyurl.com/2p9adwxk" },
-                { 9, "https://tinyurl.com/2p8bbbfm" },
+                { 0, "https://tinyurl.com/2p9ynesd" },
+                { 1, "https://tinyurl.com/5n78f946" },
+                { 2, "https://tinyurl.com/4fku2vzv" },
+                { 3, "https://tinyurl.com/ythkkk4n" },
+                { 4, "https://tinyurl.com/2p9heenz" },
+                { 5, "https://tinyurl.com/3wckkxrz" },
+                { 6, "https://tinyurl.com/5aw5eb4x" },
+                { 7, "https://tinyurl.com/ynfw44zt" },
+                { 8, "https://tinyurl.com/32y52ab5" },
+                { 9, "https://tinyurl.com/54c26ss5" },
             };
             CostToSingleImage = new Dictionary<int, string>()
             {
-                { 1, "https://tinyurl.com/34t9pd4d" },
-                { 2, "https://tinyurl.com/ym4vd6vc" },
-                { 3, "https://tinyurl.com/ykmxvpmt" },
-                { 4, "https://tinyurl.com/mstdm6ew" },
-                { 5, "https://tinyurl.com/jrww3cd6" },
-                { 6, "https://tinyurl.com/2p8z5bbp" },
-                { 7, "https://tinyurl.com/bdfbdrcu" },
-                { 8, "https://tinyurl.com/yckdjs9c" },
-                { 9, "https://tinyurl.com/y5mhzxc9" },
-                { 10, "https://tinyurl.com/4dbzjwyh" },
-                { 11, "https://tinyurl.com/yc8cjfyb" },
-                { 12, "https://tinyurl.com/2p9924tw" },
-                { 13, "https://tinyurl.com/bdfemups" },
-                { 14, "https://tinyurl.com/2p92zcxs" },
-                { 15, "https://tinyurl.com/c33czhdm" },
+                { 1, "https://tinyurl.com/kx98nhby" },
+                { 2, "https://tinyurl.com/2p8fwa8w" },
+                { 3, "https://tinyurl.com/yr33696a" },
+                { 4, "https://tinyurl.com/mr7n8jz7" },
+                { 5, "https://tinyurl.com/36ter6y5" },
+                { 6, "https://tinyurl.com/4uaa7znv" },
+                { 7, "https://tinyurl.com/5efbr2de" },
+                { 8, "https://tinyurl.com/3mdm2ufs" },
+                { 9, "https://tinyurl.com/zekh2x5m" },
             };
         }
         
