@@ -205,6 +205,19 @@ namespace JamesGames.ReadmeMaker.Sections
         
         private static int CompareByDisplayName(CardInfo a, CardInfo b)
         {
+            if (a.displayedName == null)
+            {
+                if (b.displayedName != null)
+                {
+                    return -1;
+                }
+                return 0;
+            }
+            else if (b.displayedName == null)
+            {
+                return 1;
+            }
+            
             return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
         }
 
