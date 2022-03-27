@@ -59,6 +59,7 @@ To see what your Readme looks like when its on the store.
 |jamesgames.inscryption.readmemaker|Config|Only Show Plugin|If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: "jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod"|
 |jamesgames.inscryption.readmemaker|Config|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
 |jamesgames.inscryption.readmemaker|Config|Show GUID|Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?|
+|jamesgames.inscryption.readmemaker|Encounters|Show Encounters|Show all new encounters added in its own section..|
 |jamesgames.inscryption.readmemaker|General|Header Size|How big should the header be? (Does not work for type Foldout!|
 |jamesgames.inscryption.readmemaker|General|Header Type|How should the header be shown? (Unaffected by Size)|
 |jamesgames.inscryption.readmemaker|Modified Cards|Show Modified Cards Section|Show a section that lists all the cards modified.|
@@ -67,6 +68,7 @@ To see what your Readme looks like when its on the store.
 |jamesgames.inscryption.readmemaker|Side Deck|Show Side Deck Section|Show a section that lists all the custom side deck cards.|
 |jamesgames.inscryption.readmemaker|Sigils|Show Sigils|Show all new sigils listed on cards in its own section.|
 |jamesgames.inscryption.readmemaker|Special Abilities|Show Special Abilities|Show all new special abilities listed on cards in its own section.|
+|jamesgames.inscryption.readmemaker|Tribes|Show Tribes|Show all new tribes added in its own section.|
 |jamesgames.inscryption.readmemaker|_ReadmeMaker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
 
 
@@ -83,6 +85,21 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 0.10.0 - 27/3/2022`
+### General:
+- Bumped API to 2.1
+
+### Added:
+- New Tribe section
+- New Encounter section
+
+### Fixed:
+- Fixed cards missing a displayName causing a NullReference
+- Fixed Map node section not showing 
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 0.9.0 - 25/3/2022`
 ### General:
 - Combined Summary and dropdowns
@@ -98,9 +115,6 @@ To see what your Readme looks like when its on the store.
 ### Fixed:
 - Fixed LifeMoney cost not working
 - Added cards only accessible by tail not showing in list
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 0.8.0 - 22/3/2022`
 ### General:
