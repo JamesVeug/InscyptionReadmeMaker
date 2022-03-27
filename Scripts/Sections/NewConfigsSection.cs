@@ -96,7 +96,7 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             if (configs.Count > 0)
             {
-                stringBuilder.Append($"- {configs.Count} {SectionName}\n");
+                stringBuilder.Append($"\n{configs.Count} {SectionName}\n");
             }
         }
 

@@ -31,7 +31,7 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             if (decks.Count > 0)
             {
-                stringBuilder.Append($"- {decks.Count} {SectionName}\n");
+                stringBuilder.Append($"\n{decks.Count} {SectionName}\n");
             }
         }
 

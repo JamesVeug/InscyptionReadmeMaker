@@ -28,7 +28,7 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             if (allNodes.Count > 0)
             {
-                stringBuilder.Append($"- {allNodes.Count} {SectionName}\n");
+                stringBuilder.Append($"\n{allNodes.Count} {SectionName}\n");
             }
         }
 
