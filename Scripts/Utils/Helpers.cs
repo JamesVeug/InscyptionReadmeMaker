@@ -5,12 +5,78 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using APIPlugin;
+using BepInEx;
+using BepInEx.Bootstrap;
+using InscryptionAPI.Guid;
+using InscryptionAPI.Saves;
 using UnityEngine;
 
 namespace JamesGames.ReadmeMaker
 {
     public static class Helpers
     {
+        private static Dictionary<int, Tuple<string, string>> GUIDNameLookup = null;
+
+        public static string GetGUID(int value)
+        {
+            Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
+            if (tuple == null)
+            {
+                return "unknown guid";
+            }
+
+            return tuple.Item1;
+        }
+
+        public static string GetName(int value)
+        {
+            Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
+            if (tuple == null)
+            {
+                return "unknown name";
+            }
+
+            return tuple.Item2;
+        }
+        
+        public static Tuple<string, string> GetGUIDAndNameFromEnum(int value)
+        {
+            if (GUIDNameLookup == null)
+            {
+                // Init
+                GUIDNameLookup = new Dictionary<int, Tuple<string, string>>();
+                foreach (KeyValuePair<string, Dictionary<string, string>> pluginData in ModdedSaveManager.SaveData.SaveData)
+                {
+                    foreach (KeyValuePair<string, string> savedData in pluginData.Value)
+                    {
+                        string entry = savedData.Key;
+                        int entryValue = int.Parse(savedData.Value);
+                        
+                        // format: {typeof(T).Name}_{guid}_{value}
+                        foreach (PluginInfo infosValue in Chainloader.PluginInfos.Values)
+                        {
+                            string pluginGUID = infosValue.Metadata.GUID;
+                            int indexOf = entry.IndexOf(pluginGUID, StringComparison.Ordinal);
+                            if (indexOf >= 0)
+                            {
+                                string entryName = entry.Substring(indexOf + pluginGUID.Length + 1);
+                                GUIDNameLookup[entryValue] = new Tuple<string, string>(pluginGUID, entryName);
+                                Plugin.Log.LogInfo($"{pluginGUID} {entryName} = {entryValue}");
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (GUIDNameLookup.TryGetValue(value, out Tuple<string, string> pair))
+            {
+                return pair;
+            }
+
+            return null;
+        }
+
         public static T GetStaticPrivateField<T>(Type classType, string fieldName)
         {
             FieldInfo info = classType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static);

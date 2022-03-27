@@ -22,6 +22,7 @@ namespace JamesGames.ReadmeMaker
 		    new NewAscensionChallengesSection(),
 		    new NewAscensionStarterDecksSection(),
 		    new NewMapNodesSection(),
+		    new NewTribesSection(),
 		    new NewConfigsSection(),
 	    };
 	    
@@ -45,6 +46,11 @@ namespace JamesGames.ReadmeMaker
 	    public static void AddCustomCost(ACost cost)
 	    {
 		    Costs.Add(cost);
+	    }
+
+	    public static void AddSection(ASection section)
+	    {
+		    Sections.Add(section);
 	    }
 
 	    public static void RenameTrait(Trait trait, string traitName)
