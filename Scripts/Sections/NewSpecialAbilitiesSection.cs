@@ -51,7 +51,7 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             if (allAbilities.Count > 0)
             {
-                stringBuilder.Append($"- {allAbilities.Count} {SectionName}\n");
+                stringBuilder.Append($"\n{allAbilities.Count} {SectionName}\n");
             }
         }
 
