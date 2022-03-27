@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public abstract class ASection
     {

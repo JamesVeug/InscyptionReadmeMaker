@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public abstract class ACardsSection : ASection
     {

@@ -4,7 +4,7 @@ using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public abstract class AllNewCards : ACardsSection
     {

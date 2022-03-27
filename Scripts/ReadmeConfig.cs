@@ -1,7 +1,7 @@
 ﻿using System;
 using BepInEx.Configuration;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public class ReadmeConfig
     {

@@ -6,7 +6,7 @@ using InscryptionAPI.Ascension;
 using InscryptionAPI.Card;
 using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewAscensionChallengesSection : ASection
     {

@@ -4,11 +4,11 @@ using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
 using InscryptionAPI.Card;
-using ReadmeMaker.Configs;
+using JamesGames.ReadmeMaker.Configs;
 using UnityEngine;
 using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewConfigsSection : ASection
     {

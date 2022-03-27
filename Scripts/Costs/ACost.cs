@@ -2,7 +2,7 @@
 using System.Text;
 using DiskCardGame;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public abstract class ACost
     {

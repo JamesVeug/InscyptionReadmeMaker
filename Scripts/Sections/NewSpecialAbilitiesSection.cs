@@ -4,7 +4,7 @@ using System.Text;
 using InscryptionAPI.Card;
 using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewSpecialAbilitiesSection : ASection
     {

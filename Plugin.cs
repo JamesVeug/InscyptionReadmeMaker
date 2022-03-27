@@ -2,7 +2,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     [BepInDependency("cyantist.inscryption.api", BepInDependency.DependencyFlags.HardDependency)]

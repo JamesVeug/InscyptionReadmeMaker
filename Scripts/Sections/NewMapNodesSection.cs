@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using InscryptionAPI.Encounters;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewMapNodesSection : ASection
     {

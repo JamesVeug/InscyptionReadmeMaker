@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using ReadmeMaker.Sections;
+using JamesGames.ReadmeMaker.Sections;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public static class ReadmeTableMaker
     {
