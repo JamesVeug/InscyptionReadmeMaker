@@ -4,7 +4,7 @@ using System.Text;
 using InscryptionAPI.Card;
 using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewSigilsSection : ASection
     {

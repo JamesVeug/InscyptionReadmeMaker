@@ -6,7 +6,7 @@ using BepInEx.Bootstrap;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public class MoneyCost : ACost
     {

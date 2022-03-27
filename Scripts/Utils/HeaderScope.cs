@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public class HeaderScope : IDisposable
     {

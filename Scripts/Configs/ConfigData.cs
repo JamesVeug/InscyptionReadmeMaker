@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace ReadmeMaker.Configs
+namespace JamesGames.ReadmeMaker.Configs
 {
     public class ConfigData
     {

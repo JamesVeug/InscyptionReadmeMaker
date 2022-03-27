@@ -1,6 +1,6 @@
 ﻿using DiskCardGame;
 using HarmonyLib;
-using ReadmeMaker;
+using JamesGames.ReadmeMaker;
 
 namespace API.Patches
 {

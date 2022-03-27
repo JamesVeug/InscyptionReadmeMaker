@@ -2,7 +2,7 @@
 using DiskCardGame;
 using InscryptionAPI.Card;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewSideDeckCardsSection : NewCardsSection
     {

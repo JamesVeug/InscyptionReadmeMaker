@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public class MoxGreenCost : ACost
     {

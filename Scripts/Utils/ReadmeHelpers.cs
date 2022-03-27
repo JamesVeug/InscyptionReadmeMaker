@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
-namespace ReadmeMaker
+namespace JamesGames.ReadmeMaker
 {
     public class ReadmeHelpers
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
 
-namespace ReadmeMaker.Sections
+namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewRareCardsSection : AllNewCards
     {
