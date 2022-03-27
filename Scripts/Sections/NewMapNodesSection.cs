@@ -17,6 +17,7 @@ namespace JamesGames.ReadmeMaker.Sections
             if (!ReadmeConfig.Instance.NodesShow)
             {
                 allNodes = new List<NodeManager.NodeInfo>();
+                return;
             }
 
             allNodes = new List<NodeManager.NodeInfo>(NodeManager.AllNodes);
