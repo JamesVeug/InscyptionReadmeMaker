@@ -16,6 +16,7 @@ namespace JamesGames.ReadmeMaker
                 section.GetTableDump(out List<ASection.TableHeader> headers, out List<Dictionary<string, string>> rows);
                 if (rows == null || rows.Count == 0)
                 {
+                    section.DumpSummary(stringBuilder);
                     continue;
                 }
                 
