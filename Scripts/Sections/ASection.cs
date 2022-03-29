@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace JamesGames.ReadmeMaker.Sections
@@ -58,9 +57,15 @@ namespace JamesGames.ReadmeMaker.Sections
         
         protected List<Dictionary<string, string>> BreakdownForTable<T>(List<T> objects, out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
-            headers = grouping.Where(col => col.Enabled)
-                              .Select(column => new TableHeader(column.HeaderName, column.Alignment))
-                              .ToList();
+            headers = new List<TableHeader>();
+            for (int i = 0; i < grouping.Length; i++)
+            {
+                TableColumn<T> column = grouping[i];
+                if (column.Enabled)
+                {
+                    headers.Add(new TableHeader(column.HeaderName, column.Alignment));
+                }
+            }
 
             var split = new List<Dictionary<string, string>>();
             foreach (var o in objects)

@@ -79,20 +79,23 @@ namespace JamesGames.ReadmeMaker
 		public static string GetPower(CardInfo info)
 		{
 			string power = "";
-			foreach (var pair in ReadmeDump.PowerModifyingSpecials.Where(pair => info.SpecialAbilities.Contains(pair.Key)))
+			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in ReadmeDump.PowerModifyingSpecials)
 			{
-				if (!string.IsNullOrEmpty(power))
+				if(info.SpecialAbilities.Contains(pair.Key))
 				{
-					power += ", ";
-				}
+					if (!string.IsNullOrEmpty(power))
+					{
+						power += ", ";
+					}
 
-				if (string.IsNullOrEmpty(pair.Value))
-				{
-					power += GetSpecialAbilityName(pair.Key);
-				}
-				else
-				{
-					power += pair.Value;
+					if (string.IsNullOrEmpty(pair.Value))
+					{
+						power += GetSpecialAbilityName(pair.Key);
+					}
+					else
+					{
+						power += pair.Value;
+					}
 				}
 			}
 
@@ -112,20 +115,23 @@ namespace JamesGames.ReadmeMaker
 		public static string GetHealth(CardInfo info)
 		{
 			string health = "";
-			foreach (var pair in ReadmeDump.HealthModifyingSpecials.Where(pair => info.SpecialAbilities.Contains(pair.Key)))
+			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in ReadmeDump.HealthModifyingSpecials)
 			{
-				if (!string.IsNullOrEmpty(health))
+				if(info.SpecialAbilities.Contains(pair.Key))
 				{
-					health += ", ";
-				}
+					if (!string.IsNullOrEmpty(health))
+					{
+						health += ", ";
+					}
 
-				if (string.IsNullOrEmpty(pair.Value))
-				{
-					health += GetSpecialAbilityName(pair.Key);
-				}
-				else
-				{
-					health += pair.Value;
+					if (string.IsNullOrEmpty(pair.Value))
+					{
+						health += GetSpecialAbilityName(pair.Key);
+					}
+					else
+					{
+						health += pair.Value;
+					}
 				}
 			}
 
