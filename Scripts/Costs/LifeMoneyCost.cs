@@ -1,8 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using BepInEx;
-using BepInEx.Bootstrap;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
@@ -50,12 +46,7 @@ namespace JamesGames.ReadmeMaker
         public override int GetCost(CardInfo cardInfo)
         {
             int? cost = cardInfo.GetExtendedPropertyAsInt("LifeMoneyCost");
-            if (!cost.HasValue)
-            {
-                return 0;
-            }
-            
-            return cost.Value;
+            return cost ?? 0;
         }
     }
 }
