@@ -8,32 +8,32 @@ namespace JamesGames.ReadmeMaker
         public BoneCost()
         {
             CostName = "Bone";
-            CustomIconX = "https://tinyurl.com/2p8e9tz5";
+            CustomIconX = "https://i.imgur.com/UMfuFFS.png";
             IntToImage = new Dictionary<int, string>()
             {
-                { 0, "https://tinyurl.com/yd7pkf8k" },
-                { 1, "https://tinyurl.com/3e6vmy8w" },
-                { 2, "https://tinyurl.com/3bmsh9ax" },
-                { 3, "https://tinyurl.com/ynxxamy7" },
-                { 4, "https://tinyurl.com/33n7er5c" },
-                { 5, "https://tinyurl.com/4nhcutsf" },
-                { 6, "https://tinyurl.com/r5n49kst" },
-                { 7, "https://tinyurl.com/2s3pwt9d" },
-                { 8, "https://tinyurl.com/2p9vfuk4" },
-                { 9, "https://tinyurl.com/bdecxmby" },
+                { 0, "https://i.imgur.com/puwP3dD.png" },
+                { 1, "https://i.imgur.com/g6cUUvP.png" },
+                { 2, "https://i.imgur.com/czecyiH.png" },
+                { 3, "https://i.imgur.com/jnK5NEz.png" },
+                { 4, "https://i.imgur.com/iJN52Ow.png" },
+                { 5, "https://i.imgur.com/o1qsSmA.png" },
+                { 6, "https://i.imgur.com/r1Q62Ck.png" },
+                { 7, "https://i.imgur.com/mKxovtH.png" },
+                { 8, "https://i.imgur.com/cEvPoTk.png" },
+                { 9, "https://i.imgur.com/Vh7xWuE.png" },
             };
             CostToSingleImage = new Dictionary<int, string>()
             {
-                { 1, "https://tinyurl.com/ycku3kab" },
-                { 2, "https://tinyurl.com/kt3f8tnw" },
-                { 3, "https://tinyurl.com/mta2ah9y" },
-                { 4, "https://tinyurl.com/276rt5yx" },
-                { 5, "https://tinyurl.com/2p97kn33" },
-                { 6, "https://tinyurl.com/2p8wpx7f" },
-                { 7, "https://tinyurl.com/58ksh7sk" },
-                { 8, "https://tinyurl.com/mv6tnc5e" },
-                { 9, "https://tinyurl.com/ks2sbsr3" },
-                { 10, "https://tinyurl.com/3usw5tn2" },
+                { 1, "https://i.imgur.com/GeMgIce.png" },
+                { 2, "https://i.imgur.com/beJhD7d.png" },
+                { 3, "https://i.imgur.com/XmTnHld.png" },
+                { 4, "https://i.imgur.com/UvtK0PY.png" },
+                { 5, "https://i.imgur.com/i9oPLUJ.png" },
+                { 6, "https://i.imgur.com/5EnVPo0.png" },
+                { 7, "https://i.imgur.com/azfV5m8.png" },
+                { 8, "https://i.imgur.com/66XMPEU.png" },
+                { 9, "https://i.imgur.com/aH4bIq4.png" },
+                { 10,"https://i.imgur.com/ogwt58w.png" },
             };
         }
         
