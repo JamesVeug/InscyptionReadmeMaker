@@ -20,23 +20,13 @@ namespace JamesGames.ReadmeMaker
         public static string GetGUID(int value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
-            if (tuple == null)
-            {
-                return "unknown guid";
-            }
-
-            return tuple.Item1;
+            return tuple == null ? "unknown guid" : tuple.Item1;
         }
 
         public static string GetName(int value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
-            if (tuple == null)
-            {
-                return "unknown name";
-            }
-
-            return tuple.Item2;
+            return tuple == null ? "unknown name" : tuple.Item2;
         }
         
         public static Tuple<string, string> GetGUIDAndNameFromEnum(int value)
