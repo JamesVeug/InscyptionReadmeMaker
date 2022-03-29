@@ -27,10 +27,10 @@ namespace JamesGames.ReadmeMaker
 				return ability.ToString();
 			}
 
-			var specialAbility = ReadmeHelpers.GetAllNewSpecialAbilities().Find((a)=>a.Id == ability);
+			var specialAbility = GetAllNewSpecialAbilities().Find((a)=>a.Id == ability);
 			if (specialAbility != null)
 			{
-				StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == specialAbility.AbilityBehaviour);
+				StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == specialAbility.AbilityBehaviour);
 				if (icon != null)
 				{
 					return icon.Info.rulebookName;
@@ -42,13 +42,13 @@ namespace JamesGames.ReadmeMaker
         
         public static string GetSpecialAbilityName(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
-	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
+	        StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
 	        return icon?.Info.rulebookName;
         }
         
         public static string GetSpecialAbilityDescription(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
-	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
+	        StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
 	        return icon?.Info.rulebookDescription;
         }
 		

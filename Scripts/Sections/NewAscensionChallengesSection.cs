@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Ascension;
-using InscryptionAPI.Card;
-using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
