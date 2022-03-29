@@ -13,9 +13,8 @@ namespace JamesGames.ReadmeMaker.Sections
             List<CardInfo> allCards = new List<CardInfo>(CardManager.NewCards);
 
             HashSet<string> referencesCardNames = new HashSet<string>();
-            for (int i = 0; i < allCards.Count; i++)
+            foreach (var cardInfo in allCards)
             {
-                CardInfo cardInfo = allCards[i];
                 if (cardInfo.evolveParams != null && cardInfo.evolveParams != null)
                 {
                     referencesCardNames.Add(cardInfo.evolveParams.evolution.name);
