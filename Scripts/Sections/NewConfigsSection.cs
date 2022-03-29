@@ -79,7 +79,7 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
         
-        private static int SortNewSpecialAbilities(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
+        private static int SortNewSpecialAbilities(SpecialAbility a, SpecialAbility b)
         {
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
             StatIconManager.FullStatIcon aStatIcon = icons.Find((icon) => icon.VariableStatBehavior == a.AbilityBehaviour);
