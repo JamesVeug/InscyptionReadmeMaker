@@ -62,25 +62,20 @@ namespace JamesGames.ReadmeMaker.Sections
             // Key
             configs.Sort((a, b) =>
             {
-                int guid = String.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
+                int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
                 if (guid != 0)
                 {
             	    return guid;
                 }
                 
-                int section = String.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
+                int section = string.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
                 if (section != 0)
                 {
             	    return section;
                 }
                 
-                int key = String.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
-                if (key != 0)
-                {
-            	    return key;
-                }
-
-                return 0;
+                int key = string.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
+                return key != 0 ? key : 0;
             });
         }
         
@@ -89,7 +84,7 @@ namespace JamesGames.ReadmeMaker.Sections
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
             StatIconManager.FullStatIcon aStatIcon = icons.Find((icon) => icon.VariableStatBehavior == a.AbilityBehaviour);
             StatIconManager.FullStatIcon bStatIcon = icons.Find((icon) => icon.VariableStatBehavior == b.AbilityBehaviour);
-            return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
+            return string.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
 
         public override void DumpSummary(StringBuilder stringBuilder)
