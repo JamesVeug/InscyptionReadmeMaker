@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
+using HarmonyLib;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -52,55 +53,17 @@ namespace JamesGames.ReadmeMaker.Sections
         
         private static string GetTribes(CardInfo info)
         {
-            StringBuilder tribesBuilder = new StringBuilder();
-            for (int j = 0; j < info.tribes.Count; j++)
-            {
-                if (j > 0)
-                {
-                    tribesBuilder.Append(", ");
-                }
-
-                tribesBuilder.Append(ReadmeHelpers.GetTribeName(info.tribes[j]));
-            }
-
-            return tribesBuilder.ToString();
+            return info.tribes.Join(ReadmeHelpers.GetTribeName, ",<br/>");
         }
 
         private string GetTraits(CardInfo info)
         {
-            StringBuilder traitsBuilder = new StringBuilder();
-            for (int j = 0; j < info.traits.Count; j++)
-            {
-                if (j > 0)
-                {
-                    traitsBuilder.Append(", ");
-                }
-
-                string traitName = ReadmeHelpers.GetTraitName(info.traits[j]);
-                traitsBuilder.Append(traitName);
-            }
-
-            return traitsBuilder.ToString();
+            return info.traits.Join(ReadmeHelpers.GetTraitName, ",<br/>");
         }
 
         private static string GetSpecialAbilities(CardInfo info)
         {
-            StringBuilder specialsBuilder = new StringBuilder();
-            for (int j = 0; j < info.specialAbilities.Count; j++)
-            {
-                if (j > 0)
-                {
-                    specialsBuilder.Append(", ");
-                }
-
-                string specialAbilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[j]);
-                if (specialAbilityName != null)
-                {
-                    specialsBuilder.Append($" {specialAbilityName}");
-                }
-            }
-
-            return specialsBuilder.ToString();
+            return info.specialAbilities.Join(ReadmeHelpers.GetSpecialAbilityName, ",<br/>");
         }
 
         private string GetTail(CardInfo info)
@@ -146,9 +109,8 @@ namespace JamesGames.ReadmeMaker.Sections
 
             // Show all abilities one after the other
             int totalShownAbilities = 0;
-            for (int i = 0; i < infoAbilities.Count; i++)
+            foreach (Ability ability in infoAbilities)
             {
-                Ability ability = infoAbilities[i];
                 AbilityInfo abilityInfo = ReadmeHelpers.GetAbilityInfo(ability);
                 if (abilityInfo == null)
                 {
@@ -164,21 +126,21 @@ namespace JamesGames.ReadmeMaker.Sections
                 
                 if (totalShownAbilities++ > 0)
                 {
-                    sigilBuilder.Append(", ");
+                    sigilBuilder.Append(",<br/>");
                 }
                 
                 if (ReadmeConfig.Instance.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
                 {
                     // Show all abilities, but combine duplicates into Waterborne(x2)
-                    sigilBuilder.Append($" {abilityName}(x{count})");
+                    sigilBuilder.Append($"{abilityName}(x{count})");
                 }
                 else
                 {
                     // Show all abilities 1 by 1 (Waterborne, Waterborne, Waterborne)
-                    sigilBuilder.Append($" {abilityName}");
+                    sigilBuilder.Append($"{abilityName}");
                 }
             }
-            
+
             return sigilBuilder.ToString();
         }
         
@@ -213,12 +175,10 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
                 return 0;
             }
-            else if (b.displayedName == null)
-            {
-                return 1;
-            }
-            
-            return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
+
+            return b.displayedName == null 
+                       ? 1 
+                       : string.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
         }
 
         private static int CompareByCost(CardInfo a, CardInfo b)
@@ -279,9 +239,9 @@ namespace JamesGames.ReadmeMaker.Sections
             }
             if (a.gemsCost.Count > 0)
             {
-                for (int i = 0; i < a.gemsCost.Count; i++)
+                foreach (var gemType in a.gemsCost)
                 {
-                    switch (a.gemsCost[i])
+                    switch (gemType)
                     {
                         case GemType.Green:
                             list.Add(new Tuple<int, int>(3, 1));
