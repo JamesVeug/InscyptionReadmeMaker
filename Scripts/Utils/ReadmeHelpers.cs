@@ -43,23 +43,13 @@ namespace JamesGames.ReadmeMaker
         public static string GetSpecialAbilityName(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
 	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
-	        if (icon != null)
-	        {
-		        return icon.Info.rulebookName;
-	        }
-
-	        return null;
+	        return icon?.Info.rulebookName;
         }
         
         public static string GetSpecialAbilityDescription(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
 	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
-	        if (icon != null)
-	        {
-		        return icon.Info.rulebookDescription;
-	        }
-
-	        return null;
+	        return icon?.Info.rulebookDescription;
         }
 		
 		public static string GetAbilityName(AbilityManager.FullAbility Ability)
