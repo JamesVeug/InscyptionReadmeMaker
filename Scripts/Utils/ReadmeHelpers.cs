@@ -68,22 +68,12 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTraitName(Trait trait)
 		{
-			if (ReadmeDump.TraitToName.TryGetValue(trait, out string name))
-			{
-				return name;
-			}
-			
-			return trait.ToString();
+			return ReadmeDump.TraitToName.TryGetValue(trait, out string name) ? name : trait.ToString();
 		}
 
 		public static string GetTribeName(Tribe tribe)
 		{
-			if (ReadmeDump.TribeToName.TryGetValue(tribe, out string name))
-			{
-				return name;
-			}
-			
-			return tribe.ToString();
+			return ReadmeDump.TribeToName.TryGetValue(tribe, out string name) ? name : tribe.ToString();
 		}
 
 		public static string GetPower(CardInfo info)
