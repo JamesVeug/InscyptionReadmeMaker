@@ -13,31 +13,31 @@ namespace JamesGames.ReadmeMaker
         public LifeCost()
         {            
             CostName = "Life";
-            CustomIconX = "https://tinyurl.com/2p96t6x5";
+            CustomIconX = "https://i.imgur.com/hox8zlk.png";
             IntToImage = new Dictionary<int, string>()
             {
-                { 0, "https://tinyurl.com/2p9ynesd" },
-                { 1, "https://tinyurl.com/5n78f946" },
-                { 2, "https://tinyurl.com/4fku2vzv" },
-                { 3, "https://tinyurl.com/ythkkk4n" },
-                { 4, "https://tinyurl.com/2p9heenz" },
-                { 5, "https://tinyurl.com/3wckkxrz" },
-                { 6, "https://tinyurl.com/5aw5eb4x" },
-                { 7, "https://tinyurl.com/ynfw44zt" },
-                { 8, "https://tinyurl.com/32y52ab5" },
-                { 9, "https://tinyurl.com/54c26ss5" },
+                { 0, "https://i.imgur.com/3mXHK5K.png" },
+                { 1, "https://i.imgur.com/NcdGqIZ.png" },
+                { 2, "https://i.imgur.com/3ngvEdK.png" },
+                { 3, "https://i.imgur.com/Aem0MCG.png" },
+                { 4, "https://i.imgur.com/P1yr67p.png" },
+                { 5, "https://i.imgur.com/qeakSS4.png" },
+                { 6, "https://i.imgur.com/lgHEMp9.png" },
+                { 7, "https://i.imgur.com/h6f8Y6a.png" },
+                { 8, "https://i.imgur.com/WcDo2N1.png" },
+                { 9, "https://i.imgur.com/81nqsA4.png" },
             };
             CostToSingleImage = new Dictionary<int, string>()
             {
-                { 1, "https://tinyurl.com/kx98nhby" },
-                { 2, "https://tinyurl.com/2p8fwa8w" },
-                { 3, "https://tinyurl.com/yr33696a" },
-                { 4, "https://tinyurl.com/mr7n8jz7" },
-                { 5, "https://tinyurl.com/36ter6y5" },
-                { 6, "https://tinyurl.com/4uaa7znv" },
-                { 7, "https://tinyurl.com/5efbr2de" },
-                { 8, "https://tinyurl.com/3mdm2ufs" },
-                { 9, "https://tinyurl.com/zekh2x5m" },
+                { 1, "https://i.imgur.com/ewWAXzT.png" },
+                { 2, "https://i.imgur.com/0Lbz2Sv.png" },
+                { 3, "https://i.imgur.com/9qF5brY.png" },
+                { 4, "https://i.imgur.com/ajsynkV.png" },
+                { 5, "https://i.imgur.com/ywMATqz.png" },
+                { 6, "https://i.imgur.com/iuXQy4f.png" },
+                { 7, "https://i.imgur.com/L9YyzSE.png" },
+                { 8, "https://i.imgur.com/CGFrK9s.png" },
+                { 9, "https://i.imgur.com/dd2p9an.png" },
             };
         }
         

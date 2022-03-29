@@ -12,7 +12,7 @@ namespace JamesGames.ReadmeMaker
             IntToImage = new Dictionary<int, string>() {};
             CostToSingleImage = new Dictionary<int, string>()
             {
-                { 1, "https://tinyurl.com/ybsfz23h" },
+                { 1, "https://i.imgur.com/WnaCjEY.png" },
             };
         }
         

@@ -13,37 +13,37 @@ namespace JamesGames.ReadmeMaker
         public MoneyCost()
         {            
             CostName = "Money";
-            CustomIconX = "https://tinyurl.com/bdefpyvb";
+            CustomIconX = "https://i.imgur.com/hox8zlk.png";
             IntToImage = new Dictionary<int, string>()
             {
-                { 0, "https://tinyurl.com/5n7bzaru" },
-                { 1, "https://tinyurl.com/bp5rudyv" },
-                { 2, "https://tinyurl.com/mrxmjbnm" },
-                { 3, "https://tinyurl.com/4z46mdjd" },
-                { 4, "https://tinyurl.com/y2crc4ds" },
-                { 5, "https://tinyurl.com/yc6jknuc" },
-                { 6, "https://tinyurl.com/2p84ffvs" },
-                { 7, "https://tinyurl.com/2p9y2swm" },
-                { 8, "https://tinyurl.com/mryu7ntj" },
-                { 9, "https://tinyurl.com/2j83adb4" },
+                { 0, "https://i.imgur.com/3mXHK5K.png" },
+                { 1, "https://i.imgur.com/NcdGqIZ.png" },
+                { 2, "https://i.imgur.com/3ngvEdK.png" },
+                { 3, "https://i.imgur.com/Aem0MCG.png" },
+                { 4, "https://i.imgur.com/P1yr67p.png" },
+                { 5, "https://i.imgur.com/qeakSS4.png" },
+                { 6, "https://i.imgur.com/lgHEMp9.png" },
+                { 7, "https://i.imgur.com/h6f8Y6a.png" },
+                { 8, "https://i.imgur.com/WcDo2N1.png" },
+                { 9, "https://i.imgur.com/81nqsA4.png" },
             };
             CostToSingleImage = new Dictionary<int, string>()
             {
-                { 1, "https://tinyurl.com/2p986twn" },
-                { 2, "https://tinyurl.com/d9bhc4uy" },
-                { 3, "https://tinyurl.com/2sm7zw6n" },
-                { 4, "https://tinyurl.com/mrpawmry" },
-                { 5, "https://tinyurl.com/9xafycb8" },
-                { 6, "https://tinyurl.com/23s3pe5t" },
-                { 7, "https://tinyurl.com/bdeh47uf" },
-                { 8, "https://tinyurl.com/2p8sf5me" },
-                { 9, "https://tinyurl.com/2p8kum23" },
-                { 10, "https://tinyurl.com/5f8yptte" },
-                { 11, "https://tinyurl.com/24sfrazc" },
-                { 12, "https://tinyurl.com/y82nvsn7" },
-                { 13, "https://tinyurl.com/cd69fv6w" },
-                { 14, "https://tinyurl.com/29drbhv2" },
-                { 15, "https://tinyurl.com/ms8sajyz" },
+                { 1,  "https://i.imgur.com/AvSFjqE.png" },
+                { 2,  "https://i.imgur.com/XkjzNGs.png" },
+                { 3,  "https://i.imgur.com/CFUOyGF.png" },
+                { 4,  "https://i.imgur.com/XycYXqJ.png" },
+                { 5,  "https://i.imgur.com/FZhTjPv.png" },
+                { 6,  "https://i.imgur.com/yntWPHa.png" },
+                { 7,  "https://i.imgur.com/p0gd8tq.png" },
+                { 8,  "https://i.imgur.com/4KPbD9s.png" },
+                { 9,  "https://i.imgur.com/2NE54Qt.png" },
+                { 10, "https://i.imgur.com/c9Lqcqs.png" },
+                { 11, "https://i.imgur.com/7upNyss.png" },
+                { 12, "https://i.imgur.com/KLYdE3U.png" },
+                { 13, "https://i.imgur.com/LfECumH.png" },
+                { 14, "https://i.imgur.com/0dwwqNf.png" },
+                { 15, "https://i.imgur.com/DQ4t4PQ.png" },
             };
         }
         
