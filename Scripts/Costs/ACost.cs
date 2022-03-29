@@ -104,14 +104,9 @@ namespace JamesGames.ReadmeMaker
 
         private string FormatUrl(string url)
         {
-            if (ReadmeConfig.Instance.CostAlignImages)
-            {
-                return string.Format("<img align=\"center\" src=\"{0}\">", url);
-            }
-            else
-            {
-                return string.Format("<img src=\"{0}\">", url);
-            }
+            return ReadmeConfig.Instance.CostAlignImages 
+                       ? $"<img align=\"center\" src=\"{url}\">" 
+                       : $"<img src=\"{url}\">";
         }
 
         private void ShowMultipleIcons(int cost, StringBuilder builder)
