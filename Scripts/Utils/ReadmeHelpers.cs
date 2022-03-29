@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
@@ -98,23 +99,20 @@ namespace JamesGames.ReadmeMaker
 		public static string GetPower(CardInfo info)
 		{
 			string power = "";
-			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in ReadmeDump.PowerModifyingSpecials)
+			foreach (var pair in ReadmeDump.PowerModifyingSpecials.Where(pair => info.SpecialAbilities.Contains(pair.Key)))
 			{
-				if(info.SpecialAbilities.Contains(pair.Key))
+				if (!string.IsNullOrEmpty(power))
 				{
-					if (!string.IsNullOrEmpty(power))
-					{
-						power += ", ";
-					}
+					power += ", ";
+				}
 
-					if (string.IsNullOrEmpty(pair.Value))
-					{
-						power += GetSpecialAbilityName(pair.Key);
-					}
-					else
-					{
-						power += pair.Value;
-					}
+				if (string.IsNullOrEmpty(pair.Value))
+				{
+					power += GetSpecialAbilityName(pair.Key);
+				}
+				else
+				{
+					power += pair.Value;
 				}
 			}
 
@@ -122,36 +120,32 @@ namespace JamesGames.ReadmeMaker
 			{
 				return info.baseAttack.ToString();
 			}
-			else if (info.baseAttack > 0)
+
+			if (info.baseAttack > 0)
 			{
 				return power + " + " + info.baseAttack;
 			}
-			else
-			{
-				return power;
-			}
+
+			return power;
 		}
 
 		public static string GetHealth(CardInfo info)
 		{
 			string health = "";
-			foreach (KeyValuePair<SpecialTriggeredAbility,string> pair in ReadmeDump.HealthModifyingSpecials)
+			foreach (var pair in ReadmeDump.HealthModifyingSpecials.Where(pair => info.SpecialAbilities.Contains(pair.Key)))
 			{
-				if(info.SpecialAbilities.Contains(pair.Key))
+				if (!string.IsNullOrEmpty(health))
 				{
-					if (!string.IsNullOrEmpty(health))
-					{
-						health += ", ";
-					}
+					health += ", ";
+				}
 
-					if (string.IsNullOrEmpty(pair.Value))
-					{
-						health += GetSpecialAbilityName(pair.Key);
-					}
-					else
-					{
-						health += pair.Value;
-					}
+				if (string.IsNullOrEmpty(pair.Value))
+				{
+					health += GetSpecialAbilityName(pair.Key);
+				}
+				else
+				{
+					health += pair.Value;
 				}
 			}
 
@@ -159,14 +153,13 @@ namespace JamesGames.ReadmeMaker
 			{
 				return info.baseHealth.ToString();
 			}
-			else if (info.baseHealth > 0)
+
+			if (info.baseHealth > 0)
 			{
 				return health + " + " + info.baseHealth;
 			}
-			else
-			{
-				return health;
-			}
+
+			return health;
 		}
 
 		public static AbilityInfo GetAbilityInfo(Ability ability)
@@ -177,17 +170,8 @@ namespace JamesGames.ReadmeMaker
 				return abilityInfo;
 			}
 			
-			var abilities = new List<AbilityManager.FullAbility>(AbilityManager.NewAbilities);
-			for (int i = 0; i < abilities.Count; i++)
-			{
-				AbilityManager.FullAbility fullAbility = abilities[i];
-				if (fullAbility.Id == ability)
-				{
-					return fullAbility.Info;
-				}
-			}
-
-			return null;
+			var abilities = AbilityManager.NewAbilities;
+			return (from fullAbility in abilities where fullAbility.Id == ability select fullAbility.Info).FirstOrDefault();
 		}
     }
 }

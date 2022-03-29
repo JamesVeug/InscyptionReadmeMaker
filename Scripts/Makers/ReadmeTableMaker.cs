@@ -10,9 +10,8 @@ namespace JamesGames.ReadmeMaker
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("### Includes:\n");
-            for (int i = 0; i < sections.Count; i++)
+            foreach (var section in sections)
             {
-                ASection section = sections[i];
                 section.GetTableDump(out List<ASection.TableHeader> headers, out List<Dictionary<string, string>> rows);
                 if (rows == null || rows.Count == 0)
                 {
@@ -67,11 +66,10 @@ namespace JamesGames.ReadmeMaker
             // Cards
             //|alien|thingy|
             //|baby|other thing|
-            for (int i = 0; i < rows.Count; i++)
+            foreach (var cardData in rows)
             {
                 for (int j = 0; j < headers.Count; j++)
                 {
-                    Dictionary<string, string> cardData = rows[i];
                     cardData.TryGetValue(headers[j].HeaderName, out string value);
                     string parsedValue = string.IsNullOrEmpty(value) ? "" : value;
                     builder.Append("|" + parsedValue);
