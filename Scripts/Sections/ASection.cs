@@ -13,8 +13,8 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public class TableHeader
         {
-            public string HeaderName;
-            public Alignment Alignment;
+            public readonly string HeaderName;
+            public readonly Alignment Alignment;
 
             public TableHeader(string headerName, Alignment alignment)
             {
@@ -25,10 +25,10 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public class TableColumn<T>
         {
-            public string HeaderName;
-            public Alignment Alignment;
-            public Func<T, string> Getter;
-            public bool Enabled;
+            public readonly string HeaderName;
+            public readonly Alignment Alignment;
+            public readonly Func<T, string> Getter;
+            public readonly bool Enabled;
 
             public TableColumn(string headerName, Func<T, string> getter, bool enabled=true, Alignment alignment=Alignment.Left)
             {
