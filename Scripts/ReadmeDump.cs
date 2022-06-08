@@ -9,13 +9,13 @@ namespace JamesGames.ReadmeMaker
 {
     public static class ReadmeDump
     {
-	    // List if different costs the mod supports
-	    // Ordered by what will be shown. Vanilla first then Custom last
+	    // List of different sections of data to show listed in order displayed in the dump
 	    private static List<ASection> Sections = new List<ASection>()
 	    {
 		    new NewCardsSection(),
 		    new ModifiedCardsSection(),
 		    new NewRareCardsSection(),
+		    new NewBoonsSection(),
 		    new NewSideDeckCardsSection(),
 		    new NewSigilsSection(),
 		    new NewSpecialAbilitiesSection(),

@@ -93,6 +93,8 @@ namespace JamesGames.ReadmeMaker
         
         public bool NodesShow = Plugin.Instance.Config.Bind("Nodes", "Show Nodes", true, new ConfigDescription("Show all new map nodes added in its own section..", null, Array.Empty<object>())).Value;
         
+        public bool BoonsShow = Plugin.Instance.Config.Bind("Boons", "Show Boons", true, new ConfigDescription("Show all new Boons added in its own section..", null, Array.Empty<object>())).Value;
+        
         public bool EncountersShow = Plugin.Instance.Config.Bind("Encounters", "Show Encounters", true, new ConfigDescription("Show all new encounters added in its own section..", null, Array.Empty<object>())).Value;
         
         public bool AscensionChallengesShow = Plugin.Instance.Config.Bind("Ascension", "Show Ascension Challenges", true, new ConfigDescription("Show all new challenges added for Kaycees mod.", null, Array.Empty<object>())).Value;
