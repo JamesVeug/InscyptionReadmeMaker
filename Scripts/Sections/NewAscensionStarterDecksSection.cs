@@ -15,6 +15,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            decks.Clear(); // Clear so when we re-dump everything we don't double up
             decks.AddRange(StarterDeckManager.NewDecks);
             decks.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
         }

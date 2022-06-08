@@ -16,6 +16,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            boons.Clear(); // Clear so when we re-dump everything we don't double up
             boons.AddRange(BoonManager.NewBoons);
             boons.Sort((a, b) => string.Compare(a.boon.displayedName, b.boon.displayedName, StringComparison.Ordinal));
         }

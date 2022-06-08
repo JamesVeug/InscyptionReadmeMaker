@@ -15,6 +15,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            challenges.Clear(); // Clear so when we re-dump everything we don't double up
             challenges.AddRange(ChallengeManager.NewInfos);
             challenges.Sort(SortAscensionChallenges);
         }

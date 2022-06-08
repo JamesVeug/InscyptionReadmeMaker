@@ -27,6 +27,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            allNodes.Clear(); // Clear so when we re-dump everything we don't double up
             foreach (NodeManager.NodeInfo info in NodeManager.AllNodes)
             {
                 allNodes.Add(new NodeWrapper()

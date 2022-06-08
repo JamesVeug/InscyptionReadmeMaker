@@ -14,6 +14,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            regions.Clear(); // Clear so when we re-dump everything we don't double up
             regions.AddRange(RegionManager.NewRegions);
             regions.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
         }

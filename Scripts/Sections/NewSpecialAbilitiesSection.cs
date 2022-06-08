@@ -15,6 +15,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            allAbilities.Clear(); // Clear so when we re-dump everything we don't double up
             allAbilities.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
 	        
             // Remove special abilities that have no rulebook entry

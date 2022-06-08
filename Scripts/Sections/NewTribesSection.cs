@@ -14,6 +14,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            newTribes.Clear(); // Clear so when we re-dump everything we don't double up
             newTribes.AddRange(TribeManager.tribes);
         }
 

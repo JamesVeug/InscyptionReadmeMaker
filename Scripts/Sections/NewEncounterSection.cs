@@ -14,6 +14,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            allEncounters.Clear(); // Clear so when we re-dump everything we don't double up
             allEncounters.AddRange(EncounterManager.NewEncounters);
         }
         

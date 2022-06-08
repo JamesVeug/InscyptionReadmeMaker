@@ -19,6 +19,8 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            configs.Clear(); // Clear so when we re-dump everything we don't double up
+            
             List<string> validModGUIDS = null;
             if (!string.IsNullOrEmpty(ReadmeConfig.Instance.ConfigOnlyShowModGUID))
             {

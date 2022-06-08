@@ -15,6 +15,7 @@ namespace JamesGames.ReadmeMaker.Sections
         
         public override void Initialize()
         {
+            allAbilities.Clear(); // Clear so when we re-dump everything we don't double up
             allAbilities.AddRange(AbilityManager.NewAbilities);
             allAbilities.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
             allAbilities.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
