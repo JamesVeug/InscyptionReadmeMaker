@@ -5,6 +5,6 @@
     "description": "Creates a file that lists all new cards/abilities and special abilities to be easily viewed.",
     "dependencies": [
         "BepInEx-BepInExPack_Inscryption-5.4.1901",
-        "API_dev-API-2.1.0"
+        "API_dev-API-2.4.0"
     ]
 }

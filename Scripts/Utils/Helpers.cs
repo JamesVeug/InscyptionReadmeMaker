@@ -15,9 +15,9 @@ namespace JamesGames.ReadmeMaker
 {
     public static class Helpers
     {
-        private static Dictionary<int, Tuple<string, string>> GUIDNameLookup = null;
+        private static Dictionary<object, Tuple<string, string>> GUIDNameLookup = null;
 
-        public static string GetGUID(int value)
+        public static string GetGUID(object value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
@@ -28,7 +28,7 @@ namespace JamesGames.ReadmeMaker
             return tuple.Item1;
         }
 
-        public static string GetName(int value)
+        public static string GetName(object value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
@@ -39,18 +39,18 @@ namespace JamesGames.ReadmeMaker
             return tuple.Item2;
         }
         
-        public static Tuple<string, string> GetGUIDAndNameFromEnum(int value)
+        public static Tuple<string, string> GetGUIDAndNameFromEnum(object value)
         {
             if (GUIDNameLookup == null)
             {
                 // Init
-                GUIDNameLookup = new Dictionary<int, Tuple<string, string>>();
-                foreach (KeyValuePair<string, Dictionary<string, string>> pluginData in ModdedSaveManager.SaveData.SaveData)
+                GUIDNameLookup = new Dictionary<object, Tuple<string, string>>();
+                foreach (KeyValuePair<string, Dictionary<string, object>> pluginData in ModdedSaveManager.SaveData.SaveData)
                 {
-                    foreach (KeyValuePair<string, string> savedData in pluginData.Value)
+                    foreach (KeyValuePair<string, object> savedData in pluginData.Value)
                     {
                         string entry = savedData.Key;
-                        int entryValue = int.Parse(savedData.Value);
+                        object entryValue = savedData.Value;
                         
                         // format: {typeof(T).Name}_{guid}_{value}
                         foreach (PluginInfo infosValue in Chainloader.PluginInfos.Values)

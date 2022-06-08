@@ -42,12 +42,12 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public static string GetTribeGUID(TribeInfo tribe)
         {
-            return Helpers.GetGUID((int)tribe.tribe);
+            return Helpers.GetGUID(tribe.tribe);
         }
 
         public static string GetTribeName(TribeInfo tribe)
         {
-            return Helpers.GetName((int)tribe.tribe);
+            return Helpers.GetName(tribe.tribe);
         }
     }
 }

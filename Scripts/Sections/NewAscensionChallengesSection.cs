@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Ascension;
-using InscryptionAPI.Card;
-using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -13,24 +11,24 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "Ascension Challenges";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
 
-        private List<AscensionChallengeInfo> challenges = null;
+        private List<ChallengeManager.FullChallenge> challenges = null;
         
         public override void Initialize()
         {
             if (!ReadmeConfig.Instance.AscensionChallengesShow)
             {
-                challenges = new List<AscensionChallengeInfo>();
+                challenges = new List<ChallengeManager.FullChallenge>();
                 return;
             }
 
-            List<AscensionChallengeInfo> nodes = new List<AscensionChallengeInfo>(ChallengeManager.NewInfos);
+            List<ChallengeManager.FullChallenge> nodes = new List<ChallengeManager.FullChallenge>(ChallengeManager.NewInfos);
             nodes.Sort(SortAscensionChallenges);
             challenges = nodes;
         }
 
-        private static int SortAscensionChallenges(AscensionChallengeInfo a, AscensionChallengeInfo b)
+        private static int SortAscensionChallenges(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)
         {
-            return String.Compare(a.title, b.title, StringComparison.Ordinal);
+            return String.Compare(a.Challenge.title, b.Challenge.title, StringComparison.Ordinal);
         }
 
         public override void DumpSummary(StringBuilder stringBuilder)
@@ -43,11 +41,11 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(challenges, out headers, new TableColumn<AscensionChallengeInfo>[]
+            splitCards = BreakdownForTable(challenges, out headers, new []
             {
-                new TableColumn<AscensionChallengeInfo>("Name", (a)=>a.title),
-                new TableColumn<AscensionChallengeInfo>("Points", (a)=>a.pointValue.ToString()),
-                new TableColumn<AscensionChallengeInfo>("Description", (a)=>a.description)
+                new TableColumn<ChallengeManager.FullChallenge>("Name", (a)=>a.Challenge.title),
+                new TableColumn<ChallengeManager.FullChallenge>("Points", (a)=>a.Challenge.pointValue.ToString()),
+                new TableColumn<ChallengeManager.FullChallenge>("Description", (a)=>a.Challenge.description)
             });
         }
     }
