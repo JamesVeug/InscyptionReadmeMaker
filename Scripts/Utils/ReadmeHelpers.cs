@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
@@ -27,10 +26,10 @@ namespace JamesGames.ReadmeMaker
 				return ability.ToString();
 			}
 
-			var specialAbility = GetAllNewSpecialAbilities().Find((a)=>a.Id == ability);
+			var specialAbility = ReadmeHelpers.GetAllNewSpecialAbilities().Find((a)=>a.Id == ability);
 			if (specialAbility != null)
 			{
-				StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == specialAbility.AbilityBehaviour);
+				StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == specialAbility.AbilityBehaviour);
 				if (icon != null)
 				{
 					return icon.Info.rulebookName;
@@ -42,14 +41,24 @@ namespace JamesGames.ReadmeMaker
         
         public static string GetSpecialAbilityName(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
-	        StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
-	        return icon?.Info.rulebookName;
+	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
+	        if (icon != null)
+	        {
+		        return icon.Info.rulebookName;
+	        }
+
+	        return null;
         }
         
         public static string GetSpecialAbilityDescription(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility ability)
         {
-	        StatIconManager.FullStatIcon icon = GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
-	        return icon?.Info.rulebookDescription;
+	        StatIconManager.FullStatIcon icon = ReadmeHelpers.GetAllNewStatInfoIcons().Find((a)=>a.VariableStatBehavior == ability.AbilityBehaviour);
+	        if (icon != null)
+	        {
+		        return icon.Info.rulebookDescription;
+	        }
+
+	        return null;
         }
 		
 		public static string GetAbilityName(AbilityManager.FullAbility Ability)
@@ -68,12 +77,22 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTraitName(Trait trait)
 		{
-			return ReadmeDump.TraitToName.TryGetValue(trait, out string name) ? name : trait.ToString();
+			if (ReadmeDump.TraitToName.TryGetValue(trait, out string name))
+			{
+				return name;
+			}
+			
+			return trait.ToString();
 		}
 
 		public static string GetTribeName(Tribe tribe)
 		{
-			return ReadmeDump.TribeToName.TryGetValue(tribe, out string name) ? name : tribe.ToString();
+			if (ReadmeDump.TribeToName.TryGetValue(tribe, out string name))
+			{
+				return name;
+			}
+			
+			return tribe.ToString();
 		}
 
 		public static string GetPower(CardInfo info)
@@ -103,13 +122,14 @@ namespace JamesGames.ReadmeMaker
 			{
 				return info.baseAttack.ToString();
 			}
-
-			if (info.baseAttack > 0)
+			else if (info.baseAttack > 0)
 			{
 				return power + " + " + info.baseAttack;
 			}
-
-			return power;
+			else
+			{
+				return power;
+			}
 		}
 
 		public static string GetHealth(CardInfo info)
@@ -139,13 +159,14 @@ namespace JamesGames.ReadmeMaker
 			{
 				return info.baseHealth.ToString();
 			}
-
-			if (info.baseHealth > 0)
+			else if (info.baseHealth > 0)
 			{
 				return health + " + " + info.baseHealth;
 			}
-
-			return health;
+			else
+			{
+				return health;
+			}
 		}
 
 		public static AbilityInfo GetAbilityInfo(Ability ability)
@@ -156,8 +177,17 @@ namespace JamesGames.ReadmeMaker
 				return abilityInfo;
 			}
 			
-			var abilities = AbilityManager.NewAbilities;
-			return (from fullAbility in abilities where fullAbility.Id == ability select fullAbility.Info).FirstOrDefault();
+			var abilities = new List<AbilityManager.FullAbility>(AbilityManager.NewAbilities);
+			for (int i = 0; i < abilities.Count; i++)
+			{
+				AbilityManager.FullAbility fullAbility = abilities[i];
+				if (fullAbility.Id == ability)
+				{
+					return fullAbility.Info;
+				}
+			}
+
+			return null;
 		}
     }
 }

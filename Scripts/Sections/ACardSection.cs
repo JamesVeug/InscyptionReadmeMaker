@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
-using HarmonyLib;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -53,17 +52,55 @@ namespace JamesGames.ReadmeMaker.Sections
         
         private static string GetTribes(CardInfo info)
         {
-            return info.tribes.Join(ReadmeHelpers.GetTribeName, ",<br/>");
+            StringBuilder tribesBuilder = new StringBuilder();
+            for (int j = 0; j < info.tribes.Count; j++)
+            {
+                if (j > 0)
+                {
+                    tribesBuilder.Append(", ");
+                }
+
+                tribesBuilder.Append(ReadmeHelpers.GetTribeName(info.tribes[j]));
+            }
+
+            return tribesBuilder.ToString();
         }
 
         private string GetTraits(CardInfo info)
         {
-            return info.traits.Join(ReadmeHelpers.GetTraitName, ",<br/>");
+            StringBuilder traitsBuilder = new StringBuilder();
+            for (int j = 0; j < info.traits.Count; j++)
+            {
+                if (j > 0)
+                {
+                    traitsBuilder.Append(", ");
+                }
+
+                string traitName = ReadmeHelpers.GetTraitName(info.traits[j]);
+                traitsBuilder.Append(traitName);
+            }
+
+            return traitsBuilder.ToString();
         }
 
         private static string GetSpecialAbilities(CardInfo info)
         {
-            return info.specialAbilities.Join(ReadmeHelpers.GetSpecialAbilityName, ",<br/>");
+            StringBuilder specialsBuilder = new StringBuilder();
+            for (int j = 0; j < info.specialAbilities.Count; j++)
+            {
+                if (j > 0)
+                {
+                    specialsBuilder.Append(", ");
+                }
+
+                string specialAbilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[j]);
+                if (specialAbilityName != null)
+                {
+                    specialsBuilder.Append($" {specialAbilityName}");
+                }
+            }
+
+            return specialsBuilder.ToString();
         }
 
         private string GetTail(CardInfo info)
@@ -126,21 +163,21 @@ namespace JamesGames.ReadmeMaker.Sections
                 
                 if (totalShownAbilities++ > 0)
                 {
-                    sigilBuilder.Append(",<br/>");
+                    sigilBuilder.Append(", ");
                 }
                 
                 if (ReadmeConfig.Instance.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
                 {
                     // Show all abilities, but combine duplicates into Waterborne(x2)
-                    sigilBuilder.Append($"{abilityName}(x{count})");
+                    sigilBuilder.Append($" {abilityName}(x{count})");
                 }
                 else
                 {
                     // Show all abilities 1 by 1 (Waterborne, Waterborne, Waterborne)
-                    sigilBuilder.Append($"{abilityName}");
+                    sigilBuilder.Append($" {abilityName}");
                 }
             }
-
+            
             return sigilBuilder.ToString();
         }
         
@@ -175,10 +212,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
                 return 0;
             }
-
-            return b.displayedName == null 
-                       ? 1 
-                       : string.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
+            else if (b.displayedName == null)
+            {
+                return 1;
+            }
+            
+            return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
         }
 
         private static int CompareByCost(CardInfo a, CardInfo b)
