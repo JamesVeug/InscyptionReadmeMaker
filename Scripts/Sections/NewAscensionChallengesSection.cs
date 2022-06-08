@@ -8,7 +8,7 @@ namespace JamesGames.ReadmeMaker.Sections
 {
     public class NewAscensionChallengesSection : ASection
     {
-        public override string SectionName => "Ascension Challenges";
+        public override string SectionName => "New Ascension Challenges";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
 
         private List<ChallengeManager.FullChallenge> challenges = null;
