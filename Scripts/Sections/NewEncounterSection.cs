@@ -10,17 +10,11 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Encounters";
         public override bool Enabled => ReadmeConfig.Instance.EncountersShow;
 
-        private List<EncounterBlueprintData> allEncounters = null;
+        private List<EncounterBlueprintData> allEncounters = new List<EncounterBlueprintData>();
         
         public override void Initialize()
         {
-            if (!Enabled)
-            {
-                allEncounters = new List<EncounterBlueprintData>();
-                return;
-            }
-
-            allEncounters = new List<EncounterBlueprintData>(EncounterManager.NewEncounters);
+            allEncounters.AddRange(EncounterManager.NewEncounters);
         }
         
         public override void DumpSummary(StringBuilder stringBuilder)

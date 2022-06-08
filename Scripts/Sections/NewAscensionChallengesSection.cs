@@ -11,19 +11,12 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Ascension Challenges";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
 
-        private List<ChallengeManager.FullChallenge> challenges = null;
+        private List<ChallengeManager.FullChallenge> challenges = new List<ChallengeManager.FullChallenge>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.AscensionChallengesShow)
-            {
-                challenges = new List<ChallengeManager.FullChallenge>();
-                return;
-            }
-
-            List<ChallengeManager.FullChallenge> nodes = new List<ChallengeManager.FullChallenge>(ChallengeManager.NewInfos);
-            nodes.Sort(SortAscensionChallenges);
-            challenges = nodes;
+            challenges.AddRange(ChallengeManager.NewInfos);
+            challenges.Sort(SortAscensionChallenges);
         }
 
         private static int SortAscensionChallenges(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)

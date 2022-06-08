@@ -11,17 +11,11 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Sigils";
         public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
 
-        private List<FullAbility> allAbilities = null;
+        private List<FullAbility> allAbilities = new List<FullAbility>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.SigilsShow)
-            {
-                allAbilities = new List<FullAbility>();
-                return;
-            }
-	        
-            allAbilities = new List<FullAbility>(AbilityManager.NewAbilities);
+            allAbilities.AddRange(AbilityManager.NewAbilities);
             allAbilities.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
             allAbilities.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
         }

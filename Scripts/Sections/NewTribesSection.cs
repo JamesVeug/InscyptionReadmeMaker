@@ -10,17 +10,11 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Tribes";
         public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
 
-        private List<TribeInfo> newTribes = null;
+        private List<TribeInfo> newTribes = new List<TribeInfo>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.SigilsShow)
-            {
-                newTribes = new List<TribeInfo>();
-                return;
-            }
-	        
-            newTribes = new List<TribeInfo>(TribeManager.tribes);
+            newTribes.AddRange(TribeManager.tribes);
         }
 
         public override void DumpSummary(StringBuilder stringBuilder)

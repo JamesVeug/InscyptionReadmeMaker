@@ -15,16 +15,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Configs";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
         
-        private List<ConfigData> configs = null;
+        private List<ConfigData> configs = new List<ConfigData>();
         
         public override void Initialize()
         {
-             configs = new List<ConfigData>();
-            if (!ReadmeConfig.Instance.ConfigSectionEnabled)
-            {
-                return;
-            }
-
             List<string> validModGUIDS = null;
             if (!string.IsNullOrEmpty(ReadmeConfig.Instance.ConfigOnlyShowModGUID))
             {

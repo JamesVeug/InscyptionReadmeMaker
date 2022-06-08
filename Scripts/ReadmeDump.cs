@@ -154,9 +154,12 @@ namespace JamesGames.ReadmeMaker
         private static string GetDumpString()
         {
 	        // Initialize everything for the Summary
-	        for (int i = 0; i < Sections.Count; i++)
+	        foreach (ASection section in Sections)
 	        {
-		        Sections[i].Initialize();
+		        if (section.Enabled)
+		        {
+			        section.Initialize();
+		        }
 	        }
 
 	        // Build everything

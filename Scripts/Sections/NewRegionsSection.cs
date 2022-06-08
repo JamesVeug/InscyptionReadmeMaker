@@ -10,19 +10,12 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Regions";
         public override bool Enabled => ReadmeConfig.Instance.RegionsShow;
         
-        private List<Part1RegionData> regions = null;
+        private List<Part1RegionData> regions = new List<Part1RegionData>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.RegionsShow)
-            {
-                regions = new List<Part1RegionData>();
-                return;
-            }
-
-            List<Part1RegionData> nodes = new List<Part1RegionData>(RegionManager.NewRegions);
-            nodes.Sort((a,b)=>String.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
-            regions = nodes;
+            regions.AddRange(RegionManager.NewRegions);
+            regions.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
         }
 
         public override void DumpSummary(StringBuilder stringBuilder)

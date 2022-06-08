@@ -10,17 +10,11 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Map Nodes";
         public override bool Enabled => ReadmeConfig.Instance.NodesShow;
 
-        private List<NodeManager.NodeInfo> allNodes = null;
+        private List<NodeManager.NodeInfo> allNodes = new List<NodeManager.NodeInfo>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.NodesShow)
-            {
-                allNodes = new List<NodeManager.NodeInfo>();
-                return;
-            }
-
-            allNodes = new List<NodeManager.NodeInfo>(NodeManager.AllNodes);
+            allNodes.AddRange(NodeManager.AllNodes);
             allNodes.Sort((a, b) => String.Compare(a.guid, b.guid, StringComparison.Ordinal));
         }
         

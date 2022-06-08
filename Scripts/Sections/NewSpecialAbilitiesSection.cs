@@ -11,18 +11,11 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Special Abilities";
         public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
 
-        private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = null;
+        private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
         
         public override void Initialize()
         {
-            if (!ReadmeConfig.Instance.SpecialAbilitiesShow)
-            {
-                allAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
-                return;
-            }
-
-
-            allAbilities = ReadmeHelpers.GetAllNewSpecialAbilities();
+            allAbilities.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
 	        
             // Remove special abilities that have no rulebook entry
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
