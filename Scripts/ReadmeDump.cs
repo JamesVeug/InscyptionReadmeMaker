@@ -23,6 +23,7 @@ namespace JamesGames.ReadmeMaker
 		    new NewAscensionStarterDecksSection(),
 		    new NewMapNodesSection(),
 		    new NewEncounterSection(),
+		    new NewRegionsSection(),
 		    new NewTribesSection(),
 		    new NewConfigsSection(),
 	    };

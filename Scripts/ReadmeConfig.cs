@@ -98,6 +98,8 @@ namespace JamesGames.ReadmeMaker
         public bool AscensionChallengesShow = Plugin.Instance.Config.Bind("Ascension", "Show Ascension Challenges", true, new ConfigDescription("Show all new challenges added for Kaycees mod.", null, Array.Empty<object>())).Value;
         public bool AscensionStarterDecks = Plugin.Instance.Config.Bind("Ascension", "Show Starter Decks", true, new ConfigDescription("Show all new starter decks for Kaycees mod.", null, Array.Empty<object>())).Value;
         
+        public bool RegionsShow = Plugin.Instance.Config.Bind("Regions", "Show Regions", true, new ConfigDescription("Show all new regions.", null, Array.Empty<object>())).Value;
+        
         public bool SpecialAbilitiesShow = Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
         public bool ConfigSectionEnabled = Plugin.Instance.Config.Bind("Config", "Show Configs", true, new ConfigDescription("Should the Readme Maker show a section listing all the new configs added?", null, Array.Empty<object>())).Value;
