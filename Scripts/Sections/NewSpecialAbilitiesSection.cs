@@ -11,13 +11,13 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Special Abilities";
         public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
 
-        private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = null;
+        private List<SpecialAbility> allAbilities = null;
         
         public override void Initialize()
         {
             if (!ReadmeConfig.Instance.SpecialAbilitiesShow)
             {
-                allAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
+                allAbilities = new List<SpecialAbility>();
                 return;
             }
 
@@ -28,7 +28,7 @@ namespace JamesGames.ReadmeMaker.Sections
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
             for (int i = 0; i < allAbilities.Count; i++)
             {
-                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = allAbilities[i];
+                SpecialAbility specialAbility = allAbilities[i];
                 StatIconManager.FullStatIcon fullStatIcon = icons.Find((b) => b.VariableStatBehavior == specialAbility.AbilityBehaviour);
                 if (fullStatIcon == null || fullStatIcon.Info == null || string.IsNullOrEmpty(fullStatIcon.Info.rulebookName))
                 {
@@ -39,7 +39,7 @@ namespace JamesGames.ReadmeMaker.Sections
             allAbilities.Sort(SortNewSpecialAbilities);
         }
         
-        private static int SortNewSpecialAbilities(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
+        private static int SortNewSpecialAbilities(SpecialAbility a, SpecialAbility b)
         {
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
             StatIconManager.FullStatIcon aStatIcon = icons.Find((icon) => icon.VariableStatBehavior == a.AbilityBehaviour);

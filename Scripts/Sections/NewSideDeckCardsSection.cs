@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
-using InscryptionAPI.Card;
 
 namespace JamesGames.ReadmeMaker.Sections
 {

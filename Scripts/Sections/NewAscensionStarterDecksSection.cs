@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Ascension;
-using InscryptionAPI.Card;
-using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -59,9 +57,8 @@ namespace JamesGames.ReadmeMaker.Sections
 
             // Show all abilities one after the other
             int totalShownCards = 0;
-            for (int i = 0; i < cardNames.Count; i++)
+            foreach (var cardName in cardNames)
             {
-                string cardName = cardNames[i];
                 CardInfo cardInfo = CardLoader.GetCardByName(cardName);
                 if (cardInfo == null)
                 {

@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using APIPlugin;
 using BepInEx;
 using BepInEx.Bootstrap;
-using InscryptionAPI.Guid;
 using InscryptionAPI.Saves;
-using UnityEngine;
 
 namespace JamesGames.ReadmeMaker
 {
@@ -20,23 +14,13 @@ namespace JamesGames.ReadmeMaker
         public static string GetGUID(object value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
-            if (tuple == null)
-            {
-                return "unknown guid";
-            }
-
-            return tuple.Item1;
+            return tuple == null ? "unknown guid" : tuple.Item1;
         }
 
         public static string GetName(object value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
-            if (tuple == null)
-            {
-                return "unknown name";
-            }
-
-            return tuple.Item2;
+            return tuple == null ? "unknown name" : tuple.Item2;
         }
         
         public static Tuple<string, string> GetGUIDAndNameFromEnum(object value)
