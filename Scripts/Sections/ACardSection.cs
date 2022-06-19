@@ -18,14 +18,6 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected abstract List<CardInfo> GetCards();
 
-        public override void DumpSummary(StringBuilder stringBuilder, List<Dictionary<string, string>> rows)
-        {
-            if (allCards.Count > 0)
-            {
-                stringBuilder.Append($"\n{allCards.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(allCards, out headers, new TableColumn<CardInfo>[]
