@@ -9,7 +9,7 @@ namespace JamesGames.ReadmeMaker.Sections
     public class NewTribesSection : ASection
     {
         public override string SectionName => "New Tribes";
-        public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
+        public override bool Enabled => ReadmeConfig.Instance.TribesShow;
 
         private List<TribeInfo> newTribes = new List<TribeInfo>();
         
