@@ -31,7 +31,7 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             splitCards = BreakdownForTable(newTribes, out headers, new TableColumn<TribeInfo>[]
             {
-                new TableColumn<TribeInfo>("GUID", GetTribeGUID),
+                new TableColumn<TribeInfo>("GUID", GetTribeGUID, ReadmeConfig.Instance.TribesShowGUID),
                 new TableColumn<TribeInfo>("Name", GetTribeName),
                 new TableColumn<TribeInfo>("Cards", GetCardCount)
             });

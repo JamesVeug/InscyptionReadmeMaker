@@ -90,6 +90,7 @@ namespace JamesGames.ReadmeMaker
         public bool SigilsShow = Plugin.Instance.Config.Bind("Sigils", "Show Sigils", true, new ConfigDescription("Show all new sigils listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
         public bool TribesShow = Plugin.Instance.Config.Bind("Tribes", "Show Tribes", true, new ConfigDescription("Show all new tribes added in its own section.", null, Array.Empty<object>())).Value;
+        public bool TribesShowGUID = Plugin.Instance.Config.Bind("Tribes", "Show GUID", false, new ConfigDescription("Show the GUID for the mod that added the tribe", null, Array.Empty<object>())).Value;
         
         public bool NodesShow = Plugin.Instance.Config.Bind("Nodes", "Show Nodes", true, new ConfigDescription("Show all new map nodes added in its own section..", null, Array.Empty<object>())).Value;
         
