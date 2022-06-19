@@ -209,7 +209,7 @@ namespace JamesGames.ReadmeMaker
 				return true;
 			}
 
-			bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Contains(guid);
+			bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Trim().Contains(guid.Trim());
 			//Plugin.Log.LogInfo("IsPluginGUIDFiltered " + guid + " = " + isPluginGuidFiltered);
 			return isPluginGuidFiltered;
 		}
