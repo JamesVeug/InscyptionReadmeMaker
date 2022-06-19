@@ -46,14 +46,6 @@ namespace JamesGames.ReadmeMaker.Sections
             
             allNodes.Sort((a, b) => string.Compare(a.GUID, b.GUID, StringComparison.Ordinal));
         }
-        
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allNodes.Count > 0)
-            {
-                stringBuilder.Append($"\n{allNodes.Count} {SectionName}\n");
-            }
-        }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
         {
@@ -61,6 +53,12 @@ namespace JamesGames.ReadmeMaker.Sections
             {
                 new TableColumn<NodeWrapper>("Name", (a)=>a.Name),
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            NodeWrapper casted = (NodeWrapper)o;
+            return casted.GUID;
         }
     }
 }

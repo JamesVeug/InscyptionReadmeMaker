@@ -200,5 +200,18 @@ namespace JamesGames.ReadmeMaker
 
 			return null;
 		}
+
+		public static bool IsPluginGUIDFiltered(string guid)
+		{
+			if (string.IsNullOrEmpty(ReadmeConfig.Instance.LimitToGUID))
+			{
+				// Show everything
+				return true;
+			}
+
+			bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Contains(guid);
+			//Plugin.Log.LogInfo("IsPluginGUIDFiltered " + guid + " = " + isPluginGuidFiltered);
+			return isPluginGuidFiltered;
+		}
     }
 }

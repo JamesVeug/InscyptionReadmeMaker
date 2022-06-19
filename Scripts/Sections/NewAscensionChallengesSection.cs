@@ -25,14 +25,6 @@ namespace JamesGames.ReadmeMaker.Sections
             return String.Compare(a.Challenge.title, b.Challenge.title, StringComparison.Ordinal);
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (challenges.Count > 0)
-            {
-                stringBuilder.Append($"\n{challenges.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(challenges, out headers, new []
@@ -41,6 +33,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<ChallengeManager.FullChallenge>("Points", (a)=>a.Challenge.pointValue.ToString()),
                 new TableColumn<ChallengeManager.FullChallenge>("Description", (a)=>a.Challenge.description)
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            ChallengeManager.FullChallenge casted = (ChallengeManager.FullChallenge)o;
+            return Helpers.GetGUID(((int)casted.Challenge.challengeType).ToString());
         }
     }
 }

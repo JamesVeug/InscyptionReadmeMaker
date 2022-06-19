@@ -41,11 +41,19 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public abstract string SectionName { get; }
         public virtual bool Enabled => true;
+        public abstract string GetGUID(object o);
 
         public abstract void Initialize();
-
-        public abstract void DumpSummary(StringBuilder stringBuilder);
+        
         public abstract void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows);
+
+        public virtual void DumpSummary(StringBuilder stringBuilder, List<Dictionary<string, string>> rows)
+        {
+            if (rows.Count > 0)
+            {
+                stringBuilder.Append($"\n{rows.Count} {SectionName}\n");
+            }
+        }
         
         protected static void RemoveHeaderIfDisabled(List<string> headerList, string header, bool enabled)
         {
@@ -58,6 +66,11 @@ namespace JamesGames.ReadmeMaker.Sections
         protected List<Dictionary<string, string>> BreakdownForTable<T>(List<T> objects, out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
             headers = new List<TableHeader>();
+            if (ReadmeConfig.Instance.ShowGUIDS)
+            {
+                headers.Add(new TableHeader("GUID", Alignment.Middle));
+            }
+            
             for (int i = 0; i < grouping.Length; i++)
             {
                 TableColumn<T> column = grouping[i];
@@ -68,14 +81,26 @@ namespace JamesGames.ReadmeMaker.Sections
             }
 
             var split = new List<Dictionary<string, string>>();
-            foreach (var o in objects)
+            foreach (T t in objects)
             {
+                string guid = GetGUID(t);
+                if (!ReadmeHelpers.IsPluginGUIDFiltered(guid))
+                {
+                    continue;
+                }
+                
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                foreach (var column in grouping)
+                Plugin.Log.LogInfo("ShowGUIDS " + ReadmeConfig.Instance.ShowGUIDS);
+                if (ReadmeConfig.Instance.ShowGUIDS)
+                {
+                    data["GUID"] = guid;
+                }
+                
+                foreach (TableColumn<T> column in grouping)
                 {
                     if (column.Enabled)
                     {
-                        data[column.HeaderName] = column.Getter(o);
+                        data[column.HeaderName] = column.Getter(t);
                     }
                 }
                 split.Add(data);

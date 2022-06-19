@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
+using InscryptionAPI.Card;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -17,7 +18,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected abstract List<CardInfo> GetCards();
 
-        public override void DumpSummary(StringBuilder stringBuilder)
+        public override void DumpSummary(StringBuilder stringBuilder, List<Dictionary<string, string>> rows)
         {
             if (allCards.Count > 0)
             {
@@ -41,6 +42,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
                 new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            CardInfo casted = (CardInfo)o;
+            return casted.GetModTag();
         }
 
         private string GetCost(CardInfo info)

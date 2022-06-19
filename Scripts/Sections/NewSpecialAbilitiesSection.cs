@@ -41,14 +41,6 @@ namespace JamesGames.ReadmeMaker.Sections
             return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allAbilities.Count > 0)
-            {
-                stringBuilder.Append($"\n{allAbilities.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(allAbilities, out headers, new TableColumn<SpecialAbility>[]
@@ -56,6 +48,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<SpecialAbility>("Name", ReadmeHelpers.GetSpecialAbilityName),
                 new TableColumn<SpecialAbility>("Description", ReadmeHelpers.GetSpecialAbilityDescription)
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            SpecialAbility casted = (SpecialAbility)o;
+            return Helpers.GetGUID(((int)casted.Id).ToString());
         }
     }
 }

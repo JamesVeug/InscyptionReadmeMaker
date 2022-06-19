@@ -19,27 +19,19 @@ namespace JamesGames.ReadmeMaker.Sections
             newTribes.AddRange(TribeManager.tribes);
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (newTribes.Count > 0)
-            {
-                stringBuilder.Append($"\n{newTribes.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(newTribes, out headers, new TableColumn<TribeInfo>[]
             {
-                new TableColumn<TribeInfo>("GUID", GetTribeGUID, ReadmeConfig.Instance.TribesShowGUID),
                 new TableColumn<TribeInfo>("Name", GetTribeName),
                 new TableColumn<TribeInfo>("Cards", GetCardCount)
             });
         }
 
-        public static string GetTribeGUID(TribeInfo tribe)
+        public override string GetGUID(object o)
         {
-            return ReadmeHelpers.GetTribeGUID(tribe.tribe);
+            TribeInfo casted = (TribeInfo)o;
+            return ReadmeHelpers.GetTribeGUID(casted.tribe);
         }
 
         public static string GetTribeName(TribeInfo tribe)

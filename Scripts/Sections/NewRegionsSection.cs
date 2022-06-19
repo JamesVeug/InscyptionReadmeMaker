@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using InscryptionAPI.Regions;
+using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -19,14 +20,6 @@ namespace JamesGames.ReadmeMaker.Sections
             regions.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (regions.Count > 0)
-            {
-                stringBuilder.Append($"\n{regions.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(regions, out headers, new TableColumn<Part1RegionData>[]
@@ -34,6 +27,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<Part1RegionData>("Name", (a)=>a.region.name),
                 new TableColumn<Part1RegionData>("Tier", (a)=>a.tier.ToString()),
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            Part1RegionData casted = (Part1RegionData)o;
+            return casted.GetModTag();
         }
     }
 }

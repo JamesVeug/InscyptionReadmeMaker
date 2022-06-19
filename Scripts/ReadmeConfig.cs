@@ -67,6 +67,8 @@ namespace JamesGames.ReadmeMaker
 
         public HeaderType GeneralHeaderType = Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
         public HeaderSize GeneralHeaderSize = Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
+        public string LimitToGUID = Plugin.Instance.Config.Bind("General", "Mod GUID", "", new ConfigDescription("Only dump cards, sigils... etc related to this mods GUID. Disable by leaving blank.", null, Array.Empty<object>())).Value;
+        public bool ShowGUIDS = Plugin.Instance.Config.Bind("General", "Show GUIDs", false, new ConfigDescription("Show the mod GUID for each sigils, tribes... etc.", null, Array.Empty<object>())).Value;
         
         public DisplayType CardDisplayByType = Plugin.Instance.Config.Bind("Cards", "Display By", DisplayType.Table, new ConfigDescription("Changes how the cards, abilities and special abilities are displayed.", null, Array.Empty<object>())).Value;
         public SortByType CardSortBy = Plugin.Instance.Config.Bind("Cards", "Sort Type", SortByType.Name, new ConfigDescription("Changes the order that the cards will be displayed in.", null, Array.Empty<object>())).Value;
@@ -90,7 +92,6 @@ namespace JamesGames.ReadmeMaker
         public bool SigilsShow = Plugin.Instance.Config.Bind("Sigils", "Show Sigils", true, new ConfigDescription("Show all new sigils listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
         public bool TribesShow = Plugin.Instance.Config.Bind("Tribes", "Show Tribes", true, new ConfigDescription("Show all new tribes added in its own section.", null, Array.Empty<object>())).Value;
-        public bool TribesShowGUID = Plugin.Instance.Config.Bind("Tribes", "Show GUID", false, new ConfigDescription("Show the GUID for the mod that added the tribe", null, Array.Empty<object>())).Value;
         
         public bool NodesShow = Plugin.Instance.Config.Bind("Nodes", "Show Nodes", true, new ConfigDescription("Show all new map nodes added in its own section..", null, Array.Empty<object>())).Value;
         
@@ -106,8 +107,6 @@ namespace JamesGames.ReadmeMaker
         public bool SpecialAbilitiesShow = Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
         
         public bool ConfigSectionEnabled = Plugin.Instance.Config.Bind("Config", "Show Configs", true, new ConfigDescription("Should the Readme Maker show a section listing all the new configs added?", null, Array.Empty<object>())).Value;
-        public string ConfigOnlyShowModGUID = Plugin.Instance.Config.Bind("Config", "Only Show Plugin", "", new ConfigDescription("If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: \"jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod\"", null, Array.Empty<object>())).Value;
-        public bool ConfigShowGUID = Plugin.Instance.Config.Bind("Config", "Show GUID", true, new ConfigDescription("Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?", null, Array.Empty<object>())).Value;
         
         public string SavePath = Plugin.Instance.Config.Bind("Saving", "Path", "", new ConfigDescription("Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme", null, Array.Empty<object>())).Value;
 

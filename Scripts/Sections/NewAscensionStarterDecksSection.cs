@@ -20,14 +20,6 @@ namespace JamesGames.ReadmeMaker.Sections
             decks.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (decks.Count > 0)
-            {
-                stringBuilder.Append($"\n{decks.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
             splitCards = BreakdownForTable(decks, out headers, new TableColumn<StarterDeckManager.FullStarterDeck>[]
@@ -36,6 +28,14 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Unlock Level", (a)=>a.UnlockLevel.ToString()),
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Cards", GetCardNames)
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            StarterDeckManager.FullStarterDeck casted = (StarterDeckManager.FullStarterDeck)o;
+            string guid = casted.Info.name.Substring(0, casted.Info.name.LastIndexOf("_"));
+            Plugin.Log.LogInfo("FullStarterDeck GUID " + guid);
+            return guid;
         }
 
         private string GetCardNames(StarterDeckManager.FullStarterDeck deck)

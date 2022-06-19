@@ -20,14 +20,6 @@ namespace JamesGames.ReadmeMaker.Sections
             boons.AddRange(BoonManager.NewBoons);
             boons.Sort((a, b) => string.Compare(a.boon.displayedName, b.boon.displayedName, StringComparison.Ordinal));
         }
-        
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (boons.Count > 0)
-            {
-                stringBuilder.Append($"\n{boons.Count} {SectionName}\n");
-            }
-        }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
         {
@@ -36,6 +28,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<BoonManager.FullBoon>("Name", (a)=>a.boon.displayedName),
                 new TableColumn<BoonManager.FullBoon>("Description", (a)=>a.boon.description),
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            BoonManager.FullBoon casted = (BoonManager.FullBoon)o;
+            return Helpers.GetGUID(((int)casted.boon.type).ToString());
         }
     }
 }

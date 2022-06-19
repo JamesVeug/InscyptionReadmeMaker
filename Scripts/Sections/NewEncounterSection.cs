@@ -2,6 +2,7 @@
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Encounters;
+using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -17,14 +18,6 @@ namespace JamesGames.ReadmeMaker.Sections
             allEncounters.Clear(); // Clear so when we re-dump everything we don't double up
             allEncounters.AddRange(EncounterManager.NewEncounters);
         }
-        
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allEncounters.Count > 0)
-            {
-                stringBuilder.Append($"\n{allEncounters.Count} {SectionName}\n");
-            }
-        }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
         {
@@ -32,6 +25,12 @@ namespace JamesGames.ReadmeMaker.Sections
             {
                 new TableColumn<EncounterBlueprintData>("Name", (a)=>a.name),
             });
+        }
+
+        public override string GetGUID(object o)
+        {
+            EncounterBlueprintData casted = (EncounterBlueprintData)o;
+            return casted.GetModTag();
         }
     }
 }
