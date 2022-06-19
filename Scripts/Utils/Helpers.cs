@@ -15,42 +15,42 @@ namespace JamesGames.ReadmeMaker
 {
     public static class Helpers
     {
-        private static Dictionary<object, Tuple<string, string>> GUIDNameLookup = null;
+        private static Dictionary<string, Tuple<string, string>> GUIDNameLookup = null;
 
-        public static string GetGUID(object value)
+        public static string GetGUID(string value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
             {
-                return "unknown guid";
+                return null;
             }
 
             return tuple.Item1;
         }
 
-        public static string GetName(object value)
+        public static string GetName(string value)
         {
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
             {
-                return "unknown name";
+                return null;
             }
 
             return tuple.Item2;
         }
         
-        public static Tuple<string, string> GetGUIDAndNameFromEnum(object value)
+        public static Tuple<string, string> GetGUIDAndNameFromEnum(string value)
         {
             if (GUIDNameLookup == null)
             {
                 // Init
-                GUIDNameLookup = new Dictionary<object, Tuple<string, string>>();
+                GUIDNameLookup = new Dictionary<string, Tuple<string, string>>();
                 foreach (KeyValuePair<string, Dictionary<string, object>> pluginData in ModdedSaveManager.SaveData.SaveData)
                 {
                     foreach (KeyValuePair<string, object> savedData in pluginData.Value)
                     {
                         string entry = savedData.Key;
-                        object entryValue = savedData.Value;
+                        string entryValue = Convert.ToString(savedData.Value);
                         
                         // format: {typeof(T).Name}_{guid}_{value}
                         foreach (PluginInfo infosValue in Chainloader.PluginInfos.Values)
@@ -61,7 +61,7 @@ namespace JamesGames.ReadmeMaker
                             {
                                 string entryName = entry.Substring(indexOf + pluginGUID.Length + 1);
                                 GUIDNameLookup[entryValue] = new Tuple<string, string>(pluginGUID, entryName);
-                                Plugin.Log.LogInfo($"{pluginGUID} {entryName} = {entryValue}");
+                                //Plugin.Log.LogInfo($"{pluginGUID} {entryName} = {entryValue} ({entryValue.GetType().FullName})");
                                 break;
                             }
                         }

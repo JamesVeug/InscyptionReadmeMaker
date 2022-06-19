@@ -91,8 +91,19 @@ namespace JamesGames.ReadmeMaker
 			{
 				return name;
 			}
+
+			string tribeName = Helpers.GetName(((int)tribe).ToString());
+			if (!string.IsNullOrEmpty(tribeName))
+			{
+				return tribeName;
+			}
 			
 			return tribe.ToString();
+		}
+
+		public static string GetTribeGUID(Tribe tribe)
+		{
+			return Helpers.GetGUID(((int)tribe).ToString());
 		}
 
 		public static string GetPower(CardInfo info)
