@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using DiskCardGame;
 using InscryptionAPI.Card;
 using TribeInfo = InscryptionAPI.Card.TribeManager.TribeInfo;
 
@@ -31,7 +32,8 @@ namespace JamesGames.ReadmeMaker.Sections
             splitCards = BreakdownForTable(newTribes, out headers, new TableColumn<TribeInfo>[]
             {
                 new TableColumn<TribeInfo>("GUID", GetTribeGUID),
-                new TableColumn<TribeInfo>("Name", GetTribeName)
+                new TableColumn<TribeInfo>("Name", GetTribeName),
+                new TableColumn<TribeInfo>("Cards", GetCardCount)
             });
         }
 
@@ -43,6 +45,20 @@ namespace JamesGames.ReadmeMaker.Sections
         public static string GetTribeName(TribeInfo tribe)
         {
             return ReadmeHelpers.GetTribeName(tribe.tribe);
+        }
+
+        public static string GetCardCount(TribeInfo tribe)
+        {
+            int totalCards = 0;
+            foreach (CardInfo info in CardManager.AllCardsCopy)
+            {
+                if (info.IsOfTribe(tribe.tribe))
+                {
+                    totalCards++;
+                }
+            }
+            
+            return totalCards.ToString();
         }
     }
 }
