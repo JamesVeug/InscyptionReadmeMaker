@@ -62,6 +62,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 headerList.Remove(header);
             }
         }
+
+        protected virtual bool Filter(object o)
+        {
+            string guid = GetGUID(o);
+            return ReadmeHelpers.IsPluginGUIDFiltered(guid);
+        }
         
         protected List<Dictionary<string, string>> BreakdownForTable<T>(List<T> objects, out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
@@ -84,13 +90,14 @@ namespace JamesGames.ReadmeMaker.Sections
             foreach (T t in objects)
             {
                 string guid = GetGUID(t);
-                if (!ReadmeHelpers.IsPluginGUIDFiltered(guid))
+                if (!Filter(t))
                 {
+                    Plugin.Log.LogInfo(guid + " Not Filtered");
                     continue;
                 }
+                Plugin.Log.LogInfo(guid + " Filtered");
                 
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                Plugin.Log.LogInfo("ShowGUIDS " + ReadmeConfig.Instance.ShowGUIDS);
                 if (ReadmeConfig.Instance.ShowGUIDS)
                 {
                     data["GUID"] = guid;

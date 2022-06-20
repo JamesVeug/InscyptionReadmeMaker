@@ -36,6 +36,27 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
 
+        protected override bool Filter(object o)
+        {
+            Plugin.Log.LogInfo("Filter: " + o);
+            if (!string.IsNullOrEmpty(ReadmeConfig.Instance.LimitToModPrefix))
+            {
+                // Show everything
+                CardInfo casted = (CardInfo)o;
+                string modPrefix = casted.GetModPrefix();
+                Plugin.Log.LogInfo("Mod Prefix: " + casted.GetModPrefix());
+                if (!string.IsNullOrEmpty(modPrefix))
+                {
+                    if (modPrefix.Trim() == ReadmeConfig.Instance.LimitToModPrefix.Trim())
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            return base.Filter(o);
+        }
+
         public override string GetGUID(object o)
         {
             CardInfo casted = (CardInfo)o;
