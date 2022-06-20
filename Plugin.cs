@@ -8,7 +8,7 @@ namespace JamesGames.ReadmeMaker
     [BepInDependency("cyantist.inscryption.api", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin
     {
-	    public const string PluginGuid = "jamesgames.inscryption.readmemaker";
+	    public const string PluginGuid = "_jamesgames.inscryption.readmemaker";
 	    public const string PluginName = "Readme Maker";
 	    public const string PluginVersion = "0.11.0.0";
 
