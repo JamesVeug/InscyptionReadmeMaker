@@ -23,7 +23,6 @@ namespace ReadmeMaker.Patches
     {
         public static void SetModTag(this NodeManager.NodeInfo info, string modGuid)
         {
-            Plugin.Log.LogInfo("NodeManager_Extensions " + modGuid);
             NodeManager_Add.NodeToGUIDLookup[info] = modGuid;
         }
 

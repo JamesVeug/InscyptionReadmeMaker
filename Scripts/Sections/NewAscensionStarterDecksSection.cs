@@ -34,7 +34,6 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             StarterDeckManager.FullStarterDeck casted = (StarterDeckManager.FullStarterDeck)o;
             string guid = casted.Info.name.Substring(0, casted.Info.name.LastIndexOf("_"));
-            Plugin.Log.LogInfo("FullStarterDeck GUID " + guid);
             return guid;
         }
 
