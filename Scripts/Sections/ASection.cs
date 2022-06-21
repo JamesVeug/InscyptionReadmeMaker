@@ -99,10 +99,8 @@ namespace JamesGames.ReadmeMaker.Sections
                 string guid = GetGUID(t);
                 if (!Filter(t))
                 {
-                    Plugin.Log.LogInfo(guid + " Not Filtered");
                     continue;
                 }
-                Plugin.Log.LogInfo(guid + " Filtered");
                 
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 if (ReadmeConfig.Instance.ShowGUIDS)

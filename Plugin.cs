@@ -18,10 +18,6 @@ namespace JamesGames.ReadmeMaker
 
         private void Awake()
         {
-	        // TODO: Fix new Sigils GUID not working
-	        // TODO: Fix new Special Ability GUID not working
-	        // TODO: Fix Mapnode GUID not matching the real GUID. `ZergMod.Scripts.EvolveSequencer` != `jamesgames.inscryption.zergmod`
-	        
 	        Log = Logger;
 	        Instance = this;
 	        if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
