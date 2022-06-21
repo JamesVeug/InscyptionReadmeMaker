@@ -65,8 +65,15 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected virtual bool Filter(object o)
         {
+            if (string.IsNullOrEmpty(ReadmeConfig.Instance.LimitToGUID))
+            {
+                // Show everything
+                return true;
+            }
+
             string guid = GetGUID(o);
-            return ReadmeHelpers.IsPluginGUIDFiltered(guid);
+            bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Trim().Contains(guid.Trim());
+            return isPluginGuidFiltered;
         }
         
         protected List<Dictionary<string, string>> BreakdownForTable<T>(List<T> objects, out List<TableHeader> headers, params TableColumn<T>[] grouping)

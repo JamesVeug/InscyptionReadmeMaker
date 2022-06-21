@@ -204,19 +204,6 @@ namespace JamesGames.ReadmeMaker
 			return null;
 		}
 
-		public static bool IsPluginGUIDFiltered(string guid)
-		{
-			if (string.IsNullOrEmpty(ReadmeConfig.Instance.LimitToGUID))
-			{
-				// Show everything
-				return true;
-			}
-
-			bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Trim().Contains(guid.Trim());
-			//Plugin.Log.LogInfo("IsPluginGUIDFiltered " + guid + " = " + isPluginGuidFiltered);
-			return isPluginGuidFiltered;
-		}
-        
 		/// <summary>
 		/// Gets the GUID of the mod that called this method.
 		/// Requires passing in the callingAssembly otherwise it can't find the mod.

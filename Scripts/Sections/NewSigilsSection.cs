@@ -33,7 +33,8 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(object o)
         {
             FullAbility casted = (FullAbility)o;
-            return Helpers.GetGUID(((int)casted.Id).ToString());
+            string guid = Helpers.GetGUID(((int)casted.Id).ToString());
+            return guid;
         }
     }
 }

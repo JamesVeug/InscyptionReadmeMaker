@@ -29,7 +29,6 @@ namespace ReadmeMaker.Patches
     {
         public static void SetModTag(this EncounterBlueprintData info, string modGuid)
         {
-            Plugin.Log.LogInfo("EncounterBlueprintData GUID = " + modGuid);
             EncounterManager_Add.EncounterToGUIDLookup[info] = modGuid;
         }
 
