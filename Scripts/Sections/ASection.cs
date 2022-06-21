@@ -65,13 +65,23 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected virtual bool Filter(object o)
         {
+            string guid = GetGUID(o);
+            if (ReadmeConfig.Instance.ModsToIgnore.Count > 0)
+            {
+                bool ignoreMod = ReadmeConfig.Instance.ModsToIgnore.Contains(guid.Trim());
+                if (ignoreMod)
+                {
+                    // Ignore this mod
+                    return false;
+                }
+            }
+
             if (string.IsNullOrEmpty(ReadmeConfig.Instance.FilterByModGUID))
             {
                 // Show everything
                 return true;
             }
 
-            string guid = GetGUID(o);
             bool isPluginGuidFiltered = ReadmeConfig.Instance.FilterByModGUID.Trim().Contains(guid.Trim());
             return isPluginGuidFiltered;
         }

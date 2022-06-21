@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BepInEx.Configuration;
 
 namespace JamesGames.ReadmeMaker
@@ -50,10 +51,25 @@ namespace JamesGames.ReadmeMaker
             Cost
         }
 
+        public List<string> ModsToIgnore
+        {
+            get
+            {
+                if (m_modsToIgnore == null)
+                {
+                    m_modsToIgnore = new List<string>(IgnoreByModGUID.Split(','));
+                }
+
+                return m_modsToIgnore;
+            }
+        }
+        private List<string> m_modsToIgnore;
+
         public bool ReadmeMakerEnabled = Plugin.Instance.Config.Bind("_ReadmeMaker", "Enabled", false, new ConfigDescription("Should the ReadmeMaker create a GeneratedReadme?", null, Array.Empty<object>())).Value;
 
         public HeaderType GeneralHeaderType = Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
         public HeaderSize GeneralHeaderSize = Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
+        public string IgnoreByModGUID = Plugin.Instance.Config.Bind("General", "Ignore Mod by GUID", "MADH.inscryption.JSONLoader,_jamesgames.inscryption.readmemaker,community.inscryption.patch,extraVoid.inscryption.voidSigils", new ConfigDescription("Ignore mods using these guids. Disable by leaving blank.", null, Array.Empty<object>())).Value;
         public string FilterByModGUID = Plugin.Instance.Config.Bind("General", "Filter by Mod GUID", "", new ConfigDescription("Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.", null, Array.Empty<object>())).Value;
         public string FilterByJSONLoaderModPrefix = Plugin.Instance.Config.Bind("General", "Filter by JSONLoader Mod Prefix", "", new ConfigDescription("Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.", null, Array.Empty<object>())).Value;
         public bool ShowGUIDS = Plugin.Instance.Config.Bind("General", "Show GUIDs", false, new ConfigDescription("Show the mod GUID for each sigils, tribes... etc.", null, Array.Empty<object>())).Value;
