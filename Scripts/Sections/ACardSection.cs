@@ -38,14 +38,14 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected override bool Filter(object o)
         {
-            if (!string.IsNullOrEmpty(ReadmeConfig.Instance.LimitToModPrefix))
+            if (!string.IsNullOrEmpty(ReadmeConfig.Instance.FilterByJSONLoaderModPrefix))
             {
                 // Show everything
                 CardInfo casted = (CardInfo)o;
                 string modPrefix = casted.GetModPrefix();
                 if (!string.IsNullOrEmpty(modPrefix))
                 {
-                    if (modPrefix.Trim() == ReadmeConfig.Instance.LimitToModPrefix.Trim())
+                    if (modPrefix.Trim() == ReadmeConfig.Instance.FilterByJSONLoaderModPrefix.Trim())
                     {
                         return true;
                     }
