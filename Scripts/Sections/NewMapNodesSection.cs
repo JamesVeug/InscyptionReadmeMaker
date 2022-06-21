@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using InscryptionAPI.Encounters;
 using InscryptionAPI.Nodes;
+using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -16,7 +17,7 @@ namespace JamesGames.ReadmeMaker.Sections
             public NewNodeManager.FullNode NewMapNodes;
             public NodeManager.NodeInfo OldMapNodes;
 
-            public string GUID => NewMapNodes != null ? NewMapNodes.guid : OldMapNodes.guid;
+            public string GUID => NewMapNodes != null ? NewMapNodes.guid : OldMapNodes.GetModTag();
             public string Name => NewMapNodes != null ? NewMapNodes.name : OldMapNodes.guid; 
         }
         
