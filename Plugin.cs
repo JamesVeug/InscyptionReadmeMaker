@@ -18,10 +18,8 @@ namespace JamesGames.ReadmeMaker
 
         private void Awake()
         {
-	        // TODO: Fix: JsonLoaded cards have `MADH.inscryption.JSONLoader` as the guid
-	        // see if there is a way to get the GUID of the .jldr from the mod info file????????
-	        // TODO: Fix new Encounter GUID not working
-	        // TODO: Fix new Region GUID not working
+	        // TODO: Fix new Sigils GUID not working
+	        // TODO: Fix new Special Ability GUID not working
 	        // TODO: Fix Mapnode GUID not matching the real GUID. `ZergMod.Scripts.EvolveSequencer` != `jamesgames.inscryption.zergmod`
 	        
 	        Log = Logger;

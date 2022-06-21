@@ -2,8 +2,6 @@
 using System.Reflection;
 using DiskCardGame;
 using HarmonyLib;
-using InscryptionAPI.Card;
-using InscryptionAPI.Guid;
 using InscryptionAPI.Regions;
 using JamesGames.ReadmeMaker;
 
@@ -17,9 +15,9 @@ namespace ReadmeMaker.Patches
         public static void Postfix(RegionData newRegion, int tier)
         {
             Part1RegionData lastRegion = RegionManager.NewRegions[RegionManager.NewRegions.Count - 1];
-            
+
             Assembly callingAssembly = Assembly.GetCallingAssembly();
-            lastRegion.SetModTag(TypeManager.GetModIdFromCallstack(callingAssembly));
+            lastRegion.SetModTag(ReadmeHelpers.GetModIdFromCallstack(callingAssembly));
         }
     }
 

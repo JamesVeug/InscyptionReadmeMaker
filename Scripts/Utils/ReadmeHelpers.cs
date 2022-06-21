@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reflection;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using InscryptionAPI.Guid;
 
 namespace JamesGames.ReadmeMaker
 {
@@ -212,6 +215,32 @@ namespace JamesGames.ReadmeMaker
 			bool isPluginGuidFiltered = ReadmeConfig.Instance.LimitToGUID.Trim().Contains(guid.Trim());
 			//Plugin.Log.LogInfo("IsPluginGUIDFiltered " + guid + " = " + isPluginGuidFiltered);
 			return isPluginGuidFiltered;
+		}
+        
+		/// <summary>
+		/// Gets the GUID of the mod that called this method.
+		/// Requires passing in the callingAssembly otherwise it can't find the mod.
+		/// </summary>
+		public static string GetModIdFromCallstack(Assembly callingAssembly)
+		{
+			string cacheVal = TypeManager.GetModIdFromAssembly(callingAssembly);
+			if (!string.IsNullOrEmpty(cacheVal))
+			{
+				return cacheVal;
+			}
+
+			StackTrace trace = new StackTrace();
+			StackFrame[] frames = trace.GetFrames();
+			foreach (StackFrame frame in frames)
+			{
+				string newVal = TypeManager.GetModIdFromAssembly(frame.GetMethod().DeclaringType.Assembly);
+				if (!string.IsNullOrEmpty(newVal) && newVal != Plugin.PluginGuid)
+				{
+					return newVal;
+				}
+			}
+
+			return default(string);
 		}
     }
 }
