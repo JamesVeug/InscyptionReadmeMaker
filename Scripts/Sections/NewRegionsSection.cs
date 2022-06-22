@@ -15,7 +15,6 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             rawData.AddRange(RegionManager.NewRegions);
-            rawData.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
@@ -30,6 +29,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(Part1RegionData o)
         {
             return o.GetModTag();
+        }
+
+        protected override int Sort(Part1RegionData a, Part1RegionData b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.region.name, b.region.name, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

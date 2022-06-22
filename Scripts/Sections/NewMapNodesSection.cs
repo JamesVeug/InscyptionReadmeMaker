@@ -43,8 +43,6 @@ namespace JamesGames.ReadmeMaker.Sections
                     NewMapNodes = info
                 });
             }
-            
-            rawData.Sort((a, b) => string.Compare(a.GUID, b.GUID, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
@@ -58,6 +56,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(NodeWrapper o)
         {
             return o.GUID;
+        }
+
+        protected override int Sort(NodeWrapper a, NodeWrapper b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.Name, b.Name, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

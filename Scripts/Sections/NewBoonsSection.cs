@@ -16,7 +16,6 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             rawData.AddRange(BoonManager.NewBoons);
-            rawData.Sort((a, b) => string.Compare(a.boon.displayedName, b.boon.displayedName, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
@@ -31,6 +30,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(BoonManager.FullBoon o)
         {
             return Helpers.GetGUID(((int)o.boon.type).ToString());
+        }
+
+        protected override int Sort(BoonManager.FullBoon a, BoonManager.FullBoon b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.boon.displayedName, b.boon.displayedName, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

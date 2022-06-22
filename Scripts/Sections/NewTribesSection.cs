@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
@@ -29,6 +30,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(TribeInfo o)
         {
             return ReadmeHelpers.GetTribeGUID(o.tribe);
+        }
+
+        protected override int Sort(TribeInfo a, TribeInfo b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(GetTribeName(a), GetTribeName(b), StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public static string GetTribeName(TribeInfo tribe)

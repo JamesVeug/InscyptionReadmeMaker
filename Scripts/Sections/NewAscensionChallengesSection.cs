@@ -13,12 +13,6 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             rawData.AddRange(ChallengeManager.NewInfos);
-            rawData.Sort(SortAscensionChallenges);
-        }
-
-        private static int SortAscensionChallenges(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)
-        {
-            return String.Compare(a.Challenge.title, b.Challenge.title, StringComparison.Ordinal);
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
@@ -34,6 +28,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(ChallengeManager.FullChallenge o)
         {
             return Helpers.GetGUID(((int)o.Challenge.challengeType).ToString());
+        }
+
+        protected override int Sort(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.Challenge.title, b.Challenge.title, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

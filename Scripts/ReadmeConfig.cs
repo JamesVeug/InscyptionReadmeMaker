@@ -89,6 +89,7 @@ namespace JamesGames.ReadmeMaker
         public readonly HeaderType GeneralHeaderType = Bind(GeneralHeader, "Header Type", HeaderType.Foldout, "How should the header be shown? (Unaffected by Size)");
         public readonly HeaderSize GeneralHeaderSize = Bind(GeneralHeader, "Header Size", HeaderSize.Big, "How big should the header be? (Does not work for type Foldout!");
         public readonly DisplayType GeneralDisplayType = Bind(GeneralHeader, "Display By", DisplayType.Table, "Changes how the cards, abilities and special abilities are displayed.");
+        public readonly SortByType GeneralSortBy = Bind(GeneralHeader, "Sort By", SortByType.Name, "Changes the order of how rows in sections are displayed.");
         private readonly string IgnoreByModGUID = Bind(GeneralHeader, "Ignore Mod by GUID", DefaultIgnoreByModGUIDs, "Ignore mods using these guids. Separate multiple guids by a comma. Disable by leaving blank.");
         public readonly string FilterByModGUID = Bind(GeneralHeader, "Filter by Mod GUID", "", "Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.");
         public readonly string FilterByJSONLoaderModPrefix = Bind(GeneralHeader, "Filter by JSONLoader Mod Prefix", "", "Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.");

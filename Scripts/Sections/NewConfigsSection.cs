@@ -36,28 +36,6 @@ namespace JamesGames.ReadmeMaker.Sections
             	    });
                 }
             }
-
-            // Sort by
-            // GUID
-            // Section
-            // Key
-            rawData.Sort((a, b) =>
-            {
-                int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
-                if (guid != 0)
-                {
-            	    return guid;
-                }
-                
-                int section = string.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
-                if (section != 0)
-                {
-            	    return section;
-                }
-                
-                int key = string.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
-                return key != 0 ? key : 0;
-            });
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
@@ -73,6 +51,28 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string GetGUID(ConfigData o)
         {
             return o.PluginGUID;
+        }
+
+        protected override int Sort(ConfigData a, ConfigData b)
+        {
+            // Sort by
+            // GUID
+            // Section
+            // Key
+            int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
+            if (guid != 0)
+            {
+                return guid;
+            }
+                
+            int section = string.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
+            if (section != 0)
+            {
+                return section;
+            }
+                
+            int key = string.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
+            return key != 0 ? key : 0;
         }
     }
 }

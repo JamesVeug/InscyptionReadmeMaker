@@ -52,5 +52,18 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             return Helpers.GetGUID(((int)o.Id).ToString());
         }
+
+        protected override int Sort(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(ReadmeHelpers.GetSpecialAbilityName(a), ReadmeHelpers.GetSpecialAbilityName(b), StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

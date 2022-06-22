@@ -46,6 +46,7 @@ namespace JamesGames.ReadmeMaker.Sections
         protected List<T> rawData = new List<T>();
 
         public abstract void Initialize();
+        protected abstract int Sort(T a, T b);
         
         public abstract void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows);
 
@@ -98,6 +99,7 @@ namespace JamesGames.ReadmeMaker.Sections
             }
 
             var split = new List<Dictionary<string, string>>();
+            rawData.Sort(Sort);
             foreach (T t in rawData)
             {
                 string guid = GetGUID(t);

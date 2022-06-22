@@ -51,6 +51,25 @@ namespace JamesGames.ReadmeMaker.Sections
             return base.Filter(o);
         }
 
+        protected override int Sort(CardInfo a, CardInfo b)
+        {
+            switch (ReadmeConfig.Instance.CardSortBy)
+            {
+                case ReadmeConfig.CardSortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.CardSortByType.Name:
+                    return CompareByDisplayName(a, b);
+                case ReadmeConfig.CardSortByType.Cost:
+                    return CompareByCost(a, b);
+                case ReadmeConfig.CardSortByType.Power:
+                    return a.Attack - b.Attack;
+                case ReadmeConfig.CardSortByType.Health:
+                    return a.Health - b.Health;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public override string GetGUID(CardInfo o)
         {
             return o.GetModTag();

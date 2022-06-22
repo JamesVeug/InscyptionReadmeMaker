@@ -16,7 +16,6 @@ namespace JamesGames.ReadmeMaker.Sections
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             rawData.AddRange(AbilityManager.NewAbilities);
             rawData.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
-            rawData.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
@@ -32,6 +31,19 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             string guid = Helpers.GetGUID(((int)o.Id).ToString());
             return guid;
+        }
+
+        protected override int Sort(FullAbility a, FullAbility b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(ReadmeHelpers.GetAbilityName(a), ReadmeHelpers.GetAbilityName(b), StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

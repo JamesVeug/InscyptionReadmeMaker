@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
 using DiskCardGame;
 using InscryptionAPI.Encounters;
 using ReadmeMaker.Patches;
@@ -27,8 +27,20 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override string GetGUID(EncounterBlueprintData o)
         {
-            EncounterBlueprintData casted = (EncounterBlueprintData)o;
-            return casted.GetModTag();
+            return o.GetModTag();
+        }
+
+        protected override int Sort(EncounterBlueprintData a, EncounterBlueprintData b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.name, b.name, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
