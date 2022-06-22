@@ -17,8 +17,6 @@ namespace JamesGames.ReadmeMaker.Sections
 	        
             List<CardInfo> allCards = ScriptableObjectLoader<CardInfo>.AllData;
             List<CardInfo> sideDeckCards = allCards.FindAll((a) => a.HasTrait((Trait)5103));
-            sideDeckCards.Sort(SortCards);
-	        
             return sideDeckCards;
         }
     }

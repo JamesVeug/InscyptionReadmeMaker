@@ -6,23 +6,21 @@ using InscryptionAPI.Ascension;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewAscensionStarterDecksSection : ASection
+    public class NewAscensionStarterDecksSection : ASection<StarterDeckManager.FullStarterDeck>
     {
         public override string SectionName => "New Ascension Starter Decks";
         public override bool Enabled => ReadmeConfig.Instance.AscensionStarterDecksShow;
         
-        private List<StarterDeckManager.FullStarterDeck> decks = new List<StarterDeckManager.FullStarterDeck>();
-        
         public override void Initialize()
         {
-            decks.Clear(); // Clear so when we re-dump everything we don't double up
-            decks.AddRange(StarterDeckManager.NewDecks);
-            decks.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(StarterDeckManager.NewDecks);
+            rawData.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(decks, out headers, new TableColumn<StarterDeckManager.FullStarterDeck>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Name", (a)=>a.Info.title),
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Unlock Level", (a)=>a.UnlockLevel.ToString()),
@@ -30,10 +28,9 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(StarterDeckManager.FullStarterDeck o)
         {
-            StarterDeckManager.FullStarterDeck casted = (StarterDeckManager.FullStarterDeck)o;
-            string guid = casted.Info.name.Substring(0, casted.Info.name.LastIndexOf("_"));
+            string guid = o.Info.name.Substring(0, o.Info.name.LastIndexOf("_"));
             return guid;
         }
 

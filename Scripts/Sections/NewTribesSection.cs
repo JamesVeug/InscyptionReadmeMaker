@@ -6,32 +6,29 @@ using TribeInfo = InscryptionAPI.Card.TribeManager.TribeInfo;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewTribesSection : ASection
+    public class NewTribesSection : ASection<TribeInfo>
     {
         public override string SectionName => "New Tribes";
         public override bool Enabled => ReadmeConfig.Instance.TribesShow;
-
-        private List<TribeInfo> newTribes = new List<TribeInfo>();
         
         public override void Initialize()
         {
-            newTribes.Clear(); // Clear so when we re-dump everything we don't double up
-            newTribes.AddRange(TribeManager.tribes);
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(TribeManager.tribes);
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(newTribes, out headers, new TableColumn<TribeInfo>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<TribeInfo>("Name", GetTribeName),
                 new TableColumn<TribeInfo>("Cards", GetCardCount)
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(TribeInfo o)
         {
-            TribeInfo casted = (TribeInfo)o;
-            return ReadmeHelpers.GetTribeGUID(casted.tribe);
+            return ReadmeHelpers.GetTribeGUID(o.tribe);
         }
 
         public static string GetTribeName(TribeInfo tribe)

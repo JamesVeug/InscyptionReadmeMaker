@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DiskCardGame;
 using InscryptionAPI.Ascension;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewAscensionChallengesSection : ASection
+    public class NewAscensionChallengesSection : ASection<ChallengeManager.FullChallenge>
     {
         public override string SectionName => "New Ascension Challenges";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
-
-        private List<ChallengeManager.FullChallenge> challenges = new List<ChallengeManager.FullChallenge>();
         
         public override void Initialize()
         {
-            challenges.Clear(); // Clear so when we re-dump everything we don't double up
-            challenges.AddRange(ChallengeManager.NewInfos);
-            challenges.Sort(SortAscensionChallenges);
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(ChallengeManager.NewInfos);
+            rawData.Sort(SortAscensionChallenges);
         }
 
         private static int SortAscensionChallenges(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)
@@ -27,7 +23,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(challenges, out headers, new []
+            splitCards = BreakdownForTable(out headers, new []
             {
                 new TableColumn<ChallengeManager.FullChallenge>("Name", (a)=>a.Challenge.title),
                 new TableColumn<ChallengeManager.FullChallenge>("Points", (a)=>a.Challenge.pointValue.ToString()),
@@ -35,10 +31,9 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(ChallengeManager.FullChallenge o)
         {
-            ChallengeManager.FullChallenge casted = (ChallengeManager.FullChallenge)o;
-            return Helpers.GetGUID(((int)casted.Challenge.challengeType).ToString());
+            return Helpers.GetGUID(((int)o.Challenge.challengeType).ToString());
         }
     }
 }

@@ -8,16 +8,14 @@ using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSp
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewConfigsSection : ASection
+    public class NewConfigsSection : ASection<ConfigData>
     {
         public override string SectionName => "New Configs";
         public override bool Enabled => ReadmeConfig.Instance.ConfigSectionShow;
         
-        private List<ConfigData> configs = new List<ConfigData>();
-        
         public override void Initialize()
         {
-            configs.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
             
             foreach (BaseUnityPlugin plugin in GameObject.FindObjectsOfType<BaseUnityPlugin>())
             {
@@ -31,7 +29,7 @@ namespace JamesGames.ReadmeMaker.Sections
                 ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();
                 foreach (ConfigEntryBase definition in entries)
                 {
-                    configs.Add(new ConfigData()
+                    rawData.Add(new ConfigData()
             	    {
             		    PluginGUID = guid,
             		    Entry = definition,
@@ -43,7 +41,7 @@ namespace JamesGames.ReadmeMaker.Sections
             // GUID
             // Section
             // Key
-            configs.Sort((a, b) =>
+            rawData.Sort((a, b) =>
             {
                 int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
                 if (guid != 0)
@@ -64,7 +62,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(configs, out headers, new TableColumn<ConfigData>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<ConfigData>("Section", (a)=>a.Entry.Definition.Section),
                 new TableColumn<ConfigData>("Key", (a)=>a.Entry.Definition.Key),
@@ -72,10 +70,9 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(ConfigData o)
         {
-            ConfigData casted = (ConfigData)o;
-            return casted.PluginGUID;
+            return o.PluginGUID;
         }
     }
 }

@@ -6,31 +6,29 @@ using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSp
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewSpecialAbilitiesSection : ASection
+    public class NewSpecialAbilitiesSection : ASection<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>
     {
         public override string SectionName => "New Special Abilities";
         public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
-
-        private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
         
         public override void Initialize()
         {
-            allAbilities.Clear(); // Clear so when we re-dump everything we don't double up
-            allAbilities.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
 	        
             // Remove special abilities that have no rulebook entry
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
-            for (int i = 0; i < allAbilities.Count; i++)
+            for (int i = 0; i < rawData.Count; i++)
             {
-                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = allAbilities[i];
+                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = rawData[i];
                 StatIconManager.FullStatIcon fullStatIcon = icons.Find((b) => b.VariableStatBehavior == specialAbility.AbilityBehaviour);
                 if (fullStatIcon == null || fullStatIcon.Info == null || string.IsNullOrEmpty(fullStatIcon.Info.rulebookName))
                 {
-                    allAbilities.RemoveAt(i--);
+                    rawData.RemoveAt(i--);
                 }
             }
 	        
-            allAbilities.Sort(SortNewSpecialAbilities);
+            rawData.Sort(SortNewSpecialAbilities);
         }
         
         private static int SortNewSpecialAbilities(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
@@ -43,17 +41,16 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(allAbilities, out headers, new TableColumn<SpecialAbility>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<SpecialAbility>("Name", ReadmeHelpers.GetSpecialAbilityName),
                 new TableColumn<SpecialAbility>("Description", ReadmeHelpers.GetSpecialAbilityDescription)
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility o)
         {
-            SpecialAbility casted = (SpecialAbility)o;
-            return Helpers.GetGUID(((int)casted.Id).ToString());
+            return Helpers.GetGUID(((int)o.Id).ToString());
         }
     }
 }

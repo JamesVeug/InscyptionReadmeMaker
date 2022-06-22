@@ -10,7 +10,7 @@ namespace JamesGames.ReadmeMaker
     public static class ReadmeDump
     {
 	    // List of different sections of data to show listed in order displayed in the dump
-	    private static List<ASection> Sections = new List<ASection>()
+	    private static List<ISection> Sections = new List<ISection>()
 	    {
 		    new NewCardsSection(),
 		    new ModifiedCardsSection(),
@@ -50,7 +50,7 @@ namespace JamesGames.ReadmeMaker
 		    Costs.Add(cost);
 	    }
 
-	    public static void AddSection(ASection section)
+	    public static void AddSection(ISection section)
 	    {
 		    Sections.Add(section);
 	    }
@@ -154,7 +154,7 @@ namespace JamesGames.ReadmeMaker
         private static string GetDumpString()
         {
 	        // Initialize everything for the Summary
-	        foreach (ASection section in Sections)
+	        foreach (ISection section in Sections)
 	        {
 		        if (section.Enabled)
 		        {

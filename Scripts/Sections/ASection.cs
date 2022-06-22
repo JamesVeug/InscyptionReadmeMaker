@@ -4,44 +4,46 @@ using System.Text;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public abstract class ASection
+    public enum Alignment
     {
-        public enum Alignment
+        Left, Middle, Right
+    }
+
+    public class TableHeader
+    {
+        public readonly string HeaderName;
+        public readonly Alignment Alignment;
+
+        public TableHeader(string headerName, Alignment alignment)
         {
-            Left, Middle, Right
+            HeaderName = headerName;
+            Alignment = alignment;
         }
+    }
 
-        public class TableHeader
+    public class TableColumn<T>
+    {
+        public readonly string HeaderName;
+        public readonly Alignment Alignment;
+        public readonly Func<T, string> Getter;
+        public readonly bool Enabled;
+
+        public TableColumn(string headerName, Func<T, string> getter, bool enabled=true, Alignment alignment=Alignment.Left)
         {
-            public readonly string HeaderName;
-            public readonly Alignment Alignment;
-
-            public TableHeader(string headerName, Alignment alignment)
-            {
-                HeaderName = headerName;
-                Alignment = alignment;
-            }
+            HeaderName = headerName;
+            Getter = getter;
+            Alignment = alignment;
+            Enabled = enabled;
         }
-
-        public class TableColumn<T>
-        {
-            public readonly string HeaderName;
-            public readonly Alignment Alignment;
-            public readonly Func<T, string> Getter;
-            public readonly bool Enabled;
-
-            public TableColumn(string headerName, Func<T, string> getter, bool enabled=true, Alignment alignment=Alignment.Left)
-            {
-                HeaderName = headerName;
-                Getter = getter;
-                Alignment = alignment;
-                Enabled = enabled;
-            }
-        }
-
+    }
+    
+    public abstract class ASection<T> : ISection
+    {
         public abstract string SectionName { get; }
         public virtual bool Enabled => true;
-        public abstract string GetGUID(object o);
+        public abstract string GetGUID(T o);
+
+        protected List<T> rawData = new List<T>();
 
         public abstract void Initialize();
         
@@ -54,16 +56,8 @@ namespace JamesGames.ReadmeMaker.Sections
                 stringBuilder.Append($"\n{rows.Count} {SectionName}\n");
             }
         }
-        
-        protected static void RemoveHeaderIfDisabled(List<string> headerList, string header, bool enabled)
-        {
-            if (!enabled)
-            {
-                headerList.Remove(header);
-            }
-        }
 
-        protected virtual bool Filter(object o)
+        protected virtual bool Filter(T o)
         {
             string guid = GetGUID(o);
             if (ReadmeConfig.Instance.ModsToIgnore.Count > 0)
@@ -86,7 +80,7 @@ namespace JamesGames.ReadmeMaker.Sections
             return isPluginGuidFiltered;
         }
         
-        protected List<Dictionary<string, string>> BreakdownForTable<T>(List<T> objects, out List<TableHeader> headers, params TableColumn<T>[] grouping)
+        protected List<Dictionary<string, string>> BreakdownForTable(out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
             headers = new List<TableHeader>();
             if (ReadmeConfig.Instance.ShowGUIDS)
@@ -104,7 +98,7 @@ namespace JamesGames.ReadmeMaker.Sections
             }
 
             var split = new List<Dictionary<string, string>>();
-            foreach (T t in objects)
+            foreach (T t in rawData)
             {
                 string guid = GetGUID(t);
                 if (!Filter(t))

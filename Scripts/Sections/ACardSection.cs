@@ -6,21 +6,18 @@ using InscryptionAPI.Card;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public abstract class ACardsSection : ASection
+    public abstract class ACardsSection : ASection<CardInfo>
     {
-        private List<CardInfo> allCards;
-
         public override void Initialize()
         {
-            allCards = GetCards();
-            allCards.Sort(SortCards);
+            rawData = GetCards();
         }
 
         protected abstract List<CardInfo> GetCards();
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(allCards, out headers, new TableColumn<CardInfo>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<CardInfo>("Name", (a)=>a.displayedName),
                 new TableColumn<CardInfo>("Power", ReadmeHelpers.GetPower),
@@ -36,13 +33,12 @@ namespace JamesGames.ReadmeMaker.Sections
             });
         }
 
-        protected override bool Filter(object o)
+        protected override bool Filter(CardInfo o)
         {
             if (!string.IsNullOrEmpty(ReadmeConfig.Instance.FilterByJSONLoaderModPrefix))
             {
                 // Show everything
-                CardInfo casted = (CardInfo)o;
-                string modPrefix = casted.GetModPrefix();
+                string modPrefix = o.GetModPrefix();
                 if (!string.IsNullOrEmpty(modPrefix))
                 {
                     if (modPrefix.Trim() == ReadmeConfig.Instance.FilterByJSONLoaderModPrefix.Trim())
@@ -55,10 +51,9 @@ namespace JamesGames.ReadmeMaker.Sections
             return base.Filter(o);
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(CardInfo o)
         {
-            CardInfo casted = (CardInfo)o;
-            return casted.GetModTag();
+            return o.GetModTag();
         }
 
         private string GetCost(CardInfo info)
@@ -199,27 +194,6 @@ namespace JamesGames.ReadmeMaker.Sections
             return sigilBuilder.ToString();
         }
         
-        protected int SortCards(CardInfo a, CardInfo b)
-        {
-            int sorted = 0;
-            switch (ReadmeConfig.Instance.CardSortBy)
-            {
-        	    case ReadmeConfig.SortByType.Cost:
-        		    sorted = CompareByCost(a, b); 
-        		    break;
-        	    case ReadmeConfig.SortByType.Name:
-        		    sorted = CompareByDisplayName(a, b); 
-        		    break;
-            }
-
-            if (!ReadmeConfig.Instance.CardSortAscending)
-            {
-        	    return sorted * -1;
-            }
-            
-            return sorted;
-        }
-        
         private static int CompareByDisplayName(CardInfo a, CardInfo b)
         {
             if (a.displayedName == null)
@@ -236,6 +210,27 @@ namespace JamesGames.ReadmeMaker.Sections
             }
             
             return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
+        }
+        
+        protected int SortCards(CardInfo a, CardInfo b)
+        {
+            int sorted = 0;
+            switch (ReadmeConfig.Instance.CardSortBy)
+            {
+                case ReadmeConfig.CardSortByType.Cost:
+                    sorted = CompareByCost(a, b); 
+                    break;
+                case ReadmeConfig.CardSortByType.Name:
+                    sorted = CompareByDisplayName(a, b); 
+                    break;
+            }
+
+            if (!ReadmeConfig.Instance.CardSortAscending)
+            {
+                return sorted * -1;
+            }
+            
+            return sorted;
         }
 
         private static int CompareByCost(CardInfo a, CardInfo b)

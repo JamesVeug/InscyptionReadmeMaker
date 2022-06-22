@@ -43,8 +43,17 @@ namespace JamesGames.ReadmeMaker
         
         public enum SortByType
         {
+            GUID,
             Name,
-            Cost
+        }
+        
+        public enum CardSortByType
+        {
+            GUID,
+            Name,
+            Cost,
+            Power,
+            Health,
         }
 
         private const string DefaultIgnoreByModGUIDs =
@@ -98,7 +107,7 @@ namespace JamesGames.ReadmeMaker
         public readonly bool SpecialAbilitiesShow = Bind(SectionsHeader, "Show Special Abilities", true, "Show all new special abilities listed on cards in its own section.");
         public readonly bool TribesShow = Bind(SectionsHeader, "Show Tribes", true, "Show all new tribes added in its own section.");
 
-        public readonly SortByType CardSortBy = Bind(CardsHeader, "Sort Type", SortByType.Name, "Changes the order that the cards will be displayed in.");
+        public readonly CardSortByType CardSortBy = Bind(CardsHeader, "Sort Type", CardSortByType.Name, "Changes the order that the cards will be displayed in.");
         public readonly bool CardShowUnobtainable = Bind(CardsHeader, "Show Unobtainable Cards", true, "Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)");
         public readonly bool CardSortAscending = Bind(CardsHeader, "Sort by Ascending", true, "True=Names will be ordered from A-Z, False=Z-A... etc");
         public readonly int CostMinCollapseAmount = Bind(CardsHeader, "Show Cost Min Collapse Amount", 4, "Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc");

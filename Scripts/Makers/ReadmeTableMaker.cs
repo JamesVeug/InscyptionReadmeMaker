@@ -6,13 +6,13 @@ namespace JamesGames.ReadmeMaker
 {
     public static class ReadmeTableMaker
     {
-        public static string Dump(List<ASection> sections)
+        public static string Dump(List<ISection> sections)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("### Includes:\n");
             foreach (var section in sections)
             {
-                section.GetTableDump(out List<ASection.TableHeader> headers, out List<Dictionary<string, string>> rows);
+                section.GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows);
                 if (rows == null || rows.Count == 0)
                 {
                     section.DumpSummary(stringBuilder, rows);
@@ -28,7 +28,7 @@ namespace JamesGames.ReadmeMaker
             return stringBuilder.ToString();
         }
         
-        private static void BuildTable(StringBuilder builder, List<ASection.TableHeader> headers, List<Dictionary<string, string>> rows)
+        private static void BuildTable(StringBuilder builder, List<TableHeader> headers, List<Dictionary<string, string>> rows)
         {
             // Headers
             //|Left columns|Right columns|
@@ -47,13 +47,13 @@ namespace JamesGames.ReadmeMaker
             {
                 switch (headers[i].Alignment)
                 {
-                    case ASection.Alignment.Left:
+                    case Alignment.Left:
                         builder.Append("|:-");
                         break;
-                    case ASection.Alignment.Middle:
+                    case Alignment.Middle:
                         builder.Append("|:-:");
                         break;
-                    case ASection.Alignment.Right:
+                    case Alignment.Right:
                         builder.Append("|-:");
                         break;
                 }

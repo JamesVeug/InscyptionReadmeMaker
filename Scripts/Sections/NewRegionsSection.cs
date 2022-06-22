@@ -6,33 +6,30 @@ using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewRegionsSection : ASection
+    public class NewRegionsSection : ASection<Part1RegionData>
     {
         public override string SectionName => "New Regions";
         public override bool Enabled => ReadmeConfig.Instance.RegionsShow;
         
-        private List<Part1RegionData> regions = new List<Part1RegionData>();
-        
         public override void Initialize()
         {
-            regions.Clear(); // Clear so when we re-dump everything we don't double up
-            regions.AddRange(RegionManager.NewRegions);
-            regions.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(RegionManager.NewRegions);
+            rawData.Sort((a,b)=>string.Compare(a.region.name, b.region.name, StringComparison.Ordinal));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(regions, out headers, new TableColumn<Part1RegionData>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<Part1RegionData>("Name", (a)=>a.region.name),
                 new TableColumn<Part1RegionData>("Tier", (a)=>a.tier.ToString()),
             });
         }
 
-        public override string GetGUID(object o)
+        public override string GetGUID(Part1RegionData o)
         {
-            Part1RegionData casted = (Part1RegionData)o;
-            return casted.GetModTag();
+            return o.GetModTag();
         }
     }
 }
