@@ -9,7 +9,7 @@ namespace JamesGames.ReadmeMaker.Sections
     public class NewAscensionStarterDecksSection : ASection
     {
         public override string SectionName => "New Ascension Starter Decks";
-        public override bool Enabled => ReadmeConfig.Instance.AscensionStarterDecks;
+        public override bool Enabled => ReadmeConfig.Instance.AscensionStarterDecksShow;
         
         private List<StarterDeckManager.FullStarterDeck> decks = new List<StarterDeckManager.FullStarterDeck>();
         

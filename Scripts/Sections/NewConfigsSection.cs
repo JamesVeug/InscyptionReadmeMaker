@@ -11,7 +11,7 @@ namespace JamesGames.ReadmeMaker.Sections
     public class NewConfigsSection : ASection
     {
         public override string SectionName => "New Configs";
-        public override bool Enabled => ReadmeConfig.Instance.ConfigSectionEnabled;
+        public override bool Enabled => ReadmeConfig.Instance.ConfigSectionShow;
         
         private List<ConfigData> configs = new List<ConfigData>();
         

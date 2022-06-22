@@ -126,7 +126,7 @@ namespace JamesGames.ReadmeMaker
         private static string GetOutputFullPath()
         {
 	        string defaultPath = Path.Combine(Plugin.Directory, "GENERATED_README.md");
-	        string path = ReadmeConfig.Instance.SavePath;
+	        string path = ReadmeConfig.Instance.ReadmeMakerSavePath;
 	        if (string.IsNullOrEmpty(path))
 	        {
 		        path = defaultPath;
@@ -163,7 +163,7 @@ namespace JamesGames.ReadmeMaker
 	        }
 
 	        // Build everything
-	        switch (ReadmeConfig.Instance.CardDisplayByType)
+	        switch (ReadmeConfig.Instance.GeneralDisplayType)
 	        {
 		        case ReadmeConfig.DisplayType.Table:
 			        return ReadmeTableMaker.Dump(Sections);
@@ -183,7 +183,7 @@ namespace JamesGames.ReadmeMaker
 			// Add Free if we don't get a cost
 			if (!hasCost)
 			{
-				if (ReadmeConfig.Instance.CardDisplayByType == ReadmeConfig.DisplayType.Table)
+				if (ReadmeConfig.Instance.GeneralDisplayType == ReadmeConfig.DisplayType.Table)
 				{
 					builder.Append($"Free");
 				}

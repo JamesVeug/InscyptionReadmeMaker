@@ -22,7 +22,7 @@ namespace JamesGames.ReadmeMaker.Sections
         }
         
         public override string SectionName => "New Map Nodes";
-        public override bool Enabled => ReadmeConfig.Instance.NodesShow;
+        public override bool Enabled => ReadmeConfig.Instance.MapNodesShow;
 
         private List<NodeWrapper> allNodes = new List<NodeWrapper>();
         
