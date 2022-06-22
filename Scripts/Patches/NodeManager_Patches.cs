@@ -14,6 +14,11 @@ namespace ReadmeMaker.Patches
 
         public static void Postfix(NodeManager.NodeInfo __instance)
         {
+            if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
+            {
+                return;
+            }
+            
             Assembly callingAssembly = Assembly.GetCallingAssembly();
             __instance.SetModTag(ReadmeHelpers.GetModIdFromCallstack(callingAssembly));
         }

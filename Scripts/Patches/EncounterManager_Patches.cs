@@ -17,6 +17,11 @@ namespace ReadmeMaker.Patches
 
         public static void Postfix(EncounterBlueprintData newEncounter)
         {
+            if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
+            {
+                return;
+            }
+            
             EncounterBlueprintData lastRegion = EncounterManager.NewEncounters[EncounterManager.NewEncounters.Count - 1];
                 
             Assembly callingAssembly = Assembly.GetCallingAssembly();

@@ -14,6 +14,11 @@ namespace ReadmeMaker.Patches
 
         public static void Postfix(RegionData newRegion, int tier)
         {
+            if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
+            {
+                return;
+            }
+            
             Part1RegionData lastRegion = RegionManager.NewRegions[RegionManager.NewRegions.Count - 1];
 
             Assembly callingAssembly = Assembly.GetCallingAssembly();
