@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -229,5 +230,104 @@ namespace JamesGames.ReadmeMaker
 
 			return default(string);
 		}
+
+
+		public static int CompareByDisplayName(CardInfo a, CardInfo b)
+        {
+            if (a.displayedName == null)
+            {
+                if (b.displayedName != null)
+                {
+                    return -1;
+                }
+                return 0;
+            }
+            else if (b.displayedName == null)
+            {
+                return 1;
+            }
+            
+            return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
+        }
+
+        public static int CompareByCost(CardInfo a, CardInfo b)
+        {
+            List<Tuple<int, int>> aCosts = GetCostType(a);
+            List<Tuple<int, int>> bCosts = GetCostType(b);
+
+            // Show least amount of costs at the top (Blood, Bone, Blood&Bone)
+            if (aCosts.Count != bCosts.Count)
+            {
+                return aCosts.Count - bCosts.Count;
+            }
+	        
+            // Show lowest cost first (Blood, Bone, Energy)
+            for (var i = 0; i < aCosts.Count; i++)
+            {
+                Tuple<int, int> aCost = aCosts[i];
+                Tuple<int, int> bCost = bCosts[i];
+                if (aCost.Item1 != bCost.Item1)
+                {
+                    return aCost.Item1 - bCost.Item1;
+                }
+            }
+
+            // Show lowest amounts first (1 Blood, 2 Blood)
+            for (var i = 0; i < aCosts.Count; i++)
+            {
+                Tuple<int, int> aCost = aCosts[i];
+                Tuple<int, int> bCost = bCosts[i];
+                if (aCost.Item2 != bCost.Item2)
+                {
+                    return aCost.Item2 - bCost.Item2;
+                }
+            }
+
+            ListPool.Push(aCosts);
+            ListPool.Push(bCosts);
+
+            // Same Costs
+            // Default to Name
+            return CompareByDisplayName(a, b);
+        }
+        
+        private static List<Tuple<int, int>> GetCostType(CardInfo a)
+        {
+            List<Tuple<int, int>> list = ListPool.Pull<Tuple<int, int>>();
+            if (a.BloodCost > 0)
+            {
+                list.Add(new Tuple<int, int>(0, a.BloodCost));
+            }
+            if (a.bonesCost > 0)
+            {
+                list.Add(new Tuple<int, int>(1, a.bonesCost));
+            }
+            if (a.energyCost > 0)
+            {
+                list.Add(new Tuple<int, int>(2, a.energyCost));
+            }
+            if (a.gemsCost.Count > 0)
+            {
+                foreach (var gemType in a.gemsCost)
+                {
+                    switch (gemType)
+                    {
+                        case GemType.Green:
+                            list.Add(new Tuple<int, int>(3, 1));
+                            break;
+                        case GemType.Orange:
+                            list.Add(new Tuple<int, int>(4, 1));
+                            break;
+                        case GemType.Blue:
+                            list.Add(new Tuple<int, int>(5, 1));
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+            }
+
+            return list;
+        }
     }
 }

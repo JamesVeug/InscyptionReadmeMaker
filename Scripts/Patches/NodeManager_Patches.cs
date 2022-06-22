@@ -33,7 +33,8 @@ namespace ReadmeMaker.Patches
 
         public static string GetModTag(this NodeManager.NodeInfo info)
         {
-            return NodeManager_Add.NodeToGUIDLookup[info];
+            NodeManager_Add.NodeToGUIDLookup.TryGetValue(info, out string guid);
+            return guid;
         }
     }
 }
