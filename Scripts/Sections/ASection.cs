@@ -61,9 +61,17 @@ namespace JamesGames.ReadmeMaker.Sections
         protected virtual bool Filter(T o)
         {
             string guid = GetGUID(o);
+            if (guid == null)
+            {
+                Plugin.Log.LogInfo("Null GUID found!");
+                Plugin.Log.LogInfo(Environment.StackTrace);
+                return true;
+            }
+            guid = guid.Trim();
+            
             if (ReadmeConfig.Instance.ModsToIgnore.Count > 0)
             {
-                bool ignoreMod = ReadmeConfig.Instance.ModsToIgnore.Contains(guid.Trim());
+                bool ignoreMod = ReadmeConfig.Instance.ModsToIgnore.Contains(guid);
                 if (ignoreMod)
                 {
                     // Ignore this mod
@@ -71,13 +79,13 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
             }
 
-            if (string.IsNullOrEmpty(ReadmeConfig.Instance.FilterByModGUID))
+            if (ReadmeConfig.Instance.FilterByModsGUID.Count == 0)
             {
                 // Show everything
                 return true;
             }
 
-            bool isPluginGuidFiltered = ReadmeConfig.Instance.FilterByModGUID.Trim().Contains(guid.Trim());
+            bool isPluginGuidFiltered = ReadmeConfig.Instance.FilterByModsGUID.Contains(guid);
             return isPluginGuidFiltered;
         }
         

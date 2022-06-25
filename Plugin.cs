@@ -19,6 +19,7 @@ namespace JamesGames.ReadmeMaker
         private void Awake()
         {
 	        Log = Logger;
+	        
 	        Instance = this;
 	        if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
 	        {

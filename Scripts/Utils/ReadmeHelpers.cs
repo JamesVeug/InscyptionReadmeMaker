@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -328,6 +329,83 @@ namespace JamesGames.ReadmeMaker
             }
 
             return list;
+        }
+
+        public static bool IsList(object o)
+        {
+	        if(o == null) return false;
+	        return o is IList &&
+	               o.GetType().IsGenericType &&
+	               o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
+        }
+
+        public bool IsDictionary(object o)
+        {
+	        if(o == null) return false;
+	        return o is IDictionary &&
+	               o.GetType().IsGenericType &&
+	               o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
+        }
+
+
+        public static string ConvertToString(object o)
+        {
+	        if (o == null)
+	        {
+		        return "null";
+	        }
+
+	        if (IsList(o))
+	        {
+		        IList l = (IList)o;
+		        if (l.Count == 0)
+		        {
+			        return "/";
+		        }
+                
+		        string s = "";
+		        for (int i = 0; i < l.Count; i++)
+		        {
+			        object element = l[i];
+			        if (i > 0)
+			        {
+				        s += ",";
+			        }
+
+			        s += ConvertToString(element);
+		        }
+
+		        return s;
+	        }
+
+	        Type memberInfo = o.GetType();
+	        if (memberInfo == typeof(Ability))
+	        {
+		        AbilityInfo abilityInfo = GetAbilityInfo((Ability)o);
+		        return abilityInfo == null ? o.ToString() : abilityInfo.rulebookName;
+	        }
+
+	        if (memberInfo == typeof(Tribe))
+	        {
+		        return GetTribeName((Tribe)o);
+	        }
+
+	        if (memberInfo == typeof(Trait))
+	        {
+		        return GetTraitName((Trait)o);
+	        }
+
+	        string convertToString = o.ToString();
+	        if (convertToString == (" (" + memberInfo.FullName + ")"))
+	        {
+		        convertToString = memberInfo.Name;
+	        }
+	        else if (convertToString.EndsWith($"({memberInfo.FullName})"))
+	        {
+		        convertToString = convertToString.Substring(0, convertToString.Length - (memberInfo.FullName.Length + 2));
+	        }
+	        
+	        return convertToString;
         }
     }
 }

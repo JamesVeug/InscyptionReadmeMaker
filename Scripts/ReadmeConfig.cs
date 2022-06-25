@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BepInEx.Configuration;
 
 namespace JamesGames.ReadmeMaker
@@ -76,6 +77,12 @@ namespace JamesGames.ReadmeMaker
                 if (m_modsToIgnore == null)
                 {
                     m_modsToIgnore = new List<string>(IgnoreByModGUID.Split(','));
+                    m_modsToIgnore.RemoveAll(string.IsNullOrEmpty);
+                    for (int i = 0; i < m_modsToIgnore.Count; i++)
+                    {
+                        m_modsToIgnore[i] = m_modsToIgnore[i].Trim();
+                    }
+                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_modsToIgnore.Count);
                 }
 
                 return m_modsToIgnore;
@@ -83,6 +90,26 @@ namespace JamesGames.ReadmeMaker
         }
         private List<string> m_modsToIgnore;
 
+        public List<string> FilterByModsGUID
+        {
+            get
+            {
+                if (m_filterByModGUID == null)
+                {
+                    m_filterByModGUID = new List<string>(FilterByModGUID.Split(','));
+                    m_filterByModGUID.RemoveAll(string.IsNullOrEmpty);
+                    for (int i = 0; i < m_filterByModGUID.Count; i++)
+                    {
+                        m_filterByModGUID[i] = m_filterByModGUID[i].Trim();
+                    }
+                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_filterByModGUID.Count);
+                }
+
+                return m_filterByModGUID;
+            }
+        }
+        private List<string> m_filterByModGUID;
+        
         public readonly bool ReadmeMakerEnabled = Bind(ReadmeMakerHeader, "Enabled", false, "Should the ReadmeMaker create a GeneratedReadme?");
         public readonly string ReadmeMakerSavePath = Bind(ReadmeMakerHeader, "Save To", "", "Where to save the generated readme to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme.");
         
@@ -91,7 +118,7 @@ namespace JamesGames.ReadmeMaker
         public readonly DisplayType GeneralDisplayType = Bind(GeneralHeader, "Display By", DisplayType.Table, "Changes how the cards, abilities and special abilities are displayed.");
         public readonly SortByType GeneralSortBy = Bind(GeneralHeader, "Sort By", SortByType.Name, "Changes the order of how rows in sections are displayed.");
         private readonly string IgnoreByModGUID = Bind(GeneralHeader, "Ignore Mod by GUID", DefaultIgnoreByModGUIDs, "Ignore mods using these guids. Separate multiple guids by a comma. Disable by leaving blank.");
-        public readonly string FilterByModGUID = Bind(GeneralHeader, "Filter by Mod GUID", "", "Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.");
+        private readonly string FilterByModGUID = Bind(GeneralHeader, "Filter by Mod GUID", "", "Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.");
         public readonly string FilterByJSONLoaderModPrefix = Bind(GeneralHeader, "Filter by JSONLoader Mod Prefix", "", "Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.");
         public readonly bool ShowGUIDS = Bind(GeneralHeader, "Show GUIDs", false, "Show the mod GUID for each sigils, tribes... etc.");
         
