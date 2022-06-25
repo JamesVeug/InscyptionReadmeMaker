@@ -2,32 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
+using InscryptionAPI.Card;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public abstract class ACardsSection : ASection
+    public abstract class ACardsSection : ASection<CardInfo>
     {
-        private List<CardInfo> allCards;
-
         public override void Initialize()
         {
-            allCards = GetCards();
-            allCards.Sort(SortCards);
+            rawData = GetCards();
         }
 
         protected abstract List<CardInfo> GetCards();
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allCards.Count > 0)
-            {
-                stringBuilder.Append($"\n{allCards.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(allCards, out headers, new TableColumn<CardInfo>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<CardInfo>("Name", (a)=>a.displayedName),
                 new TableColumn<CardInfo>("Power", ReadmeHelpers.GetPower),
@@ -41,6 +31,48 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
                 new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
             });
+        }
+
+        protected override bool Filter(CardInfo o)
+        {
+            if (!string.IsNullOrEmpty(ReadmeConfig.Instance.FilterByJSONLoaderModPrefix))
+            {
+                // Show everything
+                string modPrefix = o.GetModPrefix();
+                if (!string.IsNullOrEmpty(modPrefix))
+                {
+                    if (modPrefix.Trim() == ReadmeConfig.Instance.FilterByJSONLoaderModPrefix.Trim())
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            return base.Filter(o);
+        }
+
+        protected override int Sort(CardInfo a, CardInfo b)
+        {
+            switch (ReadmeConfig.Instance.CardSortBy)
+            {
+                case ReadmeConfig.CardSortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.CardSortByType.Name:
+                    return ReadmeHelpers.CompareByDisplayName(a, b);
+                case ReadmeConfig.CardSortByType.Cost:
+                    return ReadmeHelpers.CompareByCost(a, b);
+                case ReadmeConfig.CardSortByType.Power:
+                    return a.Attack - b.Attack;
+                case ReadmeConfig.CardSortByType.Health:
+                    return a.Health - b.Health;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override string GetGUID(CardInfo o)
+        {
+            return o.GetModTag();
         }
 
         private string GetCost(CardInfo info)
@@ -179,125 +211,6 @@ namespace JamesGames.ReadmeMaker.Sections
             }
             
             return sigilBuilder.ToString();
-        }
-        
-        protected int SortCards(CardInfo a, CardInfo b)
-        {
-            int sorted = 0;
-            switch (ReadmeConfig.Instance.CardSortBy)
-            {
-        	    case ReadmeConfig.SortByType.Cost:
-        		    sorted = CompareByCost(a, b); 
-        		    break;
-        	    case ReadmeConfig.SortByType.Name:
-        		    sorted = CompareByDisplayName(a, b); 
-        		    break;
-            }
-
-            if (!ReadmeConfig.Instance.CardSortAscending)
-            {
-        	    return sorted * -1;
-            }
-            
-            return sorted;
-        }
-        
-        private static int CompareByDisplayName(CardInfo a, CardInfo b)
-        {
-            if (a.displayedName == null)
-            {
-                if (b.displayedName != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (b.displayedName == null)
-            {
-                return 1;
-            }
-            
-            return String.Compare(a.displayedName.ToLower(), b.displayedName.ToLower(), StringComparison.Ordinal);
-        }
-
-        private static int CompareByCost(CardInfo a, CardInfo b)
-        {
-            List<Tuple<int, int>> aCosts = GetCostType(a);
-            List<Tuple<int, int>> bCosts = GetCostType(b);
-
-            // Show least amount of costs at the top (Blood, Bone, Blood&Bone)
-            if (aCosts.Count != bCosts.Count)
-            {
-                return aCosts.Count - bCosts.Count;
-            }
-	        
-            // Show lowest cost first (Blood, Bone, Energy)
-            for (var i = 0; i < aCosts.Count; i++)
-            {
-                Tuple<int, int> aCost = aCosts[i];
-                Tuple<int, int> bCost = bCosts[i];
-                if (aCost.Item1 != bCost.Item1)
-                {
-                    return aCost.Item1 - bCost.Item1;
-                }
-            }
-
-            // Show lowest amounts first (1 Blood, 2 Blood)
-            for (var i = 0; i < aCosts.Count; i++)
-            {
-                Tuple<int, int> aCost = aCosts[i];
-                Tuple<int, int> bCost = bCosts[i];
-                if (aCost.Item2 != bCost.Item2)
-                {
-                    return aCost.Item2 - bCost.Item2;
-                }
-            }
-
-            ListPool.Push(aCosts);
-            ListPool.Push(bCosts);
-
-            // Same Costs
-            // Default to Name
-            return CompareByDisplayName(a, b);
-        }
-        
-        private static List<Tuple<int, int>> GetCostType(CardInfo a)
-        {
-            List<Tuple<int, int>> list = ListPool.Pull<Tuple<int, int>>();
-            if (a.BloodCost > 0)
-            {
-                list.Add(new Tuple<int, int>(0, a.BloodCost));
-            }
-            if (a.bonesCost > 0)
-            {
-                list.Add(new Tuple<int, int>(1, a.bonesCost));
-            }
-            if (a.energyCost > 0)
-            {
-                list.Add(new Tuple<int, int>(2, a.energyCost));
-            }
-            if (a.gemsCost.Count > 0)
-            {
-                foreach (var gemType in a.gemsCost)
-                {
-                    switch (gemType)
-                    {
-                        case GemType.Green:
-                            list.Add(new Tuple<int, int>(3, 1));
-                            break;
-                        case GemType.Orange:
-                            list.Add(new Tuple<int, int>(4, 1));
-                            break;
-                        case GemType.Blue:
-                            list.Add(new Tuple<int, int>(5, 1));
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-            }
-
-            return list;
         }
     }
 }

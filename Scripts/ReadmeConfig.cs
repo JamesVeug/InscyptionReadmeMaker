@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BepInEx.Configuration;
 
 namespace JamesGames.ReadmeMaker
@@ -12,10 +14,6 @@ namespace JamesGames.ReadmeMaker
                 if (m_instance == null)
                 {
                     m_instance = new ReadmeConfig();
-                    if (!m_instance.ReadmeMakerEnabled)
-                    {
-                        Plugin.Log.LogInfo($"ReadmeMaker disabled in the Config so it will not generate a Readme.");
-                    }
                 }
 
                 return m_instance;
@@ -46,74 +44,114 @@ namespace JamesGames.ReadmeMaker
         
         public enum SortByType
         {
+            GUID,
             Name,
-            Cost
+        }
+        
+        public enum CardSortByType
+        {
+            GUID,
+            Name,
+            Cost,
+            Power,
+            Health,
         }
 
-        /*private static string DefaultModsToIgnore =
+        private const string DefaultIgnoreByModGUIDs =
+            "_jamesgames.inscryption.readmemaker," +
+            "community.inscryption.patch," +
             "extraVoid.inscryption.voidSigils," +
             "extraVoid.inscryption.LifeCost," +
-            "org.memez4life.inscryption.customsigils," +
-            "jamesgames.inscryption.zergmod," +
-            "AnthonyPython.inscryption.AnthonysSigils";
+            "zzzzVoid.inscryption.sigil_patcher," +
+            "extraVoid.inscryption.void_life_pack";
 
-        public List<string> ModsToIgnore()
+        private const string ReadmeMakerHeader = "1. Readme Maker";
+        private const string GeneralHeader = "2. General";
+        private const string SectionsHeader = "3. Toggle Sections";
+        private const string CardsHeader = "4. Card Section Options";
+
+        public List<string> ModsToIgnore
         {
-            string mods = IgnoreMods;
-            return new List<string>(mods.Split(','));
-        }*/
-        
-        public bool ReadmeMakerEnabled = Plugin.Instance.Config.Bind("_ReadmeMaker", "Enabled", false, new ConfigDescription("Should the ReadmeMaker create a GeneratedReadme?", null, Array.Empty<object>())).Value;
+            get
+            {
+                if (m_modsToIgnore == null)
+                {
+                    m_modsToIgnore = new List<string>(IgnoreByModGUID.Split(','));
+                    m_modsToIgnore.RemoveAll(string.IsNullOrEmpty);
+                    for (int i = 0; i < m_modsToIgnore.Count; i++)
+                    {
+                        m_modsToIgnore[i] = m_modsToIgnore[i].Trim();
+                    }
+                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_modsToIgnore.Count);
+                }
 
-        public HeaderType GeneralHeaderType = Plugin.Instance.Config.Bind("General", "Header Type", HeaderType.Foldout, new ConfigDescription("How should the header be shown? (Unaffected by Size)", null, Array.Empty<object>())).Value;
-        public HeaderSize GeneralHeaderSize = Plugin.Instance.Config.Bind("General", "Header Size", HeaderSize.Big, new ConfigDescription("How big should the header be? (Does not work for type Foldout!", null, Array.Empty<object>())).Value;
-        
-        public DisplayType CardDisplayByType = Plugin.Instance.Config.Bind("Cards", "Display By", DisplayType.Table, new ConfigDescription("Changes how the cards, abilities and special abilities are displayed.", null, Array.Empty<object>())).Value;
-        public SortByType CardSortBy = Plugin.Instance.Config.Bind("Cards", "Sort Type", SortByType.Name, new ConfigDescription("Changes the order that the cards will be displayed in.", null, Array.Empty<object>())).Value;
-        public bool CardShowUnobtainable = Plugin.Instance.Config.Bind("Cards", "Show Unobtainable Cards", true, new ConfigDescription("Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)", null, Array.Empty<object>())).Value;
-        public bool CardSortAscending = Plugin.Instance.Config.Bind("Cards", "Sort by Ascending", true, new ConfigDescription("True=Names will be ordered from A-Z, False=Z-A... etc", null, Array.Empty<object>())).Value;
-        public int CostMinCollapseAmount = Plugin.Instance.Config.Bind("Cards", "Show Cost Min Collapse Amount", 4, new ConfigDescription("Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc", null, Array.Empty<object>())).Value;
-        public bool CostAlignImages = Plugin.Instance.Config.Bind("Cards", "Align Cost", true, new ConfigDescription("Centers the cost of the costs. (Adds a lot of characters)", null, Array.Empty<object>())).Value;
-        public bool CardShowTribes = Plugin.Instance.Config.Bind("Cards", "Show Tribes", true, new ConfigDescription("Show what Tribes each card has (Insect, Canine... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowTraits = Plugin.Instance.Config.Bind("Cards", "Show Traits", true, new ConfigDescription("Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowEvolutions = Plugin.Instance.Config.Bind("Cards", "Show Evolutions", true, new ConfigDescription("Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowFrozenAway = Plugin.Instance.Config.Bind("Cards", "Show Frozen Away", true, new ConfigDescription("Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowTail = Plugin.Instance.Config.Bind("Cards", "Show Tail", true, new ConfigDescription("Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowSpecials = Plugin.Instance.Config.Bind("Cards", "Show Specials", true, new ConfigDescription("Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).", null, Array.Empty<object>())).Value;
-        public bool CardShowSigils = Plugin.Instance.Config.Bind("Cards", "Show Sigils", true, new ConfigDescription("Show what each cards Sigils are. (Waterborne, Fledgling... etc).", null, Array.Empty<object>())).Value;
-        public bool CardSigilsJoinDuplicates = Plugin.Instance.Config.Bind("Cards", "Join duplicate Sigils", true, new ConfigDescription("If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.", null, Array.Empty<object>())).Value;
-        
-        public bool ModifiedCardsShow = Plugin.Instance.Config.Bind("Modified Cards", "Show Modified Cards Section", true, new ConfigDescription("Show a section that lists all the cards modified.", null, Array.Empty<object>())).Value;
-        
-        public bool SideDeckShow = Plugin.Instance.Config.Bind("Side Deck", "Show Side Deck Section", true, new ConfigDescription("Show a section that lists all the custom side deck cards.", null, Array.Empty<object>())).Value;
-        
-        public bool SigilsShow = Plugin.Instance.Config.Bind("Sigils", "Show Sigils", true, new ConfigDescription("Show all new sigils listed on cards in its own section.", null, Array.Empty<object>())).Value;
-        
-        public bool TribesShow = Plugin.Instance.Config.Bind("Tribes", "Show Tribes", true, new ConfigDescription("Show all new tribes added in its own section.", null, Array.Empty<object>())).Value;
-        public bool TribesShowGUID = Plugin.Instance.Config.Bind("Tribes", "Show GUID", false, new ConfigDescription("Show the GUID for the mod that added the tribe", null, Array.Empty<object>())).Value;
-        
-        public bool NodesShow = Plugin.Instance.Config.Bind("Nodes", "Show Nodes", true, new ConfigDescription("Show all new map nodes added in its own section..", null, Array.Empty<object>())).Value;
-        
-        public bool BoonsShow = Plugin.Instance.Config.Bind("Boons", "Show Boons", true, new ConfigDescription("Show all new Boons added in its own section..", null, Array.Empty<object>())).Value;
-        
-        public bool EncountersShow = Plugin.Instance.Config.Bind("Encounters", "Show Encounters", true, new ConfigDescription("Show all new encounters added in its own section..", null, Array.Empty<object>())).Value;
-        
-        public bool AscensionChallengesShow = Plugin.Instance.Config.Bind("Ascension", "Show Ascension Challenges", true, new ConfigDescription("Show all new challenges added for Kaycees mod.", null, Array.Empty<object>())).Value;
-        public bool AscensionStarterDecks = Plugin.Instance.Config.Bind("Ascension", "Show Starter Decks", true, new ConfigDescription("Show all new starter decks for Kaycees mod.", null, Array.Empty<object>())).Value;
-        
-        public bool RegionsShow = Plugin.Instance.Config.Bind("Regions", "Show Regions", true, new ConfigDescription("Show all new regions.", null, Array.Empty<object>())).Value;
-        
-        public bool SpecialAbilitiesShow = Plugin.Instance.Config.Bind("Special Abilities", "Show Special Abilities", true, new ConfigDescription("Show all new special abilities listed on cards in its own section.", null, Array.Empty<object>())).Value;
-        
-        public bool ConfigSectionEnabled = Plugin.Instance.Config.Bind("Config", "Show Configs", true, new ConfigDescription("Should the Readme Maker show a section listing all the new configs added?", null, Array.Empty<object>())).Value;
-        public string ConfigOnlyShowModGUID = Plugin.Instance.Config.Bind("Config", "Only Show Plugin", "", new ConfigDescription("If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: \"jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod\"", null, Array.Empty<object>())).Value;
-        public bool ConfigShowGUID = Plugin.Instance.Config.Bind("Config", "Show GUID", true, new ConfigDescription("Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?", null, Array.Empty<object>())).Value;
-        
-        public string SavePath = Plugin.Instance.Config.Bind("Saving", "Path", "", new ConfigDescription("Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme", null, Array.Empty<object>())).Value;
+                return m_modsToIgnore;
+            }
+        }
+        private List<string> m_modsToIgnore;
 
-        public ReadmeConfig()
+        public List<string> FilterByModsGUID
         {
-            
+            get
+            {
+                if (m_filterByModGUID == null)
+                {
+                    m_filterByModGUID = new List<string>(FilterByModGUID.Split(','));
+                    m_filterByModGUID.RemoveAll(string.IsNullOrEmpty);
+                    for (int i = 0; i < m_filterByModGUID.Count; i++)
+                    {
+                        m_filterByModGUID[i] = m_filterByModGUID[i].Trim();
+                    }
+                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_filterByModGUID.Count);
+                }
+
+                return m_filterByModGUID;
+            }
+        }
+        private List<string> m_filterByModGUID;
+        
+        public readonly bool ReadmeMakerEnabled = Bind(ReadmeMakerHeader, "Enabled", false, "Should the ReadmeMaker create a GeneratedReadme?");
+        public readonly string ReadmeMakerSavePath = Bind(ReadmeMakerHeader, "Save To", "", "Where to save the generated readme to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme.");
+        
+        public readonly HeaderType GeneralHeaderType = Bind(GeneralHeader, "Header Type", HeaderType.Foldout, "How should the header be shown? (Unaffected by Size)");
+        public readonly HeaderSize GeneralHeaderSize = Bind(GeneralHeader, "Header Size", HeaderSize.Big, "How big should the header be? (Does not work for type Foldout!");
+        public readonly DisplayType GeneralDisplayType = Bind(GeneralHeader, "Display By", DisplayType.Table, "Changes how the cards, abilities and special abilities are displayed.");
+        public readonly SortByType GeneralSortBy = Bind(GeneralHeader, "Sort By", SortByType.Name, "Changes the order of how rows in sections are displayed.");
+        private readonly string IgnoreByModGUID = Bind(GeneralHeader, "Ignore Mod by GUID", DefaultIgnoreByModGUIDs, "Ignore mods using these guids. Separate multiple guids by a comma. Disable by leaving blank.");
+        private readonly string FilterByModGUID = Bind(GeneralHeader, "Filter by Mod GUID", "", "Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.");
+        public readonly string FilterByJSONLoaderModPrefix = Bind(GeneralHeader, "Filter by JSONLoader Mod Prefix", "", "Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.");
+        public readonly bool ShowGUIDS = Bind(GeneralHeader, "Show GUIDs", false, "Show the mod GUID for each sigils, tribes... etc.");
+        
+        public readonly bool BoonsShow = Bind(SectionsHeader, "Show Boons", true, "Show all new Boons added in its own section..");
+        public readonly bool ModifiedCardsShow = Bind(SectionsHeader, "Show Cards Modified", true, "Show a section that lists all the cards modified.");
+        public readonly bool ConfigSectionShow = Bind(SectionsHeader, "Show Configs", true, "Should the Readme Maker show a section listing all the new configs added?");
+        public readonly bool EncountersShow = Bind(SectionsHeader, "Show Encounters", true, "Show all new encounters added in its own section..");
+        public readonly bool AscensionChallengesShow = Bind(SectionsHeader, "Show Kaycees Mod Challenges", true, "Show all new challenges added for Kaycee's mod.");
+        public readonly bool AscensionStarterDecksShow = Bind(SectionsHeader, "Show Kaycees Mod Starter Decks", true, "Show all new starter decks for Kaycee's mod.");
+        public readonly bool MapNodesShow = Bind(SectionsHeader, "Show Map Nodes", true, "Show all new map nodes added in its own section..");
+        public readonly bool RegionsShow = Bind(SectionsHeader, "Show Regions", true, "Show all new regions.");
+        public readonly bool SideDeckShow = Bind(SectionsHeader, "Show Side Decks", true, "Show a section that lists all the custom side deck cards.");
+        public readonly bool SigilsShow = Bind(SectionsHeader, "Show Sigils", true, "Show all new sigils listed on cards in its own section.");
+        public readonly bool SpecialAbilitiesShow = Bind(SectionsHeader, "Show Special Abilities", true, "Show all new special abilities listed on cards in its own section.");
+        public readonly bool TribesShow = Bind(SectionsHeader, "Show Tribes", true, "Show all new tribes added in its own section.");
+
+        public readonly CardSortByType CardSortBy = Bind(CardsHeader, "Sort Type", CardSortByType.Name, "Changes the order that the cards will be displayed in.");
+        public readonly bool CardShowUnobtainable = Bind(CardsHeader, "Show Unobtainable Cards", true, "Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)");
+        public readonly bool CardSortAscending = Bind(CardsHeader, "Sort by Ascending", true, "True=Names will be ordered from A-Z, False=Z-A... etc");
+        public readonly int CostMinCollapseAmount = Bind(CardsHeader, "Show Cost Min Collapse Amount", 4, "Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc");
+        public readonly bool CostAlignImages = Bind(CardsHeader, "Align Cost", true, "Centers the cost of the costs. (Adds a lot of characters)");
+        public readonly bool CardShowTribes = Bind(CardsHeader, "Show Tribes", true, "Show what Tribes each card has (Insect, Canine... etc).");
+        public readonly bool CardShowTraits = Bind(CardsHeader, "Show Traits", true, "Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).");
+        public readonly bool CardShowEvolutions = Bind(CardsHeader, "Show Evolutions", true, "Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).");
+        public readonly bool CardShowFrozenAway = Bind(CardsHeader, "Show Frozen Away", true, "Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).");
+        public readonly bool CardShowTail = Bind(CardsHeader, "Show Tail", true, "Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).");
+        public readonly bool CardShowSpecials = Bind(CardsHeader, "Show Specials", true, "Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).");
+        public readonly bool CardShowSigils = Bind(CardsHeader, "Show Sigils", true, "Show what each cards Sigils are. (Waterborne, Fledgling... etc).");
+        public readonly bool CardSigilsJoinDuplicates = Bind(CardsHeader, "Join duplicate Sigils", true, "If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.");
+        
+        private static T Bind<T>(string section, string key, T defaultValue, string description)
+        {
+            return Plugin.Instance.Config.Bind(section, key, defaultValue, new ConfigDescription(description, null, Array.Empty<object>())).Value;
         }
     }
 }

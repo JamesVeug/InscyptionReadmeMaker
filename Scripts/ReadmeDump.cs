@@ -10,7 +10,7 @@ namespace JamesGames.ReadmeMaker
     public static class ReadmeDump
     {
 	    // List of different sections of data to show listed in order displayed in the dump
-	    private static List<ASection> Sections = new List<ASection>()
+	    private static List<ISection> Sections = new List<ISection>()
 	    {
 		    new NewCardsSection(),
 		    new ModifiedCardsSection(),
@@ -50,7 +50,7 @@ namespace JamesGames.ReadmeMaker
 		    Costs.Add(cost);
 	    }
 
-	    public static void AddSection(ASection section)
+	    public static void AddSection(ISection section)
 	    {
 		    Sections.Add(section);
 	    }
@@ -126,7 +126,7 @@ namespace JamesGames.ReadmeMaker
         private static string GetOutputFullPath()
         {
 	        string defaultPath = Path.Combine(Plugin.Directory, "GENERATED_README.md");
-	        string path = ReadmeConfig.Instance.SavePath;
+	        string path = ReadmeConfig.Instance.ReadmeMakerSavePath;
 	        if (string.IsNullOrEmpty(path))
 	        {
 		        path = defaultPath;
@@ -154,7 +154,7 @@ namespace JamesGames.ReadmeMaker
         private static string GetDumpString()
         {
 	        // Initialize everything for the Summary
-	        foreach (ASection section in Sections)
+	        foreach (ISection section in Sections)
 	        {
 		        if (section.Enabled)
 		        {
@@ -163,7 +163,7 @@ namespace JamesGames.ReadmeMaker
 	        }
 
 	        // Build everything
-	        switch (ReadmeConfig.Instance.CardDisplayByType)
+	        switch (ReadmeConfig.Instance.GeneralDisplayType)
 	        {
 		        case ReadmeConfig.DisplayType.Table:
 			        return ReadmeTableMaker.Dump(Sections);
@@ -183,7 +183,7 @@ namespace JamesGames.ReadmeMaker
 			// Add Free if we don't get a cost
 			if (!hasCost)
 			{
-				if (ReadmeConfig.Instance.CardDisplayByType == ReadmeConfig.DisplayType.Table)
+				if (ReadmeConfig.Instance.GeneralDisplayType == ReadmeConfig.DisplayType.Table)
 				{
 					builder.Append($"Free");
 				}

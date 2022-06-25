@@ -9,6 +9,11 @@ namespace API.Patches
     {
         public static void Postfix()
         {
+            if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
+            {
+                return;
+            }
+            
             ReadmeDump.Dump();
         }
     }

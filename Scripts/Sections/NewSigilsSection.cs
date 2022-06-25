@@ -6,36 +6,44 @@ using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewSigilsSection : ASection
+    public class NewSigilsSection : ASection<FullAbility>
     {
         public override string SectionName => "New Sigils";
         public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
-
-        private List<FullAbility> allAbilities = new List<FullAbility>();
         
         public override void Initialize()
         {
-            allAbilities.Clear(); // Clear so when we re-dump everything we don't double up
-            allAbilities.AddRange(AbilityManager.NewAbilities);
-            allAbilities.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
-            allAbilities.Sort((a, b) => String.Compare(a.Info.rulebookName, b.Info.rulebookName, StringComparison.Ordinal));
-        }
-
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allAbilities.Count > 0)
-            {
-                stringBuilder.Append($"\n{allAbilities.Count} {SectionName}\n");
-            }
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(AbilityManager.NewAbilities);
+            rawData.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(allAbilities, out headers, new TableColumn<FullAbility>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<FullAbility>("Name", ReadmeHelpers.GetAbilityName),
                 new TableColumn<FullAbility>("Description", ReadmeHelpers.GetAbilityDescription)
             });
+        }
+
+        public override string GetGUID(FullAbility o)
+        {
+            string guid = Helpers.GetGUID(((int)o.Id).ToString());
+            return guid;
+        }
+
+        protected override int Sort(FullAbility a, FullAbility b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(ReadmeHelpers.GetAbilityName(a), ReadmeHelpers.GetAbilityName(b), StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

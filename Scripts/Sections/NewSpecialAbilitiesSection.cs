@@ -6,31 +6,29 @@ using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSp
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewSpecialAbilitiesSection : ASection
+    public class NewSpecialAbilitiesSection : ASection<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>
     {
         public override string SectionName => "New Special Abilities";
         public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
-
-        private List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility> allAbilities = new List<SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility>();
         
         public override void Initialize()
         {
-            allAbilities.Clear(); // Clear so when we re-dump everything we don't double up
-            allAbilities.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
 	        
             // Remove special abilities that have no rulebook entry
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
-            for (int i = 0; i < allAbilities.Count; i++)
+            for (int i = 0; i < rawData.Count; i++)
             {
-                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = allAbilities[i];
+                SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility specialAbility = rawData[i];
                 StatIconManager.FullStatIcon fullStatIcon = icons.Find((b) => b.VariableStatBehavior == specialAbility.AbilityBehaviour);
                 if (fullStatIcon == null || fullStatIcon.Info == null || string.IsNullOrEmpty(fullStatIcon.Info.rulebookName))
                 {
-                    allAbilities.RemoveAt(i--);
+                    rawData.RemoveAt(i--);
                 }
             }
 	        
-            allAbilities.Sort(SortNewSpecialAbilities);
+            rawData.Sort(SortNewSpecialAbilities);
         }
         
         private static int SortNewSpecialAbilities(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
@@ -41,21 +39,31 @@ namespace JamesGames.ReadmeMaker.Sections
             return String.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
         }
 
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allAbilities.Count > 0)
-            {
-                stringBuilder.Append($"\n{allAbilities.Count} {SectionName}\n");
-            }
-        }
-
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(allAbilities, out headers, new TableColumn<SpecialAbility>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<SpecialAbility>("Name", ReadmeHelpers.GetSpecialAbilityName),
                 new TableColumn<SpecialAbility>("Description", ReadmeHelpers.GetSpecialAbilityDescription)
             });
+        }
+
+        public override string GetGUID(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility o)
+        {
+            return Helpers.GetGUID(((int)o.Id).ToString());
+        }
+
+        protected override int Sort(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(ReadmeHelpers.GetSpecialAbilityName(a), ReadmeHelpers.GetSpecialAbilityName(b), StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

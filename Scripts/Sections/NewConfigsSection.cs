@@ -1,32 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
-using InscryptionAPI.Card;
 using JamesGames.ReadmeMaker.Configs;
 using UnityEngine;
 using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewConfigsSection : ASection
+    public class NewConfigsSection : ASection<ConfigData>
     {
         public override string SectionName => "New Configs";
-        public override bool Enabled => ReadmeConfig.Instance.ConfigSectionEnabled;
-        
-        private List<ConfigData> configs = new List<ConfigData>();
+        public override bool Enabled => ReadmeConfig.Instance.ConfigSectionShow;
         
         public override void Initialize()
         {
-            configs.Clear(); // Clear so when we re-dump everything we don't double up
-            
-            List<string> validModGUIDS = null;
-            if (!string.IsNullOrEmpty(ReadmeConfig.Instance.ConfigOnlyShowModGUID))
-            {
-                string[] guids = ReadmeConfig.Instance.ConfigOnlyShowModGUID.Split(',');
-                validModGUIDS = new List<string>(guids);
-            }
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
             
             foreach (BaseUnityPlugin plugin in GameObject.FindObjectsOfType<BaseUnityPlugin>())
             {
@@ -36,70 +25,54 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
 
                 string guid = plugin.Info.Instance.Info.Metadata.GUID;
-                if (validModGUIDS != null && !validModGUIDS.Contains(guid))
-                {
-            	    continue;
-                }
                 
                 ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();
                 foreach (ConfigEntryBase definition in entries)
                 {
-                    configs.Add(new ConfigData()
+                    rawData.Add(new ConfigData()
             	    {
             		    PluginGUID = guid,
             		    Entry = definition,
             	    });
                 }
             }
-
-            // Sort by
-            // GUID
-            // Section
-            // Key
-            configs.Sort((a, b) =>
-            {
-                int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
-                if (guid != 0)
-                {
-            	    return guid;
-                }
-                
-                int section = string.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
-                if (section != 0)
-                {
-            	    return section;
-                }
-                
-                int key = string.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
-                return key != 0 ? key : 0;
-            });
-        }
-        
-        private static int SortNewSpecialAbilities(SpecialAbility a, SpecialAbility b)
-        {
-            var icons = ReadmeHelpers.GetAllNewStatInfoIcons();
-            StatIconManager.FullStatIcon aStatIcon = icons.Find((icon) => icon.VariableStatBehavior == a.AbilityBehaviour);
-            StatIconManager.FullStatIcon bStatIcon = icons.Find((icon) => icon.VariableStatBehavior == b.AbilityBehaviour);
-            return string.Compare(aStatIcon.Info.rulebookName, bStatIcon.Info.rulebookName, StringComparison.Ordinal);
-        }
-
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (configs.Count > 0)
-            {
-                stringBuilder.Append($"\n{configs.Count} {SectionName}\n");
-            }
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(configs, out headers, new TableColumn<ConfigData>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
-                new TableColumn<ConfigData>("GUID", (a)=>a.PluginGUID, ReadmeConfig.Instance.ConfigShowGUID),
                 new TableColumn<ConfigData>("Section", (a)=>a.Entry.Definition.Section),
                 new TableColumn<ConfigData>("Key", (a)=>a.Entry.Definition.Key),
                 new TableColumn<ConfigData>("Description", (a)=>a.Entry.Description.Description)
             });
+        }
+
+        public override string GetGUID(ConfigData o)
+        {
+            return o.PluginGUID;
+        }
+
+        protected override int Sort(ConfigData a, ConfigData b)
+        {
+            // Sort by
+            // GUID
+            // Section
+            // Key
+            int guid = string.Compare(a.PluginGUID, b.PluginGUID, StringComparison.Ordinal);
+            if (guid != 0)
+            {
+                return guid;
+            }
+                
+            int section = string.Compare(a.Entry.Definition.Section, b.Entry.Definition.Section, StringComparison.Ordinal);
+            if (section != 0)
+            {
+                return section;
+            }
+                
+            int key = string.Compare(a.Entry.Definition.Key, b.Entry.Definition.Key, StringComparison.Ordinal);
+            return key != 0 ? key : 0;
         }
     }
 }

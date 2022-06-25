@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using System.Text;
 using InscryptionAPI.Encounters;
 using InscryptionAPI.Nodes;
+using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewMapNodesSection : ASection
+    /// <summary>
+    /// Wrapper to support the old NewMapnode system in the API and the new one. 
+    /// </summary>
+    public class NodeWrapper
     {
-        /// <summary>
-        /// Wrapper to support the old NewMapnode system in the API and the new one. 
-        /// </summary>
-        private class NodeWrapper
-        {
-            public NewNodeManager.FullNode NewMapNodes;
-            public NodeManager.NodeInfo OldMapNodes;
+        public NewNodeManager.FullNode NewMapNodes;
+        public NodeManager.NodeInfo OldMapNodes;
 
-            public string GUID => NewMapNodes != null ? NewMapNodes.guid : OldMapNodes.guid;
-            public string Name => NewMapNodes != null ? NewMapNodes.name : OldMapNodes.guid; 
-        }
+        public string GUID => NewMapNodes != null ? NewMapNodes.guid : OldMapNodes.GetModTag();
+        public string Name => NewMapNodes != null ? NewMapNodes.name : OldMapNodes.guid; 
+    }
+    
+    public class NewMapNodesSection : ASection<NodeWrapper>
+    {
         
         public override string SectionName => "New Map Nodes";
-        public override bool Enabled => ReadmeConfig.Instance.NodesShow;
-
-        private List<NodeWrapper> allNodes = new List<NodeWrapper>();
+        public override bool Enabled => ReadmeConfig.Instance.MapNodesShow;
         
         public override void Initialize()
         {
-            allNodes.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
             foreach (NodeManager.NodeInfo info in NodeManager.AllNodes)
             {
-                allNodes.Add(new NodeWrapper()
+                rawData.Add(new NodeWrapper()
                 {
                     OldMapNodes = info
                 });
@@ -38,29 +38,37 @@ namespace JamesGames.ReadmeMaker.Sections
             
             foreach (NewNodeManager.FullNode info in NewNodeManager.NewNodes)
             {
-                allNodes.Add(new NodeWrapper()
+                rawData.Add(new NodeWrapper()
                 {
                     NewMapNodes = info
                 });
-            }
-            
-            allNodes.Sort((a, b) => string.Compare(a.GUID, b.GUID, StringComparison.Ordinal));
-        }
-        
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (allNodes.Count > 0)
-            {
-                stringBuilder.Append($"\n{allNodes.Count} {SectionName}\n");
             }
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)
         {
-            rows = BreakdownForTable(allNodes, out headers, new TableColumn<NodeWrapper>[]
+            rows = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<NodeWrapper>("Name", (a)=>a.Name),
             });
+        }
+
+        public override string GetGUID(NodeWrapper o)
+        {
+            return o.GUID;
+        }
+
+        protected override int Sort(NodeWrapper a, NodeWrapper b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.Name, b.Name, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

@@ -6,36 +6,44 @@ using InscryptionAPI.Ascension;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewAscensionStarterDecksSection : ASection
+    public class NewAscensionStarterDecksSection : ASection<StarterDeckManager.FullStarterDeck>
     {
         public override string SectionName => "New Ascension Starter Decks";
-        public override bool Enabled => ReadmeConfig.Instance.AscensionStarterDecks;
-        
-        private List<StarterDeckManager.FullStarterDeck> decks = new List<StarterDeckManager.FullStarterDeck>();
+        public override bool Enabled => ReadmeConfig.Instance.AscensionStarterDecksShow;
         
         public override void Initialize()
         {
-            decks.Clear(); // Clear so when we re-dump everything we don't double up
-            decks.AddRange(StarterDeckManager.NewDecks);
-            decks.Sort((a,b)=>String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal));
-        }
-
-        public override void DumpSummary(StringBuilder stringBuilder)
-        {
-            if (decks.Count > 0)
-            {
-                stringBuilder.Append($"\n{decks.Count} {SectionName}\n");
-            }
+            rawData.Clear(); // Clear so when we re-dump everything we don't double up
+            rawData.AddRange(StarterDeckManager.NewDecks);
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(decks, out headers, new TableColumn<StarterDeckManager.FullStarterDeck>[]
+            splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Name", (a)=>a.Info.title),
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Unlock Level", (a)=>a.UnlockLevel.ToString()),
                 new TableColumn<StarterDeckManager.FullStarterDeck>("Cards", GetCardNames)
             });
+        }
+
+        public override string GetGUID(StarterDeckManager.FullStarterDeck o)
+        {
+            string guid = o.Info.name.Substring(0, o.Info.name.LastIndexOf("_"));
+            return guid;
+        }
+
+        protected override int Sort(StarterDeckManager.FullStarterDeck a, StarterDeckManager.FullStarterDeck b)
+        {
+            switch (ReadmeConfig.Instance.GeneralSortBy)
+            {
+                case ReadmeConfig.SortByType.GUID:
+                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                case ReadmeConfig.SortByType.Name:
+                    return String.Compare(a.Info.title, b.Info.title, StringComparison.Ordinal);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private string GetCardNames(StarterDeckManager.FullStarterDeck deck)
