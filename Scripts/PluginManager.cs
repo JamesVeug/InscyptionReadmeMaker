@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using BepInEx;
 using DiskCardGame;
 using InscryptionAPI.Card;
@@ -10,7 +11,7 @@ namespace JamesGames.ReadmeMaker
 {
     public class Modification
     {
-        public string DisplayString => OldData + " -> " + NewData;
+        public string DisplayString => OldData + "<br>=><br>" + NewData;
         
         public string OldData;
         public string NewData;
@@ -27,7 +28,7 @@ namespace JamesGames.ReadmeMaker
         // How many times this card has been changed
         public int ChangeIndex;
         
-        // FieldName to data
+        // Header Name to data
         public Dictionary<string, Modification> Modifications = new Dictionary<string, Modification>();
     }
     
@@ -49,7 +50,7 @@ namespace JamesGames.ReadmeMaker
             }
         }
         private static PluginManager m_instance = null;
-        private static FieldInfo[] m_cardFields = typeof(CardInfo).GetFields(ModificationBindingFlags);
+        private static List<CardInfoGetterInfo> m_cardFields = GetCardModificationGetters();
 
         // A mod has added a new card to the game
         private List<CardInfo> cardsLoadedDuringPlugin = new List<CardInfo>();
@@ -102,19 +103,19 @@ namespace JamesGames.ReadmeMaker
 
         public Dictionary<CardInfo, Dictionary<string, object>> GetCardDefaultValues()
         {
-            Plugin.Log.LogInfo("[PluginManager] Getting default values: " + cardDefaultValues.Count);
+            //Plugin.Log.LogInfo("[PluginManager] Getting default values: " + cardDefaultValues.Count);
             return cardDefaultValues;
         }
 
         public Dictionary<CardInfo, CardChangeList> GetModifications()
         {
-            Plugin.Log.LogInfo("[PluginManager] Getting card modifications: " + cardModifications.Count);
+            //Plugin.Log.LogInfo("[PluginManager] Getting card modifications: " + cardModifications.Count);
             return cardModifications;
         }
 
         public List<string> GetCardModifiedFieldNames()
         {
-            Plugin.Log.LogInfo("[PluginManager] Getting card modified field names: " + cardFieldModifications.Count);
+            //Plugin.Log.LogInfo("[PluginManager] Getting card modified field names: " + cardFieldModifications.Count);
             return cardFieldModifications;
         }
         
@@ -146,11 +147,10 @@ namespace JamesGames.ReadmeMaker
                 {
                     string fieldName = dataPair.Key;
                     object fieldData = dataPair.Value;
-                    object newData = type.GetField(fieldName, ModificationBindingFlags)?.GetValue(cardInfo);
+                    object newData = m_cardFields.Find((a)=>a.HeaderName == fieldName).Getter(cardInfo);
                     if (!AreEquals(fieldData, newData))
                     {
-                        Plugin.Log.LogInfo($"{cardInfo.displayedName} - {fieldName} modified from '{fieldData}' to '{newData}'");
-
+                        //Plugin.Log.LogInfo($"{cardInfo.displayedName} - {fieldName} modified from '{fieldData}' to '{newData}'");
                         if (cardChangeDetails == null)
                         {
                             if(!cardModifications.TryGetValue(cardInfo, out var m))
@@ -214,9 +214,9 @@ namespace JamesGames.ReadmeMaker
             }
             
             //Plugin.Log.LogInfo("Card added: " + newCard.displayedName);
-            foreach (FieldInfo fieldInfo in m_cardFields)
+            foreach (CardInfoGetterInfo fieldInfo in m_cardFields)
             {
-                object value = fieldInfo.GetValue(newCard);
+                object value = fieldInfo.Getter(newCard);
                 if (ReadmeHelpers.IsList(value))
                 {
                     IList valueList = (IList)value;
@@ -225,7 +225,7 @@ namespace JamesGames.ReadmeMaker
                 }
                 
                 //Plugin.Log.LogInfo("\t" + fieldInfo.Name + " = " + value);
-                stats[fieldInfo.Name] = value;
+                stats[fieldInfo.HeaderName] = value;
             }
         }
 
@@ -273,6 +273,76 @@ namespace JamesGames.ReadmeMaker
             }
 
             return a.Equals(b);
+        }
+
+        private class CardInfoGetterInfo
+        {
+            public string HeaderName;
+            public Func<CardInfo, object> Getter;
+        }
+        
+        private static List<CardInfoGetterInfo> GetCardModificationGetters()
+        {
+            return new List<CardInfoGetterInfo>()
+            {
+				new CardInfoGetterInfo() {
+                    HeaderName = "Name",
+                    Getter = (a) => a.name
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "mod Prefix",
+                    Getter = (a) => a.GetModPrefix()
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Display Name",
+                    Getter = (a) => a.displayedName
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Description",
+                    Getter = (a) => a.description
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Cost",
+                    Getter = (a) =>
+                    {
+                        StringBuilder costBuilder = new StringBuilder();
+                        ReadmeDump.AppendAllCosts(a, costBuilder);
+                        return costBuilder.ToString();
+                    }
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Power",
+                    Getter = (a) => a.baseAttack
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Health",
+                    Getter = (a) => a.baseHealth
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Sigils",
+                    Getter = (a) => a.abilities
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Special Abilities",
+                    Getter = (a) => a.specialAbilities
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Traits",
+                    Getter = (a) => a.traits
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Tribes",
+                    Getter = (a) => a.tribes
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Tribes",
+                    Getter = (a) => a.tribes
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "Meta Categories",
+                    Getter = (a) => a.metaCategories
+                },
+            };
         }
     }
 }

@@ -30,7 +30,7 @@ namespace JamesGames.ReadmeMaker.Sections
             List<TableColumn<CardChangeDetails>> columns = new List<TableColumn<CardChangeDetails>>();
             columns.Add(new TableColumn<CardChangeDetails>("Name", (a) =>
             {
-                if (a.Modifications.TryGetValue("name", out Modification data))
+                if (a.Modifications.TryGetValue("Name", out Modification data))
                 {
                     return data.OldData;
                 }
@@ -49,7 +49,7 @@ namespace JamesGames.ReadmeMaker.Sections
                         }
 
                         return "";
-                    }));
+                    }, true, Alignment.Middle));
             }
             
             
