@@ -78,6 +78,7 @@ To see what your Readme looks like when its on the store.
 ## Contributers
 - **JamesGames**
 - **TeamDoodz**
+- **der Kartoffelcode**
 
 ## Special Thanks:
 - **Eri** - Eris's Battery Cost icon
