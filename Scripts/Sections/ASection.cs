@@ -92,9 +92,11 @@ namespace JamesGames.ReadmeMaker.Sections
         protected List<Dictionary<string, string>> BreakdownForTable(out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
             headers = new List<TableHeader>();
+            Dictionary<string, bool> columnUseCount = new Dictionary<string, bool>();
             if (ReadmeConfig.Instance.ShowGUIDS)
             {
                 headers.Add(new TableHeader("GUID", Alignment.Middle));
+                columnUseCount["GUID"] = true;
             }
             
             for (int i = 0; i < grouping.Length; i++)
@@ -106,7 +108,6 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
             }
 
-            Dictionary<string, bool> columnUseCount = new Dictionary<string, bool>();
             List<Dictionary<string, string>> split = new List<Dictionary<string, string>>();
             rawData.Sort(Sort);
             if (!ReadmeConfig.Instance.GeneralSortAscending)

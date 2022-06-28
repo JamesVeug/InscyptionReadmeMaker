@@ -144,22 +144,25 @@ namespace JamesGames.ReadmeMaker.Sections
 
         private static string GetSpecialAbilities(CardInfo info)
         {
+            int abilities = 0;
             StringBuilder specialsBuilder = new StringBuilder();
-            for (int j = 0; j < info.specialAbilities.Count; j++)
+            for (int i = 0; i < info.specialAbilities.Count; i++)
             {
-                if (j > 0)
+                if (abilities > 0)
                 {
                     specialsBuilder.Append(", ");
                 }
 
-                string specialAbilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[j]);
-                if (specialAbilityName != null)
+                string specialAbilityName = ReadmeHelpers.GetSpecialAbilityName(info.specialAbilities[i]);
+                if (!string.IsNullOrEmpty(specialAbilityName))
                 {
-                    specialsBuilder.Append($" {specialAbilityName}");
+                    specialsBuilder.Append($"{specialAbilityName}");
+                    abilities++;
                 }
             }
 
-            return specialsBuilder.ToString();
+            string specialAbilities = specialsBuilder.ToString();
+            return specialAbilities;
         }
 
         private string GetTail(CardInfo info)
@@ -228,12 +231,12 @@ namespace JamesGames.ReadmeMaker.Sections
                 if (ReadmeConfig.Instance.CardSigilsJoinDuplicates && abilityCount.TryGetValue(ability, out int count) && count > 1)
                 {
                     // Show all abilities, but combine duplicates into Waterborne(x2)
-                    sigilBuilder.Append($" {abilityName}(x{count})");
+                    sigilBuilder.Append($"{abilityName}(x{count})");
                 }
                 else
                 {
                     // Show all abilities 1 by 1 (Waterborne, Waterborne, Waterborne)
-                    sigilBuilder.Append($" {abilityName}");
+                    sigilBuilder.Append(abilityName);
                 }
             }
             
