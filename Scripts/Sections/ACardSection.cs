@@ -63,21 +63,38 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected override int Sort(CardInfo a, CardInfo b)
         {
+            int compare = 0;
             switch (ReadmeConfig.Instance.CardSortBy)
             {
                 case ReadmeConfig.CardSortByType.GUID:
-                    return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                    compare = string.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
+                    if (compare == 0)
+                    {
+                        compare = ReadmeHelpers.CompareByDisplayName(a, b);
+                    }
+                    break;
                 case ReadmeConfig.CardSortByType.Name:
-                    return ReadmeHelpers.CompareByDisplayName(a, b);
+                    compare = ReadmeHelpers.CompareByDisplayName(a, b);
+                    break;
                 case ReadmeConfig.CardSortByType.Cost:
-                    return ReadmeHelpers.CompareByCost(a, b);
+                    compare = ReadmeHelpers.CompareByCost(a, b);
+                    break;
                 case ReadmeConfig.CardSortByType.Power:
-                    return a.Attack - b.Attack;
+                    compare = a.Attack - b.Attack;
+                    break;
                 case ReadmeConfig.CardSortByType.Health:
-                    return a.Health - b.Health;
+                    compare = a.Health - b.Health;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (!ReadmeConfig.Instance.CardSortAscending)
+            {
+                compare *= -1;
+            }
+
+            return compare;
         }
 
         public override string GetGUID(CardInfo o)
