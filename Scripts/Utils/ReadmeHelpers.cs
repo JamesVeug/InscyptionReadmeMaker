@@ -369,7 +369,7 @@ namespace JamesGames.ReadmeMaker
 			        object element = l[i];
 			        if (i > 0)
 			        {
-				        s += ",";
+				        s += ", ";
 			        }
 
 			        s += ConvertToString(element);
