@@ -118,6 +118,7 @@ namespace JamesGames.ReadmeMaker
         public readonly DisplayType GeneralDisplayType = Bind(GeneralHeader, "Display By", DisplayType.Table, "Changes how the cards, abilities and special abilities are displayed.");
         public readonly SortByType GeneralSortBy = Bind(GeneralHeader, "Sort By", SortByType.Name, "Changes the order of how rows in sections are displayed.");
         public readonly bool GeneralSortAscending = Bind(GeneralHeader, "Sort by Ascending", true, "True=Names will be ordered from A-Z, False=Z-A... etc.");
+        public readonly bool IgnoreEmptyColumns = Bind(GeneralHeader, "Ignore Empty Columns", true, "True=Any columns that have no data will not be shown, False=All columns shown even if it has no data to show.");
         private readonly string IgnoreByModGUID = Bind(GeneralHeader, "Ignore Mod by GUID", DefaultIgnoreByModGUIDs, "Ignore mods using these guids. Separate multiple guids by a comma. Disable by leaving blank.");
         private readonly string FilterByModGUID = Bind(GeneralHeader, "Filter by Mod GUID", "", "Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.");
         public readonly string FilterByJSONLoaderModPrefix = Bind(GeneralHeader, "Filter by JSONLoader Mod Prefix", "", "Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.");
