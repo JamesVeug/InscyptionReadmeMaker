@@ -106,8 +106,13 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
             }
 
-            var split = new List<Dictionary<string, string>>();
+            Dictionary<string, bool> columnUseCount = new Dictionary<string, bool>();
+            List<Dictionary<string, string>> split = new List<Dictionary<string, string>>();
             rawData.Sort(Sort);
+            if (!ReadmeConfig.Instance.GeneralSortAscending)
+            {
+                rawData.Reverse();
+            }
             foreach (T t in rawData)
             {
                 string guid = GetGUID(t);
@@ -126,10 +131,28 @@ namespace JamesGames.ReadmeMaker.Sections
                 {
                     if (column.Enabled)
                     {
-                        data[column.HeaderName] = column.Getter(t);
+                        string columnData = column.Getter(t);
+                        string columnName = column.HeaderName;
+                        data[columnName] = columnData;
+                        if (!string.IsNullOrEmpty(columnData))
+                        {
+                            columnUseCount[columnName] = true;
+                        }
                     }
                 }
                 split.Add(data);
+            }
+
+            // Remove headers that have no data
+            if (ReadmeConfig.Instance.IgnoreEmptyColumns)
+            {
+                for (int i = 0; i < headers.Count; i++)
+                {
+                    if (!columnUseCount.ContainsKey(headers[i].HeaderName))
+                    {
+                        headers.RemoveAt(i--);
+                    }
+                }
             }
 
             return split;
