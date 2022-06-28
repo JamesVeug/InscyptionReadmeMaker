@@ -290,7 +290,7 @@ namespace JamesGames.ReadmeMaker
                     Getter = (a) => a.name
                 },
                 new CardInfoGetterInfo() {
-                    HeaderName = "mod Prefix",
+                    HeaderName = "Mod Prefix",
                     Getter = (a) => a.GetModPrefix()
                 },
                 new CardInfoGetterInfo() {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
+using InscryptionAPI.Card;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -28,6 +29,19 @@ namespace JamesGames.ReadmeMaker.Sections
         public override void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows)
         {
             List<TableColumn<CardChangeDetails>> columns = new List<TableColumn<CardChangeDetails>>();
+            
+            
+            if (!cardModifiedFieldNames.Contains("Mod Prefix"))
+            {
+                if (ReadmeConfig.Instance.ShowGUIDS)
+                {
+                    columns.Add(new TableColumn<CardChangeDetails>("Mod Prefix", (a) =>
+                    {
+                        return a.CardInfo.GetModPrefix();
+                    }));
+                }
+            }
+            
             columns.Add(new TableColumn<CardChangeDetails>("Name", (a) =>
             {
                 if (a.Modifications.TryGetValue("Name", out Modification data))
@@ -37,6 +51,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
                 return a.CardInfo.name;
             }));
+            
 
             foreach (string fieldName in cardModifiedFieldNames)
             {

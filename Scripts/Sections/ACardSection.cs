@@ -17,7 +17,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(out headers, new[]
+            List<TableColumn<CardInfo>> tableColumns = new List<TableColumn<CardInfo>>()
             {
                 new TableColumn<CardInfo>("Name", (a)=>a.displayedName),
                 new TableColumn<CardInfo>("Power", ReadmeHelpers.GetPower),
@@ -30,7 +30,17 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<CardInfo>("Specials", GetSpecialAbilities, ReadmeConfig.Instance.CardShowSpecials),
                 new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
                 new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
-            });
+            };
+            
+            if (ReadmeConfig.Instance.ShowGUIDS)
+            {
+                tableColumns.Insert(0, new TableColumn<CardInfo>("Mod Prefix", (a) =>
+                {
+                    return a.GetModPrefix();
+                }));
+            }
+            
+            splitCards = BreakdownForTable(out headers, tableColumns.ToArray());
         }
 
         protected override bool Filter(CardInfo o)
