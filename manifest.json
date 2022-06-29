@@ -1,6 +1,6 @@
 {
     "name": "ReadmeMaker",
-    "version_number": "0.11.0",
+    "version_number": "1.0.0",
     "website_url": "https://github.com/JamesVeug/InscyptionReadmeMaker/tree/develop",
     "description": "Creates a file that lists all new cards/abilities and special abilities to be easily viewed.",
     "dependencies": [

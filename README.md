@@ -17,6 +17,7 @@ To see what your Readme looks like when its on the store.
 - [Void Life and Currency Cardpack](https://inscryption.thunderstore.io/package/Void_Slime/Void_Life_and_Currency_Cardpack/)
 - [Sire MoDeers](https://inscryption.thunderstore.io/package/Sire/Sire_MoDeers/)
 - [MycoBotsinAct1](https://inscryption.thunderstore.io/package/Cevin2006/MycoBotsinAct1/)
+- [ZergMod](https://inscryption.thunderstore.io/package/JamesGames/ZergMod/)
 
 
 ## How to use it
@@ -37,41 +38,46 @@ To see what your Readme looks like when its on the store.
 - Thunderstore will not accept a Readme with more than 32,768 characters. So if your mod has a lot of cards and sigils it's likely you'll hit this limit.
 
 
-## Configs
-|GUID|Section|Key|Description|
-|-|-|-|-|
-|jamesgames.inscryption.readmemaker|Ascension|Show Ascension Challenges|Show all new challenges added for Kaycees mod.|
-|jamesgames.inscryption.readmemaker|Ascension|Show Starter Decks|Show all new starter decks for Kaycees mod.|
-|jamesgames.inscryption.readmemaker|Boons|Show Boons|Show all new Boons added in its own section..|
-|jamesgames.inscryption.readmemaker|Cards|Align Cost|Centers the cost of the costs. (Adds a lot of characters)|
-|jamesgames.inscryption.readmemaker|Cards|Display By|Changes how the cards, abilities and special abilities are displayed.|
-|jamesgames.inscryption.readmemaker|Cards|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
-|jamesgames.inscryption.readmemaker|Cards|Show Cost Min Collapse Amount|Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc|
-|jamesgames.inscryption.readmemaker|Cards|Show Evolutions|Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Frozen Away|Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Sigils|Show what each cards Sigils are. (Waterborne, Fledgling... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Specials|Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Tail|Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Traits|Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Tribes|Show what Tribes each card has (Insect, Canine... etc).|
-|jamesgames.inscryption.readmemaker|Cards|Show Unobtainable Cards|Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)|
-|jamesgames.inscryption.readmemaker|Cards|Sort Type|Changes the order that the cards will be displayed in.|
-|jamesgames.inscryption.readmemaker|Cards|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
-|jamesgames.inscryption.readmemaker|Config|Only Show Plugin|If you only want the make to show configs from a specific Mod, put the guid of that mod here. To lsit more than 1 mod separate them with a comma. eg: "jamesgames.inscryption.readmemaker,jamesgames.inscryption.zergmod"|
-|jamesgames.inscryption.readmemaker|Config|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
-|jamesgames.inscryption.readmemaker|Config|Show GUID|Do you want the Readme Maker to show a column showing the GUID of the mod that the config came from?|
-|jamesgames.inscryption.readmemaker|Encounters|Show Encounters|Show all new encounters added in its own section..|
-|jamesgames.inscryption.readmemaker|General|Header Size|How big should the header be? (Does not work for type Foldout!|
-|jamesgames.inscryption.readmemaker|General|Header Type|How should the header be shown? (Unaffected by Size)|
-|jamesgames.inscryption.readmemaker|Modified Cards|Show Modified Cards Section|Show a section that lists all the cards modified.|
-|jamesgames.inscryption.readmemaker|Nodes|Show Nodes|Show all new map nodes added in its own section..|
-|jamesgames.inscryption.readmemaker|Regions|Show Regions|Show all new regions.|
-|jamesgames.inscryption.readmemaker|Saving|Path|Where to save this location to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme|
-|jamesgames.inscryption.readmemaker|Side Deck|Show Side Deck Section|Show a section that lists all the custom side deck cards.|
-|jamesgames.inscryption.readmemaker|Sigils|Show Sigils|Show all new sigils listed on cards in its own section.|
-|jamesgames.inscryption.readmemaker|Special Abilities|Show Special Abilities|Show all new special abilities listed on cards in its own section.|
-|jamesgames.inscryption.readmemaker|Tribes|Show Tribes|Show all new tribes added in its own section.|
-|jamesgames.inscryption.readmemaker|_ReadmeMaker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
+## 37 New Configs
+|Section|Key|Description|
+|:-|:-|:-|
+|1. Readme Maker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
+|1. Readme Maker|Save To|Where to save the generated readme to. If blank will be same folder as ReadmeMaker.dll. See console for exact location after making a readme.|
+|2. General|Display By|Changes how the cards, abilities and special abilities are displayed.|
+|2. General|Filter by JSONLoader Mod Prefix|Show .jdlr cards with a specific Mod Prefix. Disable by leaving blank.|
+|2. General|Filter by Mod GUID|Only cards, sigils... etc related to this mods GUID. Disable by leaving blank.|
+|2. General|Header Size|How big should the header be? (Does not work for type Foldout!|
+|2. General|Header Type|How should the header be shown? (Unaffected by Size)|
+|2. General|Ignore Empty Columns|True=Any columns that have no data will not be shown, False=All columns shown even if it has no data to show.|
+|2. General|Ignore Mod by GUID|Ignore mods using these guids. Separate multiple guids by a comma. Disable by leaving blank.|
+|2. General|Show GUIDs|Show the mod GUID for each sigils, tribes... etc.|
+|2. General|Sort By|Changes the order of how rows in sections are displayed.|
+|2. General|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc.|
+|3. Toggle Sections|Show Boons|Show all new Boons added in its own section..|
+|3. Toggle Sections|Show Cards Modified|Show a section that lists all the cards modified.|
+|3. Toggle Sections|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
+|3. Toggle Sections|Show Encounters|Show all new encounters added in its own section..|
+|3. Toggle Sections|Show Kaycees Mod Challenges|Show all new challenges added for Kaycee's mod.|
+|3. Toggle Sections|Show Kaycees Mod Starter Decks|Show all new starter decks for Kaycee's mod.|
+|3. Toggle Sections|Show Map Nodes|Show all new map nodes added in its own section..|
+|3. Toggle Sections|Show Regions|Show all new regions.|
+|3. Toggle Sections|Show Side Decks|Show a section that lists all the custom side deck cards.|
+|3. Toggle Sections|Show Sigils|Show all new sigils listed on cards in its own section.|
+|3. Toggle Sections|Show Special Abilities|Show all new special abilities listed on cards in its own section.|
+|3. Toggle Sections|Show Tribes|Show all new tribes added in its own section.|
+|4. Card Section Options|Align Cost|Centers the cost of the costs. (Adds a lot of characters)|
+|4. Card Section Options|Join duplicate Sigils|If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.|
+|4. Card Section Options|Show Cost Min Collapse Amount|Minimum amount before costs are shown as (icon)5 instead of (icon)(icon)...etc|
+|4. Card Section Options|Show Evolutions|Show what each card can evolve into when given Fledgling. (Wolf Cub -> Wolf, Elf Fawn -> Elf... etc).|
+|4. Card Section Options|Show Frozen Away|Show what each card turns into when killed given the Frozen Away sigil. (Frozen Possum -> Possum... etc).|
+|4. Card Section Options|Show Sigils|Show what each cards Sigils are. (Waterborne, Fledgling... etc).|
+|4. Card Section Options|Show Specials|Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).|
+|4. Card Section Options|Show Tail|Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).|
+|4. Card Section Options|Show Traits|Show what Traits each card has (KillSurvivors, Ant, Goat, Pelt, Terrain... etc).|
+|4. Card Section Options|Show Tribes|Show what Tribes each card has (Insect, Canine... etc).|
+|4. Card Section Options|Show Unobtainable Cards|Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)|
+|4. Card Section Options|Sort Type|Changes the order that the cards will be displayed in.|
+|4. Card Section Options|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
 
 
 
@@ -88,6 +94,36 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 1.0.0 - 29/6/2022`
+### General:
+- New Icon!
+- ReadmeMaker now loads before all other mods but after API.
+- Changed mod GUID to _jamesgames.inscryption.readmemaker
+- Refactored configs.
+
+### Added:
+- Added Modified Cards section
+- Added GUID column to all sections. Shows when *Show GUIDs* is on.
+- Added Mod Prefix column to all card sections. Shows when *Show GUIDs* is on.
+- Added Card Count to Tribe section
+- Added Config to show Show GUIDs for all sections. Off by default
+- Added Config to filter mods by GUID
+- Added Config to filter mods by Mod Prefix
+- Added Config to ignore mods by GUID
+- Added Config to sort everything by Ascending or Descending
+
+### Fixed:
+- Fixed Tribes incorrectly appearing
+- Fixed New Cards section disabling when Ascension starer decks disabled
+- Fixed Disabling Tribe column not working
+- Fixed Disabling Config section not working
+- Fixed MapNode Section showing wrong GUID.
+- Fixed Patches running when Readme Maker is disabled
+- Fixed Extra space appearing for Sigils and Special Abilities 
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 0.11.0 - 27/3/2022`
 ### General:
 - Bumped API requirement to 2.4
@@ -100,9 +136,6 @@ To see what your Readme looks like when its on the store.
 - Fixed new Map nodes not appearing using new API manager
 - Fixed new challenges breaking Readme dump
 - Fixed new starter deck section appearing even when disabled
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 0.10.0 - 27/3/2022`
 ### General:
