@@ -82,7 +82,6 @@ namespace JamesGames.ReadmeMaker
                     {
                         m_modsToIgnore[i] = m_modsToIgnore[i].Trim();
                     }
-                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_modsToIgnore.Count);
                 }
 
                 return m_modsToIgnore;
@@ -102,7 +101,6 @@ namespace JamesGames.ReadmeMaker
                     {
                         m_filterByModGUID[i] = m_filterByModGUID[i].Trim();
                     }
-                    Plugin.Log.LogInfo("FilterByModsGUID: " + m_filterByModGUID.Count);
                 }
 
                 return m_filterByModGUID;
