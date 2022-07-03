@@ -1,6 +1,8 @@
 using BepInEx;
 using BepInEx.Logging;
+using DiskCardGame;
 using HarmonyLib;
+using InscryptionAPI.Card;
 using JamesGames.ReadmeMaker.ExternalHelpers;
 
 namespace JamesGames.ReadmeMaker
@@ -33,8 +35,6 @@ namespace JamesGames.ReadmeMaker
             
             Harmony harmony = new Harmony(PluginGuid);
             harmony.PatchAll();
-            
-            new ExampleCustomSection().AddSectionToReadmeMaker();
             
             Logger.LogInfo($"Loaded {PluginName}. Waiting for game to start before generating the readme...");
         }

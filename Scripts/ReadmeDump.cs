@@ -46,9 +46,10 @@ namespace JamesGames.ReadmeMaker
 		    new LifeMoneyCost(),
 	    };
 
-	    public static void AddCustomCost(ACost cost)
+	    public static void AddCustomCost(object cost)
 	    {
-		    Costs.Add(cost);
+		    ExternalCostReader externalSectionReader = new ExternalCostReader(cost);
+		    Costs.Add(externalSectionReader);
 	    }
 
 	    public static void AddSection(object section)
