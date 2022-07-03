@@ -34,31 +34,19 @@ namespace JamesGames.ReadmeMaker.ExternalHelpers
         {
             MethodInfo tableHeadersField = CustomSectionType.GetMethod("TableHeaders", Flags);
             tableHeaders = new List<TableHeader>();
-            Debug.Log("Getting headers");
             IEnumerable headers = (IEnumerable)tableHeadersField?.Invoke(CustomSection, null);
-            Debug.Log("Got Headers");
             foreach (object header in headers)
             {
-                Debug.Log("\tGetting HeaderName " + header);
                 string HeaderName = (string)header.GetType().GetField("HeaderName", Flags).GetValue(header);
-                Debug.Log("\tGetting Alignment " + header);
                 object alignmentData = header.GetType().GetField("Alignment", Flags).GetValue(header);
-                Debug.Log("\tCasting Alignment " + alignmentData);
                 Enum.TryParse(alignmentData.ToString(), out Alignment alignment);
-                Debug.Log("\tCreating Header");
                 TableHeader tableHeader = new TableHeader(HeaderName, alignment);
                 tableHeaders.Add(tableHeader);
             }
             
-            Debug.Log("\tGetting Rows");
             MethodInfo rowsMethod = CustomSectionType.GetMethod("GetRows", Flags);
-            Debug.Log("\tGot Method");
             object rowData = rowsMethod?.Invoke(CustomSection, null);
-            Debug.Log("\tGot Rows");
-            IEnumerable<Dictionary<string,string>> enumerable = ((IEnumerable)rowData).Cast<Dictionary<string, string>>();
-            Debug.Log("\tCasted to dictionary");
-            rows = enumerable.ToList();
-            Debug.Log("\tFinished");
+            rows = (List<Dictionary<string, string>>)rowData;
             
         }
 
