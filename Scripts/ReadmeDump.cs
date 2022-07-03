@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DiskCardGame;
+using JamesGames.ReadmeMaker.ExternalHelpers;
 using JamesGames.ReadmeMaker.Sections;
 
 namespace JamesGames.ReadmeMaker
@@ -50,9 +51,10 @@ namespace JamesGames.ReadmeMaker
 		    Costs.Add(cost);
 	    }
 
-	    public static void AddSection(ISection section)
+	    public static void AddSection(object section)
 	    {
-		    Sections.Add(section);
+		    ExternalSectionReader externalSectionReader = new ExternalSectionReader(section);
+		    Sections.Add(externalSectionReader);
 	    }
 
 	    public static void RenameTrait(Trait trait, string traitName)
