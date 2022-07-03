@@ -18,14 +18,20 @@ public abstract class CustomCost
     // 5 = image of a 5
     protected Dictionary<int, string> IntToImageURL = null;
     
+    /// <summary>
+    /// Gets the cost attached to the CardInfo
+    /// </summary>
     public abstract int GetCost(CardInfo cardInfo);
     
+    /// <summary>
+    /// Attempts adding the cost to the Readme Maker so it can be included in the dump.
+    /// If the Readme maker mod is not enabled then this does nothing.  
+    /// </summary>
     public virtual void AddCostToReadmeMaker()
     {
         Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump");
         if (type == null)
         {
-            Debug.Log("Could not add custom cost. ReadmeMaker not found. Is it installed and enabled?");
             return;
         }
 
