@@ -23,10 +23,10 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<CardInfo>("Power", ReadmeHelpers.GetPower),
                 new TableColumn<CardInfo>("Health", ReadmeHelpers.GetHealth),
                 new TableColumn<CardInfo>("Cost", GetCost),
+                new TableColumn<CardInfo>("Sigils", GetSigils, ReadmeConfig.Instance.CardShowSigils),
                 new TableColumn<CardInfo>("Evolution", GetEvolutionName, ReadmeConfig.Instance.CardShowEvolutions),
                 new TableColumn<CardInfo>("Frozen Away", GetFrozenAway, ReadmeConfig.Instance.CardShowFrozenAway),
                 new TableColumn<CardInfo>("Tail", GetTail, ReadmeConfig.Instance.CardShowTail),
-                new TableColumn<CardInfo>("Sigils", GetSigils, ReadmeConfig.Instance.CardShowSigils),
                 new TableColumn<CardInfo>("Specials", GetSpecialAbilities, ReadmeConfig.Instance.CardShowSpecials),
                 new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
                 new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
