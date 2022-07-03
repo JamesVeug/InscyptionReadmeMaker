@@ -36,8 +36,6 @@ namespace JamesGames.ReadmeMaker
     
     public class PluginManager
     {
-        public static readonly BindingFlags ModificationBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Default | BindingFlags.NonPublic;
-        
         public static PluginManager Instance
         {
             get{

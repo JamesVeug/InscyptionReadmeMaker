@@ -32,7 +32,6 @@ namespace JamesGames.ReadmeMaker
 	        
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
             
-            
             Harmony harmony = new Harmony(PluginGuid);
             harmony.PatchAll();
             

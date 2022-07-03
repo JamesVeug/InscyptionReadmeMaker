@@ -36,19 +36,18 @@ public abstract class CustomSection
         Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump");
         if (type == null)
         {
-            Debug.Log("Could not find ReadmeMaker!");
+            Debug.Log("Could not add custom section. ReadmeMaker not found. Is it installed and enabled?");
             return;
         }
 
         MethodInfo methodInfo = type.GetMethod("AddSection");
         if (methodInfo == null)
         {
-            Debug.Log("Could not find AddSection method on ReadmeDump!");
+            Debug.LogError("Could not add custom section. Could not find AddSection method on ReadmeDump!. Is your ExternalHelpers folder up-to-date?");
             return;
         }
 
         methodInfo.Invoke(null, new object[] { this });
-        Debug.Log("Added custom section!");
     }
 
     public virtual void DumpSummary(StringBuilder stringBuilder, List<Dictionary<string, string>> rows)

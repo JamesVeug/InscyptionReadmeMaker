@@ -36,7 +36,6 @@ public class ExampleCustomCost : CustomCost
     {
         int? extendedPropertyAsInt = cardInfo.GetExtendedPropertyAsInt("ExampleCost");
         int propertyAsInt = (extendedPropertyAsInt != null) ? extendedPropertyAsInt.Value : 0;
-        Debug.Log(cardInfo.displayedName + " " + propertyAsInt);
         return propertyAsInt;
     }
 }

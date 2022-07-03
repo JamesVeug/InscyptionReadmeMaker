@@ -48,14 +48,28 @@ namespace JamesGames.ReadmeMaker
 
 	    public static void AddCustomCost(object cost)
 	    {
+		    if (cost == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Cost. null not acceptable.");
+			    return;
+		    }
+		    
 		    ExternalCostReader externalSectionReader = new ExternalCostReader(cost);
 		    Costs.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Cost '{externalSectionReader.CostName}'");
 	    }
 
 	    public static void AddSection(object section)
 	    {
+		    if (section == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Section. null not acceptable.");
+			    return;
+		    }
+		    
 		    ExternalSectionReader externalSectionReader = new ExternalSectionReader(section);
 		    Sections.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Section '{externalSectionReader.SectionName}'");
 	    }
 
 	    public static void RenameTrait(Trait trait, string traitName)

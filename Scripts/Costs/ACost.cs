@@ -13,7 +13,7 @@ namespace JamesGames.ReadmeMaker
         // We don't want to do this really because it makes the readme a lot bigger
         protected string CustomIconX = null; // x
         protected Dictionary<int, string> IntToImage = null; // 1, 2, 3
-        protected string CostName = null; // Blood
+        public string CostName = null; // Blood
         
         public abstract int GetCost(CardInfo cardInfo);
         

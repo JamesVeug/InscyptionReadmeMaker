@@ -25,18 +25,17 @@ public abstract class CustomCost
         Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump");
         if (type == null)
         {
-            Debug.Log("Could not find ReadmeMaker!");
+            Debug.Log("Could not add custom cost. ReadmeMaker not found. Is it installed and enabled?");
             return;
         }
 
         MethodInfo methodInfo = type.GetMethod("AddCustomCost");
         if (methodInfo == null)
         {
-            Debug.Log("Could not find AddCustomCost method on ReadmeDump!");
+            Debug.LogError("Could not add custom cost. Could not find AddCustomCost method on ReadmeDump!. Is your ExternalHelpers folder up-to-date?");
             return;
         }
 
         methodInfo.Invoke(null, new object[] { this });
-        Debug.Log("Added custom Cost!");
     }
 }
