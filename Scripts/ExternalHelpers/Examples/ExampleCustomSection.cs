@@ -55,4 +55,10 @@ public class ExampleCustomSection : CustomSection
 
         return list;
     }
+    
+    
+    public override string GetGUID(object row)
+    {
+        return "_jamesgames.inscryption.readmemaker";
+    }
 }

@@ -24,7 +24,23 @@ namespace JamesGames.ReadmeMaker.ExternalHelpers
             CustomSectionType = instance.GetType();
             CustomSection = instance;
         }
-        
+
+        public string GetGUID(object o)
+        {
+            string guid = (string)CustomSectionType.GetMethod("GetGUID", Flags)?.Invoke(CustomSection, new object[]{o});
+            if (guid == null)
+            {
+                Plugin.Log.LogError("GUID for custom section '" + SectionName + "' is null!");
+            }
+            else if (guid == Plugin.PluginGuid)
+            {
+                Plugin.Log.LogError("GUID for custom section '" + SectionName + "' has not been changed! This should be the plugin guid for your mod. eg: Plugin.PluginGuid.");
+                guid += "_" + CustomSectionType;
+            }
+            
+            return guid;
+        }
+
         public void Initialize()
         {
             CustomSectionType.GetMethod("Initialize", Flags).Invoke(CustomSection, null);

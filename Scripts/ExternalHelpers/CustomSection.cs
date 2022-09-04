@@ -31,6 +31,12 @@ public abstract class CustomSection
     public abstract string SectionName();
     
     /// <summary>
+    /// Returns the guid of your mod so it can be sorted and filtered.
+    /// 
+    /// </summary>
+    public abstract string GetGUID(object row);
+    
+    /// <summary>
     /// False stops the readme maker from creating a section in the dump
     /// </summary>
     public abstract bool Enabled();

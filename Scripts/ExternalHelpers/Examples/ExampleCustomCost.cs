@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
 using InscryptionAPI.Card;
-using UnityEngine;
 
 public class ExampleCustomCost : CustomCost
 {

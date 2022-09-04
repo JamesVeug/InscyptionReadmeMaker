@@ -41,6 +41,8 @@ namespace JamesGames.ReadmeMaker.Sections
     {
         public abstract string SectionName { get; }
         public virtual bool Enabled => true;
+
+        public string GetGUID(object o) => GetGUID((T)o);
         public abstract string GetGUID(T o);
 
         protected List<T> rawData = new List<T>();
