@@ -10,12 +10,13 @@ public abstract class CustomCost
     protected string CostName = null; // Blood
     
     // 5 = Image of 5xICON (Most optimal way to show icons!)
+    // Optional but recommended to include: [1] = "url to single image of icon"
     protected Dictionary<int, string> CostToSingleImageURL = null;
         
-    // Icon for X when showing 5xICON
+    // Optional: Icon for X when showing 5xICON
     protected string CustomIconXURL = null; // x
     
-    // 5 = image of a 5
+    // Optional: 5 = image of a 5
     protected Dictionary<int, string> IntToImageURL = null;
     
     /// <summary>
@@ -29,7 +30,7 @@ public abstract class CustomCost
     /// </summary>
     public virtual void AddCostToReadmeMaker()
     {
-        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump");
+        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump, ReadmeMaker");
         if (type == null)
         {
             return;
@@ -43,5 +44,6 @@ public abstract class CustomCost
         }
 
         methodInfo.Invoke(null, new object[] { this });
+        Debug.Log($"Registered custom cost {CostName} to Readme Maker!");
     }
 }

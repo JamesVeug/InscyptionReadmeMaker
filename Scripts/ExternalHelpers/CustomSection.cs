@@ -62,7 +62,7 @@ public abstract class CustomSection
     /// </summary>
     public virtual void AddSectionToReadmeMaker()
     {
-        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump");
+        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump, ReadmeMaker");
         if (type == null)
         {
             return;
@@ -76,6 +76,7 @@ public abstract class CustomSection
         }
 
         methodInfo.Invoke(null, new object[] { this });
+        Debug.Log($"Registered custom section {SectionName()} to Readme Maker!");
     }
 
     /// <summary>

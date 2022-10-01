@@ -16,10 +16,15 @@ public class ExampleData
 
 public class ExampleCustomSection : CustomSection
 {
-    public override string SectionName() => "Example Section";
+    public override string SectionName() => "Example Sections";
     public override bool Enabled() => true;
 
     private List<ExampleData> m_data = new List<ExampleData>();
+    
+    /// <summary>
+    /// Get all the data we need to make a section
+    /// eg: This could be getting all of a specific card from the game, all totems, encounters.... etc
+    /// </summary>
     public override void Initialize()
     {
         m_data = new List<ExampleData>
@@ -31,6 +36,9 @@ public class ExampleCustomSection : CustomSection
         };
     }
 
+    /// <summary>
+    /// Create list of headers we want to use for a table
+    /// </summary>
     public override List<CustomTableHeader> TableHeaders()
     {
         return new List<CustomTableHeader>()
@@ -41,6 +49,9 @@ public class ExampleCustomSection : CustomSection
         };
     }
 
+    /// <summary>
+    /// Convert the data into a list of dictionaries so it can be displayed in the readme dump
+    /// </summary>
     public override List<Dictionary<string, string>> GetRows()
     {
         List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
@@ -56,9 +67,12 @@ public class ExampleCustomSection : CustomSection
         return list;
     }
     
-    
+    /// <summary>
+    /// Each row can have a different GUID if it comes from a different mod
+    /// Rows are filtered by GUID via the config settings
+    /// </summary>
     public override string GetGUID(object row)
     {
-        return "_jamesgames.inscryption.readmemaker";
+        return "_jamesgames.inscryption.readmemaker.mod1";
     }
 }
