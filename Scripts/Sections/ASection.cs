@@ -42,7 +42,6 @@ namespace JamesGames.ReadmeMaker.Sections
         public abstract string SectionName { get; }
         public virtual bool Enabled => true;
 
-        public string GetGUID(object o) => GetGUID((T)o);
         public abstract string GetGUID(T o);
 
         protected List<T> rawData = new List<T>();
@@ -90,7 +89,7 @@ namespace JamesGames.ReadmeMaker.Sections
             return isPluginGuidFiltered;
         }
         
-        protected List<Dictionary<string, string>> BreakdownForTable(out List<TableHeader> headers, params TableColumn<T>[] grouping)
+        protected virtual List<Dictionary<string, string>> BreakdownForTable(out List<TableHeader> headers, params TableColumn<T>[] grouping)
         {
             headers = new List<TableHeader>();
             Dictionary<string, bool> columnUseCount = new Dictionary<string, bool>();

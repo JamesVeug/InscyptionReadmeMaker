@@ -14,65 +14,48 @@ public class ExampleData
     }
 }
 
-public class ExampleCustomSection : CustomSection
+public class ExampleCustomSection : CustomSection<ExampleData>
 {
     public override string SectionName() => "Example Sections";
     public override bool Enabled() => true;
-
-    private List<ExampleData> m_data = new List<ExampleData>();
     
     /// <summary>
     /// Get all the data we need to make a section
     /// eg: This could be getting all of a specific card from the game, all totems, encounters.... etc
     /// </summary>
-    public override void Initialize()
+    public override List<ExampleData> Initialize()
     {
-        m_data = new List<ExampleData>
+        return new List<ExampleData>
         {
-            new ExampleData("Hello", 20, "https://i.imgur.com/H6vESv7.png"),
-            new ExampleData("From", 40, "https://i.imgur.com/GeMgIce.png"),
-            new ExampleData("Readme", 60, "https://i.imgur.com/C22peXt.png"),
-            new ExampleData("Maker", 120, "https://i.imgur.com/WnaCjEY.png")
+            new ExampleData("Maker", 20, "https://i.imgur.com/H6vESv7.png"),
+            new ExampleData("Readme", 40, "https://i.imgur.com/GeMgIce.png"),
+            new ExampleData("From", 60, "https://i.imgur.com/C22peXt.png"),
+            new ExampleData("Hello", 120, "https://i.imgur.com/WnaCjEY.png")
         };
     }
 
-    /// <summary>
-    /// Create list of headers we want to use for a table
-    /// </summary>
-    public override List<CustomTableHeader> TableHeaders()
+    public override void GetTableDump(out List<CustomTableHeader> headers, out List<Dictionary<string, string>> rows)
     {
-        return new List<CustomTableHeader>()
+        rows = BreakdownForTable(out headers, new[]
         {
-            new CustomTableHeader("Word", CustomAlignment.Left),
-            new CustomTableHeader("Age", CustomAlignment.Middle),
-            new CustomTableHeader("Image", CustomAlignment.Middle),
-        };
+            new CustomTableColumn<ExampleData>("Name", (a)=>a.Word),
+            new CustomTableColumn<ExampleData>("Age", (a)=>a.Age.ToString()),
+            new CustomTableColumn<ExampleData>("Image", (a)=> string.Format("<img align=\"center\" src=\"{0}\">", a.ImageURL))
+        });
     }
 
-    /// <summary>
-    /// Convert the data into a list of dictionaries so it can be displayed in the readme dump
-    /// </summary>
-    public override List<Dictionary<string, string>> GetRows()
+    public override int Sort(ExampleData a, ExampleData b)
     {
-        List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
-        foreach (ExampleData data in m_data)
-        {
-            Dictionary<string,string> dictionary = new Dictionary<string, string>();
-            dictionary["Word"] = data.Word;
-            dictionary["Age"] = data.Age.ToString();
-            dictionary["Image"] = string.Format("<img align=\"center\" src=\"{0}\">", data.ImageURL);
-            list.Add(dictionary);
-        }
-
-        return list;
+        // Rows will show by highest age to lowest. Return 0 to retain order
+        return b.Age - a.Age;
     }
-    
+
     /// <summary>
     /// Each row can have a different GUID if it comes from a different mod
     /// Rows are filtered by GUID via the config settings
     /// </summary>
     public override string GetGUID(object row)
     {
-        return "_jamesgames.inscryption.readmemaker.mod1";
+        return "_jamesgames.inscryption.readmemaker.examplemod";
     }
 }
