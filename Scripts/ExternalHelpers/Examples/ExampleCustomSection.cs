@@ -54,7 +54,7 @@ public class ExampleCustomSection : CustomSection<ExampleData>
     /// Each row can have a different GUID if it comes from a different mod
     /// Rows are filtered by GUID via the config settings
     /// </summary>
-    public override string GetGUID(object row)
+    public override string GetGUID(ExampleData row)
     {
         return "_jamesgames.inscryption.readmemaker.examplemod";
     }

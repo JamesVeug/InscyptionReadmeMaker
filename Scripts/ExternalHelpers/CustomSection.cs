@@ -52,7 +52,7 @@ public abstract class CustomSection<T>
     /// <summary>
     /// Returns the guid of your mod so it can be sorted and filtered.
     /// </summary>
-    public abstract string GetGUID(object row);
+    public abstract string GetGUID(T row);
     
     /// <summary>
     /// False stops the readme maker from creating a section in the dump
@@ -63,7 +63,7 @@ public abstract class CustomSection<T>
     /// Get all the data required to display the rows
     /// </summary>
     /// <returns>List of all rows data</returns>
-    public abstract List<ExampleData> Initialize();
+    public abstract List<T> Initialize();
     
     /// <summary>
     /// Convert data returned from Initialize() into a list of dictionaries so it can be displayed in the readme dump.
@@ -75,6 +75,8 @@ public abstract class CustomSection<T>
     /// </summary>
     public abstract int Sort(T a, T b);
 
+    protected virtual string AddSectionMethodName => "AddSection";
+        
     private object m_readmeExternalSectionReference = null;
 
     protected List<Dictionary<string, string>> BreakdownForTable(out List<CustomTableHeader> headers, params CustomTableColumn<T>[] grouping)
@@ -103,29 +105,6 @@ public abstract class CustomSection<T>
         
         return result as List<Dictionary<string, string>>;
     }
-    
-    /// <summary>
-    /// Attempts adding the section to the Readme Maker so it can be included in the dump.
-    /// If the Readme maker mod is not enabled then this does nothing.  
-    /// </summary>
-    public virtual void AddSectionToReadmeMaker()
-    {
-        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump, ReadmeMaker");
-        if (type == null)
-        {
-            return;
-        }
-
-        MethodInfo methodInfo = type.GetMethod("AddSection");
-        if (methodInfo == null)
-        {
-            Debug.LogError("Could not add custom section. Could not find AddSection method on ReadmeDump!. Is your ExternalHelpers folder up-to-date?");
-            return;
-        }
-
-        methodInfo.Invoke(null, new object[] { this });
-        Debug.Log($"Registered custom section {SectionName()} to Readme Maker!");
-    }
 
     /// <summary>
     /// Simple breakdown of what the section includes.
@@ -139,5 +118,28 @@ public abstract class CustomSection<T>
         {
             stringBuilder.Append($"\n{rows.Count} {SectionName()}\n");
         }
+    }
+    
+    /// <summary>
+    /// Attempts adding the section to the Readme Maker so it can be included in the dump.
+    /// If the Readme maker mod is not enabled then this does nothing.  
+    /// </summary>
+    public virtual void AddSectionToReadmeMaker()
+    {
+        Type type = Type.GetType("JamesGames.ReadmeMaker.ReadmeDump, ReadmeMaker");
+        if (type == null)
+        {
+            return;
+        }
+
+        MethodInfo methodInfo = type.GetMethod(AddSectionMethodName);
+        if (methodInfo == null)
+        {
+            Debug.LogError("Could not add custom section. Could not find AddSection method on ReadmeDump!. Is your ExternalHelpers folder up-to-date?");
+            return;
+        }
+
+        methodInfo.Invoke(null, new object[] { this });
+        Debug.Log($"Registered custom section {SectionName()} to Readme Maker!");
     }
 }

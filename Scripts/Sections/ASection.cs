@@ -64,7 +64,6 @@ namespace JamesGames.ReadmeMaker.Sections
             string guid = GetGUID(o);
             if (guid == null)
             {
-                Plugin.Log.LogInfo("Null GUID found!");
                 return true;
             }
             guid = guid.Trim();

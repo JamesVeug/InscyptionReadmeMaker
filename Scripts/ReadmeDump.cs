@@ -72,6 +72,19 @@ namespace JamesGames.ReadmeMaker
 		    Plugin.Log.LogInfo($"Added Custom Section '{externalSectionReader.SectionName}'");
 	    }
 
+	    public static void AddCardSection(object section)
+	    {
+		    if (section == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Card Section. null not acceptable.");
+			    return;
+		    }
+		    
+		    ExternalCardSectionReader externalSectionReader = new ExternalCardSectionReader(section);
+		    Sections.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Card Section '{externalSectionReader.SectionName}'");
+	    }
+
 	    public static void RenameTrait(Trait trait, string traitName)
 	    {
 		    TraitToName[trait] = traitName;
