@@ -1,6 +1,9 @@
 using BepInEx;
 using BepInEx.Logging;
+using DiskCardGame;
 using HarmonyLib;
+using InscryptionAPI.Card;
+using JamesGames.ReadmeMaker.ExternalHelpers;
 
 namespace JamesGames.ReadmeMaker
 {
@@ -28,7 +31,6 @@ namespace JamesGames.ReadmeMaker
 	        }
 	        
             Directory = this.Info.Location.Replace("ReadmeMaker.dll", "");
-            
             
             Harmony harmony = new Harmony(PluginGuid);
             harmony.PatchAll();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DiskCardGame;
+using JamesGames.ReadmeMaker.ExternalHelpers;
 using JamesGames.ReadmeMaker.Sections;
 
 namespace JamesGames.ReadmeMaker
@@ -45,14 +46,43 @@ namespace JamesGames.ReadmeMaker
 		    new LifeMoneyCost(),
 	    };
 
-	    public static void AddCustomCost(ACost cost)
+	    public static void AddCustomCost(object cost)
 	    {
-		    Costs.Add(cost);
+		    if (cost == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Cost. null not acceptable.");
+			    return;
+		    }
+		    
+		    ExternalCostReader externalSectionReader = new ExternalCostReader(cost);
+		    Costs.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Cost '{externalSectionReader.CostName}'");
 	    }
 
-	    public static void AddSection(ISection section)
+	    public static void AddSection(object section)
 	    {
-		    Sections.Add(section);
+		    if (section == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Section. null not acceptable.");
+			    return;
+		    }
+		    
+		    ExternalSectionReader externalSectionReader = new ExternalSectionReader(section);
+		    Sections.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Section '{externalSectionReader.SectionName}'");
+	    }
+
+	    public static void AddCardSection(object section)
+	    {
+		    if (section == null)
+		    {
+			    Plugin.Log.LogError("Could not add Custom Card Section. null not acceptable.");
+			    return;
+		    }
+		    
+		    ExternalCardSectionReader externalSectionReader = new ExternalCardSectionReader(section);
+		    Sections.Add(externalSectionReader);
+		    Plugin.Log.LogInfo($"Added Custom Card Section '{externalSectionReader.SectionName}'");
 	    }
 
 	    public static void RenameTrait(Trait trait, string traitName)

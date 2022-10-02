@@ -13,7 +13,7 @@ namespace JamesGames.ReadmeMaker
         // We don't want to do this really because it makes the readme a lot bigger
         protected string CustomIconX = null; // x
         protected Dictionary<int, string> IntToImage = null; // 1, 2, 3
-        protected string CostName = null; // Blood
+        public string CostName = null; // Blood
         
         public abstract int GetCost(CardInfo cardInfo);
         
@@ -24,7 +24,7 @@ namespace JamesGames.ReadmeMaker
                 return false;
 
             // Try displaying a single image
-            if (CostToSingleImage.TryGetValue(cost, out string path))
+            if (CostToSingleImage != null && CostToSingleImage.TryGetValue(cost, out string path))
             {
                 // Blood x5
                 string fullImage = FormatUrl(path);
@@ -32,12 +32,23 @@ namespace JamesGames.ReadmeMaker
                 return true;
             }
 
-            CostToSingleImage.TryGetValue(1, out string singleIconPath);
-            
+            string singleIconPath = null;
+            if (CostToSingleImage != null)
+            {
+                CostToSingleImage.TryGetValue(1, out singleIconPath);
+            }
+
             // No way to show the icon... so just show the name
             if (string.IsNullOrEmpty(singleIconPath))
             {
-                builder.Append(CostName);
+                if (cost > 1)
+                {
+                    builder.Append(cost + "x" + CostName);
+                }
+                else
+                {
+                    builder.Append(CostName);
+                }
                 return true;
             }
             
