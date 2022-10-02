@@ -26,7 +26,9 @@ namespace JamesGames.ReadmeMaker.Sections
 
                 string guid = plugin.Info.Instance.Info.Metadata.GUID;
                 
+#pragma warning disable CS0618
                 ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();
+#pragma warning restore CS0618
                 foreach (ConfigEntryBase definition in entries)
                 {
                     rawData.Add(new ConfigData()

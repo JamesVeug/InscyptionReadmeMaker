@@ -7,6 +7,7 @@ using ReadmeMaker.Patches;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
+#pragma warning disable CS0618
     /// <summary>
     /// Wrapper to support the old NewMapnode system in the API and the new one. 
     /// </summary>
@@ -71,4 +72,5 @@ namespace JamesGames.ReadmeMaker.Sections
             }
         }
     }
+#pragma warning restore CS0618
 }

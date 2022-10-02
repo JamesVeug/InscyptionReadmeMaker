@@ -7,6 +7,7 @@ using JamesGames.ReadmeMaker;
 
 namespace ReadmeMaker.Patches
 {
+#pragma warning disable CS0618
     [HarmonyPatch(typeof(NodeManager.NodeInfo), MethodType.Constructor, new Type[] { })]
     public class NodeManager_Add
     {
@@ -37,4 +38,5 @@ namespace ReadmeMaker.Patches
             return guid;
         }
     }
+#pragma warning restore CS0618
 }
