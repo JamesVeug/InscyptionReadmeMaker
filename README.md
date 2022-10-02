@@ -31,11 +31,76 @@ To see what your Readme looks like when its on the store.
 - Restart the game so it can add the rest of the configs for you 
 
 ### Making a Readme
-- Start the game
-- Wait for console to say that it has dumped the GENERATED_RTEADME.md
+- Start Inscryption
+- Start the game either vanilla or KCM until it gets to the map
+- Wait for console to say that it has dumped the GENERATED_README.md
+
 
 # !NOTE!
 - Thunderstore will not accept a Readme with more than 32,768 characters. So if your mod has a lot of cards and sigils it's likely you'll hit this limit.
+
+
+## Adding Custom Information
+The Readme Maker has support for your mod to add additional information to readme dumps
+
+### Setup
+- Go to https://github.com/JamesVeug/InscyptionReadmeMaker/tree/develop/Scripts
+- Download ExternalHelpers method and put it in your mod
+
+### How to add a custom card section to your mod
+- Create a new class and make it inherit from `CustomCardSection` 
+- Override Initialize so it returns all the cards you want to appear in the readme dump.
+- In your `Plugin.cs` script call `AddSectionToReadmeMaker`
+
+
+eg:
+```csharp
+private void Awake()
+{
+    new AllBoneCardsSection().AddSectionToReadmeMaker();
+}
+```
+
+```csharp
+public class AllBoneCardsSection : CustomCardSection
+{
+    public override string SectionName() => "All Bone Cards";
+    public override bool Enabled() => true;
+    
+    public override List<CardInfo> Initialize()
+    {
+        return CardManager.AllCardsCopy.FindAll(a => a.bonesCost > 0);
+    }
+}
+```
+
+### How to add a general custom section to your mod
+[Go here for an example of what a custom section looks like](https://github.com/JamesVeug/InscyptionReadmeMaker/blob/develop/Scripts/ExternalHelpers/Examples/ExampleCustomSection.cs)
+- Create a new class and make it inherit from `CustomSection`
+- Fill our all methods as you need
+- In your `Plugin.cs` script call `AddSectionToReadmeMaker`
+
+eg:
+```csharp
+private void Awake()
+{
+    new ExampleCustomSection().AddSectionToReadmeMaker();
+}
+```
+
+### How to add a custom cost to your mod
+[Go here for an example of what a custom cost looks like](https://github.com/JamesVeug/InscyptionReadmeMaker/blob/develop/Scripts/ExternalHelpers/Examples/ExampleCustomCost.cs)
+- Create a new class and make it inherit from `CustomCost`
+- Fill our all methods as you need
+- In your `Plugin.cs` script call `AddCostToReadmeMaker`
+
+eg:
+```csharp
+private void Awake()
+{
+    new ExampleCustomCost().AddCostToReadmeMaker();
+}
+```
 
 
 ## 37 New Configs
@@ -94,6 +159,16 @@ To see what your Readme looks like when its on the store.
 
 # Update notes:
 
+## `Version: 1.1.0 - 2/10/2022`
+### Added:
+- Support for custom Sections from mods
+- Support for custom card Sections from mods
+- Support for custom costs from mods
+
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 1.0.0 - 29/6/2022`
 ### General:
 - New Icon!
@@ -120,9 +195,6 @@ To see what your Readme looks like when its on the store.
 - Fixed MapNode Section showing wrong GUID.
 - Fixed Patches running when Readme Maker is disabled
 - Fixed Extra space appearing for Sigils and Special Abilities 
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 0.11.0 - 27/3/2022`
 ### General:
