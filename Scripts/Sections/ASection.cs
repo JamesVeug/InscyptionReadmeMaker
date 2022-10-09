@@ -46,7 +46,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         protected List<T> rawData = new List<T>();
 
-        public abstract void Initialize();
+        public abstract void Initialize(RegisteredMod mod);
         protected abstract int Sort(T a, T b);
         
         public abstract void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows);

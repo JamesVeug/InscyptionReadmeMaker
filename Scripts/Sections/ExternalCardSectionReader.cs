@@ -17,19 +17,28 @@ namespace JamesGames.ReadmeMaker.ExternalHelpers
         private Type CustomSectionType = null;
         private Type CustomSectionBaseType = null;
         private object CustomSection = null;
+        private string PluginGUID = null;
 
-        public ExternalCardSectionReader(object instance)
+        public ExternalCardSectionReader(object instance, string guid)
         {
             CustomSectionType = instance.GetType();
             CustomSectionBaseType = CustomSectionType.BaseType.BaseType;
             CustomSection = instance;
+            PluginGUID = guid;
 
             FieldInfo field = CustomSectionBaseType.GetField("m_readmeExternalSectionReference", BindingFlags.Instance | BindingFlags.NonPublic);
             field.SetValue(instance, this);
         }
 
-        protected override List<CardInfo> GetCards()
+        protected override List<CardInfo> GetCards(RegisteredMod mod)
         {
+            // Hack maybe? - Will change whe nwe actually use templates
+            if (mod.PluginGUID != PluginGUID)
+            {
+                return new List<CardInfo>();
+            }
+
+            // TODO: Pass mod to external initialize
             object data = CustomSectionType.GetMethod("Initialize", Flags).Invoke(CustomSection, null);
             return (List<CardInfo>)data;
         }

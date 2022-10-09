@@ -8,12 +8,12 @@ namespace JamesGames.ReadmeMaker.Sections
 {
     public abstract class ACardsSection : ASection<CardInfo>
     {
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
-            rawData = GetCards();
+            rawData = GetCards(mod);
         }
 
-        protected abstract List<CardInfo> GetCards();
+        protected abstract List<CardInfo> GetCards(RegisteredMod mod);
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {

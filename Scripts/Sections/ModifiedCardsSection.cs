@@ -11,16 +11,16 @@ namespace JamesGames.ReadmeMaker.Sections
 
         private List<string> cardModifiedFieldNames = new List<string>();
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear();
             cardModifiedFieldNames.Clear();
 
             PluginManager.Instance.Flush();
-            cardModifiedFieldNames.AddRange(PluginManager.Instance.GetCardModifiedFieldNames());
+            cardModifiedFieldNames.AddRange(mod.CardFieldModifications);
             cardModifiedFieldNames.Sort();
             
-            foreach (KeyValuePair<CardInfo, CardChangeList> cardChanges in PluginManager.Instance.GetModifications())
+            foreach (KeyValuePair<CardInfo, CardChangeList> cardChanges in mod.CardModifications)
             {
                 rawData.AddRange(cardChanges.Value);
             }

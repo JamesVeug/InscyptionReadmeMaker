@@ -8,14 +8,21 @@ namespace ReadmeMaker.Patches
     [HarmonyPatch(typeof(BaseUnityPlugin), MethodType.Constructor, new Type[] { })]
     public class BaseUnityPlugin_Constructor
     {
-        public static void Prefix(BaseUnityPlugin __instance)
+        public static void Postfix(BaseUnityPlugin __instance)
         {
             if (!ReadmeConfig.Instance.ReadmeMakerEnabled)
             {
                 return;
             }
+
+            BepInPlugin metadata = MetadataHelper.GetMetadata((object) __instance);
+            if (__instance.Info == null)
+            {
+                Plugin.Log.LogError("Ignoring mod: " + __instance.name + " Due to not having any info!");
+                return;
+            }
             
-            PluginManager.Instance.RegisterPlugin(__instance.GetType());
+            PluginManager.Instance.RegisterPlugin(__instance);
         }
     }
 }

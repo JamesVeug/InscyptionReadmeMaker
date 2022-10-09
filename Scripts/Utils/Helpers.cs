@@ -22,9 +22,11 @@ namespace JamesGames.ReadmeMaker
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
             {
+                //Plugin.Log.LogInfo($"GetGUID: {value} = null");
                 return null;
             }
 
+            //Plugin.Log.LogInfo($"GetGUID: {value} = '{tuple.Item1}'");
             return tuple.Item1;
         }
 
@@ -33,9 +35,11 @@ namespace JamesGames.ReadmeMaker
             Tuple<string,string> tuple = GetGUIDAndNameFromEnum(value);
             if (tuple == null)
             {
+                //Plugin.Log.LogInfo($"GetGUID: {value} = null");
                 return null;
             }
 
+            //Plugin.Log.LogInfo($"GetGUID: {value} = '{tuple.Item1}'");
             return tuple.Item2;
         }
         
@@ -43,6 +47,8 @@ namespace JamesGames.ReadmeMaker
         {
             if (GUIDNameLookup == null)
             {
+                //Plugin.Log.LogInfo($"[GetGUIDAndNameFromEnum] Building fast lookup");
+                
                 // Init
                 GUIDNameLookup = new Dictionary<string, Tuple<string, string>>();
                 foreach (KeyValuePair<string, Dictionary<string, object>> pluginData in ModdedSaveManager.SaveData.SaveData)

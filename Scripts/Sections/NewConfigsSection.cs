@@ -13,7 +13,7 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Configs";
         public override bool Enabled => ReadmeConfig.Instance.ConfigSectionShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             
@@ -25,6 +25,10 @@ namespace JamesGames.ReadmeMaker.Sections
                 }
 
                 string guid = plugin.Info.Instance.Info.Metadata.GUID;
+                if (guid != mod.PluginGUID)
+                {
+                    continue;
+                }
                 
 #pragma warning disable CS0618
                 ConfigEntryBase[] entries = plugin.Config.GetConfigEntries();

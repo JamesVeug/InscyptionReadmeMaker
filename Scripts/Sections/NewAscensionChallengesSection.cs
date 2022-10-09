@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using InscryptionAPI.Ascension;
 
 namespace JamesGames.ReadmeMaker.Sections
@@ -9,10 +10,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Ascension Challenges";
         public override bool Enabled => ReadmeConfig.Instance.AscensionChallengesShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(ChallengeManager.NewInfos);
+            rawData.AddRange(ChallengeManager.NewInfos.Where(x=>GetGUID(x) == mod.PluginGUID));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)

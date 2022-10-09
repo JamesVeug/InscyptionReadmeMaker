@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DiskCardGame;
 using InscryptionAPI.Encounters;
 using ReadmeMaker.Patches;
@@ -11,10 +12,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Encounters";
         public override bool Enabled => ReadmeConfig.Instance.EncountersShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(EncounterManager.NewEncounters);
+            rawData.AddRange(EncounterManager.NewEncounters.Where(x=>GetGUID(x) == mod.PluginGUID));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> rows)

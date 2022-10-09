@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using InscryptionAPI.Card;
 using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
@@ -11,10 +12,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Sigils";
         public override bool Enabled => ReadmeConfig.Instance.SigilsShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(AbilityManager.NewAbilities);
+            rawData.AddRange(AbilityManager.NewAbilities.Where(x=>GetGUID(x) == mod.PluginGUID));
             rawData.RemoveAll((a) => a.Info == null || string.IsNullOrEmpty(a.Info.rulebookName));
         }
 

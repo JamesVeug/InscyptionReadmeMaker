@@ -26,19 +26,29 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Map Nodes";
         public override bool Enabled => ReadmeConfig.Instance.MapNodesShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             foreach (NodeManager.NodeInfo info in NodeManager.AllNodes)
             {
+                if (info.guid != mod.PluginGUID)
+                {
+                    continue;
+                }
+
                 rawData.Add(new NodeWrapper()
                 {
                     OldMapNodes = info
                 });
             }
-            
+             
             foreach (NewNodeManager.FullNode info in NewNodeManager.NewNodes)
             {
+                if (info.guid != mod.PluginGUID)
+                {
+                    continue;
+                }
+                
                 rawData.Add(new NodeWrapper()
                 {
                     NewMapNodes = info

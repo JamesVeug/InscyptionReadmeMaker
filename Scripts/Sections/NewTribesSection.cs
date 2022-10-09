@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using ReadmeMaker.Patches;
 using TribeInfo = InscryptionAPI.Card.TribeManager.TribeInfo;
 
 namespace JamesGames.ReadmeMaker.Sections
@@ -12,10 +14,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Tribes";
         public override bool Enabled => ReadmeConfig.Instance.TribesShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(TribeManager.tribes);
+            rawData.AddRange(TribeManager.tribes.Where(x=>GetGUID(x) == mod.PluginGUID));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)

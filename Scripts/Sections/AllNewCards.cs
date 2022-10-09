@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DiskCardGame;
 using InscryptionAPI.Card;
 
@@ -6,9 +7,9 @@ namespace JamesGames.ReadmeMaker.Sections
 {
     public abstract class AllNewCards : ACardsSection
     {
-        protected override List<CardInfo> GetCards()
+        protected override List<CardInfo> GetCards(RegisteredMod mod)
         {
-            List<CardInfo> allCards = new List<CardInfo>(CardManager.NewCards);
+            List<CardInfo> allCards = new List<CardInfo>(CardManager.NewCards.Where((x)=>mod.PluginCardModPrefixes.Contains(x.GetModPrefix())));
 
             HashSet<string> referencesCardNames = new HashSet<string>();
             foreach (var cardInfo in allCards)

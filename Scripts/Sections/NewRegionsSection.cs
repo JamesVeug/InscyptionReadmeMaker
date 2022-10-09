@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using InscryptionAPI.Regions;
 using ReadmeMaker.Patches;
@@ -11,10 +12,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Regions";
         public override bool Enabled => ReadmeConfig.Instance.RegionsShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(RegionManager.NewRegions);
+            rawData.AddRange(RegionManager.NewRegions.Where(x=>GetGUID(x) == mod.PluginGUID));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)

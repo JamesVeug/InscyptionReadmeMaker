@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using BepInEx;
 using DiskCardGame;
@@ -31,7 +30,7 @@ namespace JamesGames.ReadmeMaker
         // Header Name to data
         public Dictionary<string, Modification> Modifications = new Dictionary<string, Modification>();
     }
-    
+
     public class CardChangeList : List<CardChangeDetails>{}
     
     public class PluginManager
@@ -50,18 +49,20 @@ namespace JamesGames.ReadmeMaker
         private static PluginManager m_instance = null;
         private static List<CardInfoGetterInfo> m_cardFields = GetCardModificationGetters();
 
+        public List<RegisteredMod> RegisteredMods => registeredMods;
+        public RegisteredMod ModBeingProcess => modBeingProcess;
+        
         // A mod has added a new card to the game
         private List<CardInfo> cardsLoadedDuringPlugin = new List<CardInfo>();
-        
+        private List<RegisteredMod> registeredMods = new List<RegisteredMod>();
+        private Dictionary<string, RegisteredMod> registeredModLookup = new Dictionary<string, RegisteredMod>();
+
         // A mod has finished loading and another has started.
         // This is the list of all cards processed for a previous mod
-        // TODO: Refresh default values after processing a mod so the next mod doesn't show the same modifications
         private Dictionary<CardInfo, Dictionary<string, object>> cardDefaultValues = new Dictionary<CardInfo, Dictionary<string, object>>();
-        private Dictionary<CardInfo, CardChangeList> cardModifications = new Dictionary<CardInfo, CardChangeList>();
-        private List<string> cardFieldModifications = new List<string>();
 
         private bool flushProcessing = false;
-        private string modBeingProcess = null;
+        private RegisteredMod modBeingProcess = null;
 
         public PluginManager()
         {
@@ -70,53 +71,56 @@ namespace JamesGames.ReadmeMaker
             Flush(true);
         }
         
-        public void RegisterPlugin(Type type)
+        public void RegisterPlugin(BaseUnityPlugin instance)
         {
-            Plugin.Log.LogInfo("[PluginManager] Registering newly processed mod: " + type.FullName);
+            string infoLocation = instance.Info.Location;
+            ReadmeHelpers.ModManifest manifest = ReadmeHelpers.GetManifestFromPath(infoLocation);
+            
+            if (!registeredModLookup.TryGetValue(manifest.name, out RegisteredMod registeredMod))
+            {
+                registeredMod = new RegisteredMod(manifest);
+                registeredMods.Add(registeredMod);
+                registeredModLookup[manifest.name] = registeredMod;
+            }
+            registeredMod.Initialize(instance);
+            
+            
+            
+            Plugin.Log.LogInfo($"[PluginManager] Registering newly processed mod: {registeredMod.PluginName}({registeredMod.PluginGUID})");
             Flush();
-            modBeingProcess = GetPluginGUID(type);
-        }
-        
-        public static string GetPluginGUID(Type type)
-        {
-            Attribute[] attrs = Attribute.GetCustomAttributes(type);
-  
-            foreach (Attribute attr in attrs)  
-            {  
-                if (attr is BepInPlugin plugin)  
-                {
-                    //Plugin.Log.LogInfo("\t2 Found GUID " + plugin.GUID + "!");
-                    return plugin.GUID;
-                }  
-            }  
-
-            Plugin.Log.LogInfo("Couldn't find GUID!");
-            return null;
+            
+            modBeingProcess = registeredMod;
         }
 
         public void AddNewCard(CardInfo info)
         {
             cardsLoadedDuringPlugin.Add(info);
+
+            // Register JSONLoaded mod
+            string JSONFilePath = info.GetExtendedProperty("JSONFilePath");
+            if (!string.IsNullOrEmpty(JSONFilePath))
+            {
+                ReadmeHelpers.ModManifest manifest = ReadmeHelpers.GetManifestFromPath(JSONFilePath);
+
+                if (!registeredModLookup.TryGetValue(manifest.name, out RegisteredMod registeredMod))
+                {
+                    registeredMod = new RegisteredMod(manifest);
+                    registeredMods.Add(registeredMod);
+                    registeredModLookup[manifest.name] = registeredMod;
+                }
+                
+                string modPrefix = info.GetModPrefix();
+                if (!string.IsNullOrEmpty(modPrefix))
+                {
+                    registeredMod.AddCardModPrefix(modPrefix);
+                }
+                else
+                {
+                    Plugin.Log.LogError($"[PluginManager] Detected JSONLoaded card without modPrefix! " + info.displayedName);
+                }
+            }
         }
 
-        public Dictionary<CardInfo, Dictionary<string, object>> GetCardDefaultValues()
-        {
-            //Plugin.Log.LogInfo("[PluginManager] Getting default values: " + cardDefaultValues.Count);
-            return cardDefaultValues;
-        }
-
-        public Dictionary<CardInfo, CardChangeList> GetModifications()
-        {
-            //Plugin.Log.LogInfo("[PluginManager] Getting card modifications: " + cardModifications.Count);
-            return cardModifications;
-        }
-
-        public List<string> GetCardModifiedFieldNames()
-        {
-            //Plugin.Log.LogInfo("[PluginManager] Getting card modified field names: " + cardFieldModifications.Count);
-            return cardFieldModifications;
-        }
-        
         public void Flush(bool forceFlush = false)
         {
             if (!forceFlush && (modBeingProcess == null || flushProcessing))
@@ -134,12 +138,12 @@ namespace JamesGames.ReadmeMaker
 
         private void FlushCardModifications()
         {
-            Type type = typeof(CardInfo);
             foreach (KeyValuePair<CardInfo,Dictionary<string,object>> pair in cardDefaultValues)
             {
                 CardInfo cardInfo = pair.Key;
                 CardChangeDetails cardChangeDetails = null;
                 Dictionary<string,object> originalData = pair.Value;
+                RegisteredMod cardMod = null;
 
                 foreach (KeyValuePair<string,object> dataPair in originalData)
                 {
@@ -148,20 +152,32 @@ namespace JamesGames.ReadmeMaker
                     object newData = m_cardFields.Find((a)=>a.HeaderName == fieldName).Getter(cardInfo);
                     if (!AreEquals(fieldData, newData))
                     {
+                        if (cardMod == null)
+                        {
+                            cardMod = modBeingProcess.IsModJSONLoader() ? GetRegisteredModFromCard(cardInfo) : modBeingProcess;
+                            if (cardMod == null)
+                            {
+                                string JSONFilePath = cardInfo.GetExtendedProperty("JSONFilePath");
+                                Plugin.Log.LogInfo(
+                                    $"Cannot flush modifications for card {cardInfo.displayedName}. prefix: '{cardInfo.GetModPrefix()}' JSONFilePath: '{JSONFilePath}'");
+                                break;
+                            }
+                        }
+
                         //Plugin.Log.LogInfo($"{cardInfo.displayedName} - {fieldName} modified from '{fieldData}' to '{newData}'");
                         if (cardChangeDetails == null)
                         {
-                            if(!cardModifications.TryGetValue(cardInfo, out var m))
+                            if(!cardMod.CardModifications.TryGetValue(cardInfo, out var m))
                             {
                                 m = new CardChangeList();
-                                cardModifications[cardInfo] = m;
+                                cardMod.CardModifications[cardInfo] = m;
                             }
                             
                             cardChangeDetails = new CardChangeDetails()
                             {
                                 CardInfo = cardInfo,
                                 ChangeIndex = m.Count + 1,
-                                ModGUID = modBeingProcess
+                                ModGUID = cardMod.PluginGUID
                             };
                             m.Add(cardChangeDetails);
                         }
@@ -172,10 +188,11 @@ namespace JamesGames.ReadmeMaker
                             NewData = ReadmeHelpers.ConvertToString(newData)
                         };
 
-                        if (!cardFieldModifications.Contains(fieldName))
+                        if (!cardMod.CardFieldModifications.Contains(fieldName))
                         {
-                            cardFieldModifications.Add(fieldName);
+                            cardMod.CardFieldModifications.Add(fieldName);
                         }
+                        //Plugin.Log.LogInfo($"Flushed modifications for card {cardInfo.displayedName} to mod '" + cardMod.PluginName + "'");
                     }
                     else
                     {
@@ -185,6 +202,46 @@ namespace JamesGames.ReadmeMaker
 
                 CacheCardDefaultValues(cardInfo);
             }
+        }
+
+        private RegisteredMod GetRegisteredModFromCard(CardInfo cardInfo)
+        {
+            Plugin.Log.LogInfo($"[PluginManager] GetRegisteredModFromCard {cardInfo.displayedName}");
+            string modPrefix = cardInfo.GetModPrefix();
+            if (!string.IsNullOrEmpty(modPrefix))
+            {
+                // Try using mod prefix
+                foreach (RegisteredMod mod in registeredMods)
+                {
+                    if (mod.PluginCardModPrefixes.Contains(modPrefix))
+                    {
+                        return mod;
+                    }
+                }
+            }
+
+            // Lookup by JSON path manifest
+            string JSONFilePath = cardInfo.GetExtendedProperty("JSONFilePath");
+            if (!string.IsNullOrEmpty(JSONFilePath))
+            {
+                ReadmeHelpers.ModManifest manifest = ReadmeHelpers.GetManifestFromPath(JSONFilePath);
+                if (registeredModLookup.TryGetValue(manifest.name, out RegisteredMod registeredMod))
+                {
+                    Plugin.Log.LogInfo($"[PluginManager] GetRegisteredModFromCard Got manifest {manifest.name}");
+                    return registeredMod;
+                }
+                else
+                {
+                    Plugin.Log.LogInfo($"[PluginManager] Could not get manifest from path {JSONFilePath}");
+                }
+            }
+            else
+            {
+                Plugin.Log.LogInfo($"[PluginManager] Card does not have a JSONFilePath!");
+            }
+
+            // Base card?
+            return null;
         }
 
         private void FlushNewlyAddedCards()
@@ -197,6 +254,16 @@ namespace JamesGames.ReadmeMaker
             Plugin.Log.LogInfo($"[PluginManager] Flushing {cardsLoadedDuringPlugin.Count} new cards from " + modBeingProcess);
             foreach (CardInfo newCard in cardsLoadedDuringPlugin)
             {
+                string modPrefix = newCard.GetModPrefix();
+                if (!string.IsNullOrEmpty(modPrefix))
+                {
+                    modBeingProcess.AddCardModPrefix(modPrefix);
+                }
+                else
+                {
+                    Plugin.Log.LogError($"[PluginManager] New Card {newCard.displayedName}({newCard.name}) does not have a ModPrefix!");
+                }
+
                 CacheCardDefaultValues(newCard);
             }
             cardsLoadedDuringPlugin.Clear();

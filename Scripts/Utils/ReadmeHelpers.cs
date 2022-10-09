@@ -3,15 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using DiskCardGame;
 using InscryptionAPI.Card;
 using InscryptionAPI.Guid;
+using ReadmeMaker.Patches;
+using UnityEngine;
 
 namespace JamesGames.ReadmeMaker
 {
     public class ReadmeHelpers
     {
+	    public class ModManifest
+	    {
+		    public string name;
+	    }
+	    
         public static List<StatIconManager.FullStatIcon> GetAllNewStatInfoIcons()
         {
             return new List<StatIconManager.FullStatIcon>(Helpers.GetStaticPrivateField <ObservableCollection<StatIconManager.FullStatIcon>>(typeof(StatIconManager), "NewStatIcons"));
@@ -82,22 +90,12 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTraitName(Trait trait)
 		{
-			if (ReadmeDump.TraitToName.TryGetValue(trait, out string name))
-			{
-				return name;
-			}
-			
 			return trait.ToString();
 		}
 
 		public static string GetTribeName(Tribe tribe)
 		{
-			if (ReadmeDump.TribeToName.TryGetValue(tribe, out string name))
-			{
-				return name;
-			}
-
-			string tribeName = Helpers.GetName(((int)tribe).ToString());
+			string tribeName = tribe.GetName();
 			if (!string.IsNullOrEmpty(tribeName))
 			{
 				return tribeName;
@@ -108,7 +106,7 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTribeGUID(Tribe tribe)
 		{
-			return Helpers.GetGUID(((int)tribe).ToString());
+			return tribe.GetModTag();
 		}
 
 		public static string GetPower(CardInfo info)
@@ -406,6 +404,27 @@ namespace JamesGames.ReadmeMaker
 	        }
 	        
 	        return convertToString;
+        }
+
+        public static ModManifest GetManifestFromPath(string path)
+        {
+	        string directory = Path.GetDirectoryName(path);
+	        while (!File.Exists(Path.Combine(directory, "manifest.json")))
+	        {
+		        DirectoryInfo directoryInfo = Directory.GetParent(directory);
+		        if (directoryInfo == null)
+		        {
+			        return new ModManifest()
+			        {
+				        name = "Could not find manifest.json from path '" + path + "'"
+			        };
+		        }
+		        
+		        directory = directoryInfo.FullName;
+	        }
+	        string manifestJSON = File.ReadAllText(Path.Combine(directory, "manifest.json"));
+	        ModManifest manifest = JsonUtility.FromJson<ModManifest>(manifestJSON);
+	        return manifest;
         }
     }
 }

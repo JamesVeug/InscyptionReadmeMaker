@@ -8,7 +8,7 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Side Deck Cards";
         public override bool Enabled => ReadmeConfig.Instance.SideDeckShow;
 
-        protected override List<CardInfo> GetCards()
+        protected override List<CardInfo> GetCards(RegisteredMod mod)
         {
             if (!ReadmeConfig.Instance.SideDeckShow)
             {
@@ -16,7 +16,7 @@ namespace JamesGames.ReadmeMaker.Sections
             }
 	        
             List<CardInfo> allCards = ScriptableObjectLoader<CardInfo>.AllData;
-            List<CardInfo> sideDeckCards = allCards.FindAll((a) => a.HasTrait((Trait)5103));
+            List<CardInfo> sideDeckCards = allCards.FindAll((a) => a.HasTrait((Trait)5103) && mod.PluginCardModPrefixes.Contains(GetGUID(a)));
             return sideDeckCards;
         }
     }

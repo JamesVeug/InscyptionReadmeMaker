@@ -66,8 +66,9 @@ namespace JamesGames.ReadmeMaker
 			    Plugin.Log.LogError("Could not add Custom Section. null not acceptable.");
 			    return;
 		    }
-		    
-		    ExternalSectionReader externalSectionReader = new ExternalSectionReader(section);
+
+		    string guid = PluginManager.Instance.ModBeingProcess.PluginGUID;
+		    ExternalSectionReader externalSectionReader = new ExternalSectionReader(section, guid);
 		    Sections.Add(externalSectionReader);
 		    Plugin.Log.LogInfo($"Added Custom Section '{externalSectionReader.SectionName}'");
 	    }
@@ -80,50 +81,11 @@ namespace JamesGames.ReadmeMaker
 			    return;
 		    }
 		    
-		    ExternalCardSectionReader externalSectionReader = new ExternalCardSectionReader(section);
+		    string guid = PluginManager.Instance.ModBeingProcess.PluginGUID;
+		    ExternalCardSectionReader externalSectionReader = new ExternalCardSectionReader(section, guid);
 		    Sections.Add(externalSectionReader);
 		    Plugin.Log.LogInfo($"Added Custom Card Section '{externalSectionReader.SectionName}'");
 	    }
-
-	    public static void RenameTrait(Trait trait, string traitName)
-	    {
-		    TraitToName[trait] = traitName;
-	    }
-
-	    public static void RenameTribe(Tribe trait, string traitName)
-	    {
-		    TribeToName[trait] = traitName;
-	    }
-
-	    /// <summary>
-	    /// When the ReadmeMaker shows a card that has a SpecialStatIcon that changes the Power & Health of a card, this function allows the card to show the proper name of a number for the SpecialStatIcon.
-	    /// If you have a SpecialStatIcon on a card and this is not applied then it will not be shown in the Power and/or Health column on the card.
-	    /// If the SpecialStatIcon has an entry in the rule book then Name can be null and the Readme Maker will use that instead.
-	    /// </summary>
-	    public static void RenameSpecialStatIcon(SpecialTriggeredAbility specialTriggeredAbility, string name, bool powerModifier, bool healthModifier)
-	    {
-		    if (powerModifier)
-		    {
-			    PowerModifyingSpecials[specialTriggeredAbility] = name;
-		    }
-		    
-		    if (healthModifier)
-		    {
-			    HealthModifyingSpecials[specialTriggeredAbility] = name;
-		    }
-	    }
-
-	    // Custom Traits made by mods that we want to show the name of instead of a number
-	    internal static Dictionary<Trait, string> TraitToName = new Dictionary<Trait, string>()
-	    {
-		    { (Trait)5103, "Side Deck" }
-	    };
-
-	    // Custom Tribes made by mods that we want to show the name of instead of a number
-	    internal static Dictionary<Tribe, string> TribeToName = new Dictionary<Tribe, string>()
-	    {
-		    
-	    };
 
 	    internal static Dictionary<SpecialTriggeredAbility, string> PowerModifyingSpecials = new Dictionary<SpecialTriggeredAbility, string>()
 	    {
@@ -145,17 +107,23 @@ namespace JamesGames.ReadmeMaker
         public static void Dump()
         {
 	        Plugin.Log.LogInfo("Generating Readme...");
-	        string text = GetDumpString();
 
-	        string fullPath = GetOutputFullPath();
-	        Plugin.Log.LogInfo("Dumping Readme to '" + fullPath + "'");
+	        foreach (RegisteredMod mod in PluginManager.Instance.RegisteredMods)
+	        {
+		        Plugin.Log.LogInfo("Generating Readme for " + mod.PluginName);
 	        
-	        File.WriteAllText(fullPath, text);
+		        string text = GetDumpString(mod);
+
+		        string fullPath = GetOutputFullPath(mod);
+		        Plugin.Log.LogInfo($"Dumping {mod.PluginName} Readme to '{fullPath}'");
+		        File.WriteAllText(fullPath, text);
+	        }
+	        
 	    }
 
-        private static string GetOutputFullPath()
+        private static string GetOutputFullPath(RegisteredMod mod)
         {
-	        string defaultPath = Path.Combine(Plugin.Directory, "GENERATED_README.md");
+	        string defaultPath = Path.Combine(Plugin.Directory, $"GENERATED_README_{mod.PluginName.Replace(' ', '_')}.md");
 	        string path = ReadmeConfig.Instance.ReadmeMakerSavePath;
 	        if (string.IsNullOrEmpty(path))
 	        {
@@ -181,14 +149,14 @@ namespace JamesGames.ReadmeMaker
 	        return path;
         }
 
-        private static string GetDumpString()
+        private static string GetDumpString(RegisteredMod registeredMod)
         {
 	        // Initialize everything for the Summary
 	        foreach (ISection section in Sections)
 	        {
 		        if (section.Enabled)
 		        {
-			        section.Initialize();
+			        section.Initialize(registeredMod);
 		        }
 	        }
 

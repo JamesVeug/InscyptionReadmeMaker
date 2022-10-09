@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using InscryptionAPI.Card;
 using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility;
@@ -11,10 +12,10 @@ namespace JamesGames.ReadmeMaker.Sections
         public override string SectionName => "New Special Abilities";
         public override bool Enabled => ReadmeConfig.Instance.SpecialAbilitiesShow;
         
-        public override void Initialize()
+        public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities());
+            rawData.AddRange(ReadmeHelpers.GetAllNewSpecialAbilities().Where(x=>GetGUID(x) == mod.PluginGUID));
 	        
             // Remove special abilities that have no rulebook entry
             var icons = ReadmeHelpers.GetAllNewStatInfoIcons();

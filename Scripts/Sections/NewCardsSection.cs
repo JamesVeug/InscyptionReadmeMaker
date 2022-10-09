@@ -7,9 +7,9 @@ namespace JamesGames.ReadmeMaker.Sections
     {
         public override string SectionName => "New Cards";
 
-        protected override List<CardInfo> GetCards()
+        protected override List<CardInfo> GetCards(RegisteredMod mod)
         {
-            List<CardInfo> allCards = base.GetCards();
+            List<CardInfo> allCards = base.GetCards(mod);
             allCards.RemoveAll((a) => a.metaCategories.Contains(CardMetaCategory.Rare));
             return allCards;
         }
