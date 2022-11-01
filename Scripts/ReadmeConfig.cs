@@ -134,6 +134,7 @@ namespace JamesGames.ReadmeMaker
         public readonly bool SigilsShow = Bind(SectionsHeader, "Show Sigils", true, "Show all new sigils listed on cards in its own section.");
         public readonly bool SpecialAbilitiesShow = Bind(SectionsHeader, "Show Special Abilities", true, "Show all new special abilities listed on cards in its own section.");
         public readonly bool TribesShow = Bind(SectionsHeader, "Show Tribes", true, "Show all new tribes added in its own section.");
+        public readonly bool ConsumableItemsShow = Bind(SectionsHeader, "Show Consumable Items", true, "Show all new Consumable Items added in its own section.");
 
         public readonly CardSortByType CardSortBy = Bind(CardsHeader, "Sort Type", CardSortByType.Name, "Changes the order that the cards will be displayed in.");
         public readonly bool CardShowUnobtainable = Bind(CardsHeader, "Show Unobtainable Cards", true, "Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)");

@@ -26,6 +26,7 @@ namespace JamesGames.ReadmeMaker
 		    new NewEncounterSection(),
 		    new NewRegionsSection(),
 		    new NewTribesSection(),
+		    new NewConsumableItemSection(),
 		    new NewConfigsSection(),
 	    };
 	    
