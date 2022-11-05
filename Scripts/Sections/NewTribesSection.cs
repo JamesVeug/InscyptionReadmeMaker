@@ -17,7 +17,7 @@ namespace JamesGames.ReadmeMaker.Sections
         public override void Initialize(RegisteredMod mod)
         {
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
-            rawData.AddRange(TribeManager.tribes.Where(x=>GetGUID(x) == mod.PluginGUID));
+            rawData.AddRange(TribeManager.NewTribes.Where(x=>GetGUID(x) == mod.PluginGUID));
         }
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
