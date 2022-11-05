@@ -26,7 +26,10 @@ namespace JamesGames.ReadmeMaker.Sections
             splitCards = BreakdownForTable(out headers, new[]
             {
                 new TableColumn<ConsumableItemData>("Name", (x)=>x.rulebookName),
-                new TableColumn<ConsumableItemData>("Description", (x)=>RuleBookPage.ParseCardDefinition(x.rulebookDescription))
+                new TableColumn<ConsumableItemData>("Description", (x)=>RuleBookPage.ParseCardDefinition(x.rulebookDescription)),
+                new TableColumn<ConsumableItemData>("Randomly Given", (x)=>(!x.notRandomlyGiven) ? "Yes" : ""),
+                new TableColumn<ConsumableItemData>("Region Specific", (x)=>(x.regionSpecific) ? "Yes" : ""),
+                new TableColumn<ConsumableItemData>("Power Level", (x)=>x.powerLevel.ToString()),
             });
         }
 
