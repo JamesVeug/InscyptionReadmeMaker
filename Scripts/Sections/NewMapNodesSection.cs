@@ -31,7 +31,7 @@ namespace JamesGames.ReadmeMaker.Sections
             rawData.Clear(); // Clear so when we re-dump everything we don't double up
             foreach (NodeManager.NodeInfo info in NodeManager.AllNodes)
             {
-                if (info.guid != mod.PluginGUID)
+                if (info.ModGUID != mod.PluginGUID)
                 {
                     continue;
                 }
