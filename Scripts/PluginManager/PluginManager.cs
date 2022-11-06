@@ -259,10 +259,6 @@ namespace JamesGames.ReadmeMaker
                 {
                     modBeingProcess.AddCardModPrefix(modPrefix);
                 }
-                else
-                {
-                    Plugin.Log.LogError($"[PluginManager] New Card {newCard.displayedName}({newCard.name}) does not have a ModPrefix!");
-                }
 
                 CacheCardDefaultValues(newCard);
             }
