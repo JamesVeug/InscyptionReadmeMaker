@@ -102,6 +102,10 @@ private void Awake()
 }
 ```
 
+## 37 New Configs
+
+<details>
+  <summary>See all configs</summary>
 
 ## 37 New Configs
 |Section|Key|Description|
@@ -144,6 +148,7 @@ private void Awake()
 |4. Card Section Options|Sort Type|Changes the order that the cards will be displayed in.|
 |4. Card Section Options|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
 
+</details>
 
 
 ## Contributers
@@ -159,15 +164,22 @@ private void Awake()
 
 # Update notes:
 
+## `Version: 1.2.0 - 6/11/2022`
+### General:
+- The Readme Maker creates a separate GENERATED_README per mod now!
+
+### Added:
+- Added support for new Consumable Items
+
+<details>
+  <summary>See older changes</summary>
+
 ## `Version: 1.1.0 - 2/10/2022`
 ### Added:
 - Support for custom Sections from mods
 - Support for custom card Sections from mods
 - Support for custom costs from mods
 
-
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 1.0.0 - 29/6/2022`
 ### General:
