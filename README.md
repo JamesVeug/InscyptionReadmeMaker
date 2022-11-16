@@ -164,6 +164,35 @@ private void Awake()
 
 # Update notes:
 
+## `Version: 1.3.0 - 17/11/2022`
+### General:
+- Upgraded API to 2.7.0
+ 
+### Added:
+#### General
+- Added support for new Pelts
+- Added support for new Gramophone Tracks
+
+#### Region Section
+- Added Main Tribes column
+- Added Opponents column
+- Added Items column
+- Added Encounters column
+
+#### Encounters Section
+- Added Min Difficulty column
+- Added Max Difficulty column
+- Added Regions column
+- Added Main Tribes column
+- Added Turns column
+
+### Changes:
+- Replaced Region Specific from Item Section with Available In Regions column
+
+<details>
+  <summary>See older changes</summary>
+
+
 ## `Version: 1.2.0 - 6/11/2022`
 ### General:
 - The Readme Maker creates a separate GENERATED_README per mod now!
@@ -171,8 +200,6 @@ private void Awake()
 ### Added:
 - Added support for new Consumable Items
 
-<details>
-  <summary>See older changes</summary>
 
 ## `Version: 1.1.0 - 2/10/2022`
 ### Added:
