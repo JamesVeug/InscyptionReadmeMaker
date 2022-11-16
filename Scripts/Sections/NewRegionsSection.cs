@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DiskCardGame;
 using InscryptionAPI.Regions;
 using ReadmeMaker.Patches;
+using UnityEngine;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -20,11 +22,97 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override void GetTableDump(out List<TableHeader> headers, out List<Dictionary<string, string>> splitCards)
         {
-            splitCards = BreakdownForTable(out headers, new[]
+            List<TableColumn<Part1RegionData>> columns = new List<TableColumn<Part1RegionData>>
             {
-                new TableColumn<Part1RegionData>("Name", (a)=>a.region.name),
-                new TableColumn<Part1RegionData>("Tier", (a)=>a.tier.ToString()),
-            });
+                new TableColumn<Part1RegionData>("Name", (a) => a.region.name),
+                new TableColumn<Part1RegionData>("Tier", (a) => a.tier.ToString()),
+                new TableColumn<Part1RegionData>("Main Tribes", GetDominantTribeNames),
+                new TableColumn<Part1RegionData>("Opponents", GetOpponents),
+                new TableColumn<Part1RegionData>("Items", GetItems),
+                new TableColumn<Part1RegionData>("Encounters", GetEncounters)
+            };
+
+            splitCards = BreakdownForTable(out headers, columns.ToArray());
+        }
+
+        private string GetItems(Part1RegionData region)
+        {
+            string items = "";
+            for (int i = 0; i < region.region.consumableItems.Count; i++)
+            {
+                ConsumableItemData opponentType = region.region.consumableItems[i];
+                string itemName = opponentType.rulebookName;
+                if (i == 0)
+                {
+                    items = itemName;
+                }
+                else
+                {
+                    items = "," + itemName;
+                }
+            }
+
+            return items;
+        }
+
+        private string GetOpponents(Part1RegionData region)
+        {
+            string opponents = "";
+            for (int i = 0; i < region.region.bosses.Count; i++)
+            {
+                Opponent.Type opponentType = region.region.bosses[i];
+                string opponent = opponentType.ToString();
+                if (i == 0)
+                {
+                    opponents = opponent;
+                }
+                else
+                {
+                    opponents += "," + opponent;
+                }
+            }
+
+            return opponents;
+        }
+
+        private string GetEncounters(Part1RegionData region)
+        {
+            string encounters = "";
+            for (int i = 0; i < region.region.encounters.Count; i++)
+            {
+                EncounterBlueprintData encounter = region.region.encounters[i];
+                string tribeName = encounter.name;
+                if (i == 0)
+                {
+                    encounters = tribeName;
+                }
+                else
+                {
+                    encounters += "," + tribeName;
+                }
+            }
+
+            return encounters;
+        }
+
+        private string GetDominantTribeNames(Part1RegionData region)
+        {
+            string tribes = "";
+            for (int i = 0; i < region.region.dominantTribes.Count; i++)
+            {
+                Tribe tribe = region.region.dominantTribes[i];
+                string tribeName = ReadmeHelpers.GetTribeName(tribe);
+                if (i == 0)
+                {
+                    tribes = tribeName;
+                }
+                else
+                {
+                    tribes += "," + tribeName;
+                }
+            }
+
+            return tribes;
         }
 
         public override string GetGUID(Part1RegionData o)
