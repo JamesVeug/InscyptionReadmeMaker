@@ -27,8 +27,9 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<ICustomPeltData>("Name", GetNameOfCard),
                 new TableColumn<ICustomPeltData>("Cost", (a)=>a.Cost().ToString()),
                 new TableColumn<ICustomPeltData>("Total Sigils", (a)=>a.AbilityCount.ToString()),
-                new TableColumn<ICustomPeltData>("Max Choices", (a)=>a.MaxChoices.ToString()),
                 new TableColumn<ICustomPeltData>("Available At Trader", (a)=>a.AvailableAtTrader.ToString()),
+                new TableColumn<ICustomPeltData>("Cards To Choose", (a)=>a.MaxChoices.ToString()),
+                new TableColumn<ICustomPeltData>("Cards In Pool", (a)=>a.GetChoices().Count.ToString()),
             });
         }
 

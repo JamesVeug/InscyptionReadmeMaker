@@ -22,8 +22,8 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             splitCards = BreakdownForTable(out headers, new[]
             {
-                new TableColumn<GramophoneManager.TrackInfo>("Name", (a)=>a.TrackName),
                 new TableColumn<GramophoneManager.TrackInfo>("Track Index", GetTrackIndex),
+                new TableColumn<GramophoneManager.TrackInfo>("Name", (a)=>a.TrackName),
             });
         }
 
