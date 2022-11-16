@@ -142,7 +142,7 @@ namespace JamesGames.ReadmeMaker
         public readonly bool SpecialAbilitiesShow = Bind(SectionsHeader, "Show Special Abilities", true, "Show all new special abilities listed on cards in its own section.");
         public readonly bool TribesShow = Bind(SectionsHeader, "Show Tribes", true, "Show all new tribes added in its own section.");
         public readonly bool ConsumableItemsShow = Bind(SectionsHeader, "Show Consumable Items", true, "Show all new Consumable Items added in its own section.");
-
+        public readonly bool PeltsShow = Bind(SectionsHeader, "Show Pelts", true, "Show all new Pelts added in its own section.");
         public readonly bool GramophoneTracksShow = Bind(SectionsHeader, "Show Gramophone Tracks", true, "Show all new Gramophone Tracks added in its own section.");
         public readonly GramophoneSortByType GramophoneTracksSortBy = Bind(SectionsHeader, "Gramophone Sort Type", GramophoneSortByType.PlayOrder, "Order of which the Gramophone tracks will show in.");
         
