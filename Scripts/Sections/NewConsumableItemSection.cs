@@ -6,6 +6,7 @@ using DiskCardGame;
 using InscryptionAPI.Card;
 using InscryptionAPI.Items;
 using InscryptionAPI.Items.Extensions;
+using InscryptionAPI.Regions;
 using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
@@ -28,9 +29,46 @@ namespace JamesGames.ReadmeMaker.Sections
                 new TableColumn<ConsumableItemData>("Name", (x)=>x.rulebookName),
                 new TableColumn<ConsumableItemData>("Description", (x)=>RuleBookPage.ParseCardDefinition(x.rulebookDescription)),
                 new TableColumn<ConsumableItemData>("Randomly Given", (x)=>(!x.notRandomlyGiven) ? "Yes" : ""),
-                new TableColumn<ConsumableItemData>("Region Specific", (x)=>(x.regionSpecific) ? "Yes" : ""),
                 new TableColumn<ConsumableItemData>("Power Level", (x)=>x.powerLevel.ToString()),
+                new TableColumn<ConsumableItemData>("Available In Regions", GetRegionNames)
             });
+        }
+
+        private string GetRegionNames(ConsumableItemData a)
+        {
+            if (!a.regionSpecific)
+            {
+                return "All";
+            }
+
+            List<RegionData> regions = new List<RegionData>();
+            foreach (RegionData regionData in RegionManager.AllRegionsCopy)
+            {
+                foreach (ConsumableItemData encounter in regionData.consumableItems)
+                {
+                    if (encounter.name == a.name)
+                    {
+                        regions.Add(regionData);
+                        break;
+                    }
+                }
+            }
+
+            string regionNames = "None";
+            for (int i = 0; i < regions.Count; i++)
+            {
+                RegionData regionData = regions[i];
+                if (i == 0)
+                {
+                    regionNames = regionData.name;
+                }
+                else
+                {
+                    regionNames += "," + regionData.name;
+                }
+            }
+
+            return regionNames;
         }
 
         public override string GetGUID(ConsumableItemData o)
