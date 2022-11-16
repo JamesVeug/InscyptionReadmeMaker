@@ -30,16 +30,14 @@ namespace JamesGames.ReadmeMaker.Sections
         private string GetTrackIndex(GramophoneManager.TrackInfo arg)
         {
             string trackName = $"{GetGUID(arg)}_{Path.GetFileName(arg.FilePath)}";
-            Plugin.Log.LogInfo("[GetTrackIndex] " + trackName);
-
-            for (int i = 0; i < GramophoneInteractable.TRACK_IDS.Count; i++)
+            int index = GramophoneInteractable.TRACK_IDS.IndexOf(trackName);
+            if (index >= 0)
             {
-                var VARIABLE = GramophoneInteractable.TRACK_IDS[i];
-                Plugin.Log.LogInfo("\t" + i + " " + VARIABLE);
+                // Show 1 based
+                index++;
             }
-
-            int indexOf = GramophoneInteractable.TRACK_IDS.IndexOf(trackName);
-            return indexOf.ToString();
+            
+            return index.ToString();
         }
 
         public override string GetGUID(GramophoneManager.TrackInfo o)
