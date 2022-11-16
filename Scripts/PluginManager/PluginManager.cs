@@ -69,6 +69,8 @@ namespace JamesGames.ReadmeMaker
             cardsLoadedDuringPlugin.AddRange(CardManager.BaseGameCards);
             Plugin.Log.LogInfo("[PluginManager] Added base cards: " + cardsLoadedDuringPlugin.Count);
             Flush(true);
+            
+            RegisterPlugin(Plugin.Instance);
         }
         
         public void RegisterPlugin(BaseUnityPlugin instance)

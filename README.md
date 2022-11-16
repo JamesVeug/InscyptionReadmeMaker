@@ -102,12 +102,11 @@ private void Awake()
 }
 ```
 
-## 37 New Configs
+## 41 New Configs
 
 <details>
   <summary>See all configs</summary>
 
-## 37 New Configs
 |Section|Key|Description|
 |:-|:-|:-|
 |1. Readme Maker|Enabled|Should the ReadmeMaker create a GeneratedReadme?|
@@ -122,13 +121,17 @@ private void Awake()
 |2. General|Show GUIDs|Show the mod GUID for each sigils, tribes... etc.|
 |2. General|Sort By|Changes the order of how rows in sections are displayed.|
 |2. General|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc.|
+|3. Toggle Sections|Gramophone Sort Type|Order of which the Gramophone tracks will show in.|
 |3. Toggle Sections|Show Boons|Show all new Boons added in its own section..|
 |3. Toggle Sections|Show Cards Modified|Show a section that lists all the cards modified.|
 |3. Toggle Sections|Show Configs|Should the Readme Maker show a section listing all the new configs added?|
+|3. Toggle Sections|Show Consumable Items|Show all new Consumable Items added in its own section.|
 |3. Toggle Sections|Show Encounters|Show all new encounters added in its own section..|
+|3. Toggle Sections|Show Gramophone Tracks|Show all new Gramophone Tracks added in its own section.|
 |3. Toggle Sections|Show Kaycees Mod Challenges|Show all new challenges added for Kaycee's mod.|
 |3. Toggle Sections|Show Kaycees Mod Starter Decks|Show all new starter decks for Kaycee's mod.|
 |3. Toggle Sections|Show Map Nodes|Show all new map nodes added in its own section..|
+|3. Toggle Sections|Show Pelts|Show all new Pelts added in its own section.|
 |3. Toggle Sections|Show Regions|Show all new regions.|
 |3. Toggle Sections|Show Side Decks|Show a section that lists all the custom side deck cards.|
 |3. Toggle Sections|Show Sigils|Show all new sigils listed on cards in its own section.|
@@ -147,8 +150,8 @@ private void Awake()
 |4. Card Section Options|Show Unobtainable Cards|Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)|
 |4. Card Section Options|Sort Type|Changes the order that the cards will be displayed in.|
 |4. Card Section Options|Sort by Ascending|True=Names will be ordered from A-Z, False=Z-A... etc|
-
 </details>
+
 
 
 ## Contributers
