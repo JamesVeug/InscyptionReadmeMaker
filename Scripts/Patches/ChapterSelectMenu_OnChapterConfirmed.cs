@@ -1,12 +1,11 @@
 ﻿using DiskCardGame;
 using HarmonyLib;
-using InscryptionAPI;
 using JamesGames.ReadmeMaker;
 
 namespace API.Patches
 {
-    [HarmonyPatch(typeof(InscryptionAPIPlugin), "ResyncAll")]
-    public class InscryptionAPIPlugin_ResyncAll
+    [HarmonyPatch(typeof(ChapterSelectMenu), "OnChapterConfirmed")]
+    public class ChapterSelectMenu_OnChapterConfirmed
     {
         public static void Postfix()
         {
