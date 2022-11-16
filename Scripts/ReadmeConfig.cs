@@ -56,6 +56,13 @@ namespace JamesGames.ReadmeMaker
             Power,
             Health,
         }
+        
+        public enum GramophoneSortByType
+        {
+            GUID,
+            Name,
+            PlayOrder
+        }
 
         private const string DefaultIgnoreByModGUIDs =
             "_jamesgames.inscryption.readmemaker," +
@@ -136,6 +143,9 @@ namespace JamesGames.ReadmeMaker
         public readonly bool TribesShow = Bind(SectionsHeader, "Show Tribes", true, "Show all new tribes added in its own section.");
         public readonly bool ConsumableItemsShow = Bind(SectionsHeader, "Show Consumable Items", true, "Show all new Consumable Items added in its own section.");
 
+        public readonly bool GramophoneTracksShow = Bind(SectionsHeader, "Show Gramophone Tracks", true, "Show all new Gramophone Tracks added in its own section.");
+        public readonly GramophoneSortByType GramophoneTracksSortBy = Bind(SectionsHeader, "Gramophone Sort Type", GramophoneSortByType.PlayOrder, "Order of which the Gramophone tracks will show in.");
+        
         public readonly CardSortByType CardSortBy = Bind(CardsHeader, "Sort Type", CardSortByType.Name, "Changes the order that the cards will be displayed in.");
         public readonly bool CardShowUnobtainable = Bind(CardsHeader, "Show Unobtainable Cards", true, "Show cards that can not be added to your deck.  (Trail cards, Frozen Away Cards, Evolutions... etc)");
         public readonly bool CardSortAscending = Bind(CardsHeader, "Sort by Ascending", true, "True=Names will be ordered from A-Z, False=Z-A... etc");
