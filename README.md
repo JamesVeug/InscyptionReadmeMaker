@@ -1,5 +1,5 @@
 # Readme Maker
-Creates a file that lists all new and modifier cards/abilities and special abilities to be easiy viewed or even used in your custom mods Readme.
+Creates a file that lists all new and modified cards/abilities and special abilities... etc to be easiy viewed or even used in your Mods' Readme.
 
 
 
@@ -167,6 +167,14 @@ private void Awake()
 
 # Update notes:
 
+## `Version: 1.3.1 - 20/11/2022`
+### General:
+- Fixed error with API 2.7.1's changes to the Pelt Manager
+
+<details>
+  <summary>See older changes</summary>
+
+
 ## `Version: 1.3.0 - 17/11/2022`
 ### General:
 - Upgraded API to 2.7.0
@@ -191,9 +199,6 @@ private void Awake()
 
 ### Changes:
 - Replaced Region Specific from Item Section with Available In Regions column
-
-<details>
-  <summary>See older changes</summary>
 
 
 ## `Version: 1.2.0 - 6/11/2022`

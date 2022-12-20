@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
 using InscryptionAPI.Pelts;
-using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewPeltsSection : ASection<ICustomPeltData>
+    public class NewPeltsSection : ASection<PeltManager.CustomPeltData>
     {
         public override string SectionName => "New Pelts";
         public override bool Enabled => ReadmeConfig.Instance.PeltsShow;
@@ -24,27 +22,41 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             splitCards = BreakdownForTable(out headers, new[]
             {
-                new TableColumn<ICustomPeltData>("Name", GetNameOfCard),
-                new TableColumn<ICustomPeltData>("Cost", (a)=>a.Cost().ToString()),
-                new TableColumn<ICustomPeltData>("Total Sigils", (a)=>a.AbilityCount.ToString()),
-                new TableColumn<ICustomPeltData>("Available At Trader", (a)=>a.AvailableAtTrader.ToString()),
-                new TableColumn<ICustomPeltData>("Cards To Choose", (a)=>a.MaxChoices.ToString()),
-                new TableColumn<ICustomPeltData>("Cards In Pool", (a)=>a.GetChoices().Count.ToString()),
+                new TableColumn<PeltManager.CustomPeltData>("Name", GetNameOfCard),
+                new TableColumn<PeltManager.CustomPeltData>("Cost", (a)=>a.Cost().ToString()),
+                new TableColumn<PeltManager.CustomPeltData>("Total Sigils", (a)=>a.AbilityCount.ToString()),
+                new TableColumn<PeltManager.CustomPeltData>("Available At Trader", (a)=>a.AvailableAtTrader.ToString()),
+                new TableColumn<PeltManager.CustomPeltData>("Cards To Choose", (a)=>a.MaxChoices.ToString()),
+                new TableColumn<PeltManager.CustomPeltData>("Cards In Pool", (a)=>a.GetChoices().Count.ToString()),
             });
         }
 
-        private string GetNameOfCard(ICustomPeltData arg)
+        private string GetNameOfCard(PeltManager.CustomPeltData arg)
         {
-            CardInfo cardByName = CardLoader.GetCardByName(arg.CardNameOfPelt);
+            if (arg.CardNameOfPelt == null)
+            {
+                return "null";
+            }
+            else if (arg.CardNameOfPelt == "")
+            {
+                return arg.CardNameOfPelt;
+            }
+            
+            CardInfo cardByName = CardManager.AllCardsCopy.Find((a)=>a.name == arg.CardNameOfPelt);
+            if (cardByName == null)
+            {
+                return arg.CardNameOfPelt;
+            }
+            
             return cardByName.displayedName;
         }
 
-        public override string GetGUID(ICustomPeltData o)
+        public override string GetGUID(PeltManager.CustomPeltData o)
         {
             return o.PluginGUID;
         }
 
-        protected override int Sort(ICustomPeltData a, ICustomPeltData b)
+        protected override int Sort(PeltManager.CustomPeltData a, PeltManager.CustomPeltData b)
         {
             switch (ReadmeConfig.Instance.GeneralSortBy)
             {
