@@ -167,12 +167,17 @@ private void Awake()
 
 # Update notes:
 
-## `Version: 1.3.1 - 20/11/2022`
+## `Version: 1.3.2 - 04/01/2023`
 ### General:
-- Fixed error with API 2.7.1's changes to the Pelt Manager
+- Fixed Custom Traits showing as a number instead of a name
 
 <details>
   <summary>See older changes</summary>
+
+
+## `Version: 1.3.1 - 20/11/2022`
+### General:
+- Fixed error with API 2.7.1's changes to the Pelt Manager
 
 
 ## `Version: 1.3.0 - 17/11/2022`
