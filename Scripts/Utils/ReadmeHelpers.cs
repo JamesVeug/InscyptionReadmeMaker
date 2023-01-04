@@ -90,7 +90,6 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTraitName(Trait trait)
 		{
-			return trait.ToString();
 			 Tuple<string,string> guidAndNameFromEnum = Helpers.GetGUIDAndNameFromEnum(trait.ToString());
 			 if (guidAndNameFromEnum == null)
 			 {
