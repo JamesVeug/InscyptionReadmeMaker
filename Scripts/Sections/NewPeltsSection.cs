@@ -7,7 +7,7 @@ using InscryptionAPI.Pelts;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
-    public class NewPeltsSection : ASection<PeltManager.CustomPeltData>
+    public class NewPeltsSection : ASection<PeltManager.PeltData>
     {
         public override string SectionName => "New Pelts";
         public override bool Enabled => ReadmeConfig.Instance.PeltsShow;
@@ -22,48 +22,47 @@ namespace JamesGames.ReadmeMaker.Sections
         {
             splitCards = BreakdownForTable(out headers, new[]
             {
-                new TableColumn<PeltManager.CustomPeltData>("Name", GetNameOfCard),
-                new TableColumn<PeltManager.CustomPeltData>("Cost", (a)=>a.Cost().ToString()),
-                new TableColumn<PeltManager.CustomPeltData>("Total Sigils", (a)=>a.AbilityCount.ToString()),
-                new TableColumn<PeltManager.CustomPeltData>("Available At Trader", (a)=>a.AvailableAtTrader.ToString()),
-                new TableColumn<PeltManager.CustomPeltData>("Cards To Choose", (a)=>a.MaxChoices.ToString()),
-                new TableColumn<PeltManager.CustomPeltData>("Cards In Pool", (a)=>a.GetChoices().Count.ToString()),
+                new TableColumn<PeltManager.PeltData>("Name", GetNameOfCard),
+                new TableColumn<PeltManager.PeltData>("Base Cost", (a)=>a.baseBuyPrice.ToString()),
+                new TableColumn<PeltManager.PeltData>("Extra Sigils", (a)=>a.extraAbilitiesToAdd.ToString()),
+                new TableColumn<PeltManager.PeltData>("Available At Trader", (a)=>a.isSoldByTrapper.ToString()),
+                new TableColumn<PeltManager.PeltData>("Cards To Choose", (a)=>a.choicesOfferedByTrader.ToString()),
             });
         }
 
-        private string GetNameOfCard(PeltManager.CustomPeltData arg)
+        private string GetNameOfCard(PeltManager.PeltData arg)
         {
-            if (arg.CardNameOfPelt == null)
+            if (arg.peltCardName == null)
             {
                 return "null";
             }
-            else if (arg.CardNameOfPelt == "")
+            else if (arg.peltCardName == "")
             {
-                return arg.CardNameOfPelt;
+                return arg.peltCardName;
             }
             
-            CardInfo cardByName = CardManager.AllCardsCopy.Find((a)=>a.name == arg.CardNameOfPelt);
+            CardInfo cardByName = CardManager.AllCardsCopy.Find((a)=>a.name == arg.peltCardName);
             if (cardByName == null)
             {
-                return arg.CardNameOfPelt;
+                return arg.peltCardName;
             }
             
             return cardByName.displayedName;
         }
 
-        public override string GetGUID(PeltManager.CustomPeltData o)
+        public override string GetGUID(PeltManager.PeltData o)
         {
-            return o.PluginGUID;
+            return o.pluginGuid;
         }
 
-        protected override int Sort(PeltManager.CustomPeltData a, PeltManager.CustomPeltData b)
+        protected override int Sort(PeltManager.PeltData a, PeltManager.PeltData b)
         {
             switch (ReadmeConfig.Instance.GeneralSortBy)
             {
                 case ReadmeConfig.SortByType.GUID:
                     return String.Compare(GetGUID(a), GetGUID(b), StringComparison.Ordinal);
                 case ReadmeConfig.SortByType.Name:
-                    return String.Compare(a.CardNameOfPelt, b.CardNameOfPelt, StringComparison.Ordinal);
+                    return String.Compare(a.peltCardName, b.peltCardName, StringComparison.Ordinal);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
