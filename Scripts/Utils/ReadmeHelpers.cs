@@ -85,7 +85,8 @@ namespace JamesGames.ReadmeMaker
 		{
 			// Seeing "[creature]" appear in the readme looks jarring, sigil descriptions should appear exactly as they do in the rulebook for consistency
 			string description = Ability.Info.rulebookDescription;
-			return description.Replace("[creature]", "A card bearing this sigil");
+			string parsedDescription = RuleBookPage.ParseCardDefinition(description);
+			return parsedDescription.Replace("[creature]", "A card bearing this sigil");
 		}
 
 		public static string GetTraitName(Trait trait)
