@@ -167,12 +167,18 @@ private void Awake()
 
 # Update notes:
 
-## `Version: 1.3.2 - 04/01/2023`
+## `Version: 1.3.3 - 25/01/2023`
 ### General:
-- Fixed Custom Traits showing as a number instead of a name
+- Updated to API requirement to 2.9.1
+- Fixed Descriptions not populating [Define] correctly.
 
 <details>
   <summary>See older changes</summary>
+
+
+## `Version: 1.3.2 - 04/01/2023`
+### General:
+- Fixed Custom Traits showing as a number instead of a name
 
 
 ## `Version: 1.3.1 - 20/11/2022`
