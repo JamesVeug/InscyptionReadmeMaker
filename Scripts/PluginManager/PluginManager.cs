@@ -388,27 +388,19 @@ namespace JamesGames.ReadmeMaker
                 },
                 new CardInfoGetterInfo() {
                     HeaderName = "Sigils",
-                    Getter = (a) => a.abilities
+                    Getter = SectionUtils.GetSigils
                 },
                 new CardInfoGetterInfo() {
-                    HeaderName = "Special Abilities",
-                    Getter = (a) => a.specialAbilities
+                    HeaderName = "Specials",
+                    Getter = SectionUtils.GetSpecialAbilities
                 },
                 new CardInfoGetterInfo() {
                     HeaderName = "Traits",
-                    Getter = (a) => a.traits
+                    Getter = SectionUtils.GetTraits
                 },
                 new CardInfoGetterInfo() {
                     HeaderName = "Tribes",
-                    Getter = (a) => a.tribes
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Tribes",
-                    Getter = (a) => a.tribes
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Meta Categories",
-                    Getter = (a) => a.metaCategories
+                    Getter = SectionUtils.GetTribes
                 },
             };
         }

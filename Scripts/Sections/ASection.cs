@@ -23,7 +23,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
     public class TableColumn<T>
     {
-        public readonly string HeaderName;
+        public string HeaderName;
         public readonly Alignment Alignment;
         public readonly Func<T, string> Getter;
         public readonly bool Enabled;

@@ -55,9 +55,22 @@ namespace JamesGames.ReadmeMaker.Sections
 
 
             int nameIndex = columns.FindIndex((a)=>a.HeaderName == "Name");
-            columns.Insert(nameIndex + 1, new TableColumn<CardChangeDetails>("Rarity", GetMetaCategories));
+            columns[nameIndex].HeaderName = "Display Name";
+            
+            columns.Insert(nameIndex, new TableColumn<CardChangeDetails>("Name", GetName));
+            columns.Insert(nameIndex + 1, new TableColumn<CardChangeDetails>("MetaCategories", GetMetaCategories));
             
             rows = BreakdownForTable(out tableHeaders, columns.ToArray());
+        }
+
+        private string GetName(CardChangeDetails details)
+        {
+            if (details.Modifications.TryGetValue("Name", out Modification subModification))
+            {
+                return subModification.DisplayString;
+            }
+
+            return details.CardInfo.name;
         }
 
         private string GetMetaCategories(CardChangeDetails details)
