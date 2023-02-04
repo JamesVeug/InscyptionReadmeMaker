@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
@@ -23,7 +24,8 @@ namespace ReadmeMaker.Scripts.Utils
 				new TableColumn<CardInfo>("Tail", GetTail, ReadmeConfig.Instance.CardShowTail),
 				new TableColumn<CardInfo>("Specials", GetSpecialAbilities, ReadmeConfig.Instance.CardShowSpecials),
 				new TableColumn<CardInfo>("Traits", GetTraits, ReadmeConfig.Instance.CardShowTraits),
-				new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes)
+				new TableColumn<CardInfo>("Tribes", GetTribes, ReadmeConfig.Instance.CardShowTribes),
+				new TableColumn<CardInfo>("Meta Categories", GetMetaCategories, ReadmeConfig.Instance.CardShowMetaCategories)
 			};
 
 			if (ReadmeConfig.Instance.ShowGUIDS)
@@ -44,18 +46,43 @@ namespace ReadmeMaker.Scripts.Utils
         public static string GetMetaCategories(CardInfo info)
         {
             string s = "";
-            foreach (CardMetaCategory category in info.metaCategories)
+            for (int i = 0; i < info.metaCategories.Count; i++)
             {
-                if (string.IsNullOrEmpty(s))
+                CardMetaCategory category = info.metaCategories[i];
+                if (i > 0)
                 {
-                    s = category.ToString();
+                    s += ", ";
                 }
-                else
+
+                switch (category)
                 {
-                    s += ", " + category;
+                    case CardMetaCategory.ChoiceNode:
+                        s += "Choice";
+                        break;
+                    case CardMetaCategory.TraderOffer:
+                        s += "Trader";
+                        break;
+                    case CardMetaCategory.Part3Random:
+                        s += "Part3Random";
+                        break;
+                    case CardMetaCategory.Rare:
+                        s += "Rare";
+                        break;
+                    case CardMetaCategory.GBCPack:
+                        s += "GBCPack";
+                        break;
+                    case CardMetaCategory.GBCPlayable:
+                        s += "GBCPlayable";
+                        break;
+                    case CardMetaCategory.AscensionUnlock:
+                        s += "Ascension";
+                        break;
+                    default:
+                        s += category.ToString();
+                        break;
                 }
             }
-            
+
             return s;
         }
         

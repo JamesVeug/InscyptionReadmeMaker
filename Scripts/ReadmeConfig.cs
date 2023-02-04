@@ -159,6 +159,7 @@ namespace JamesGames.ReadmeMaker
         public readonly bool CardShowTail = Bind(CardsHeader, "Show Tail", true, "Show what each card will leave behind before attacked. (Skink -> Skink Tail... etc).");
         public readonly bool CardShowSpecials = Bind(CardsHeader, "Show Specials", true, "Show what each cards Special Abilities are. (Ouroboros, Mirror, CardsInHand... etc).");
         public readonly bool CardShowSigils = Bind(CardsHeader, "Show Sigils", true, "Show what each cards Sigils are. (Waterborne, Fledgling... etc).");
+        public readonly bool CardShowMetaCategories = Bind(CardsHeader, "Show Meta Categories", true, "Show what meta categories a card has. These indicate how the player can obtain the card");
         public readonly bool CardSigilsJoinDuplicates = Bind(CardsHeader, "Join duplicate Sigils", true, "If a card has 2 of the same sigil, it will show as Fledgling(x2) instead of Fledgling, Fledgling.");
         
         private static T Bind<T>(string section, string key, T defaultValue, string description)
