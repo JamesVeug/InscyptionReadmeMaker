@@ -40,6 +40,24 @@ namespace ReadmeMaker.Scripts.Utils
             ReadmeDump.AppendAllCosts(info, costBuilder);
             return costBuilder.ToString();
         }
+		
+        public static string GetMetaCategories(CardInfo info)
+        {
+            string s = "";
+            foreach (CardMetaCategory category in info.metaCategories)
+            {
+                if (string.IsNullOrEmpty(s))
+                {
+                    s = category.ToString();
+                }
+                else
+                {
+                    s += ", " + category;
+                }
+            }
+            
+            return s;
+        }
         
         public static string GetTribes(CardInfo info)
         {

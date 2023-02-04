@@ -5,6 +5,7 @@ using System.Text;
 using BepInEx;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using ReadmeMaker.Scripts.Utils;
 
 namespace JamesGames.ReadmeMaker
 {
@@ -351,6 +352,10 @@ namespace JamesGames.ReadmeMaker
 				new CardInfoGetterInfo() {
                     HeaderName = "Name",
                     Getter = (a) => a.name
+                },
+                new CardInfoGetterInfo() {
+                    HeaderName = "MetaCategories",
+                    Getter = SectionUtils.GetMetaCategories
                 },
                 new CardInfoGetterInfo() {
                     HeaderName = "Mod Prefix",

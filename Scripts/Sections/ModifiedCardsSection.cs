@@ -52,9 +52,22 @@ namespace JamesGames.ReadmeMaker.Sections
                 }, column.Enabled, column.Alignment);
                 columns.Add(c);
             }
-            
+
+
+            int nameIndex = columns.FindIndex((a)=>a.HeaderName == "Name");
+            columns.Insert(nameIndex + 1, new TableColumn<CardChangeDetails>("Rarity", GetMetaCategories));
             
             rows = BreakdownForTable(out tableHeaders, columns.ToArray());
+        }
+
+        private string GetMetaCategories(CardChangeDetails details)
+        {
+            if (details.Modifications.TryGetValue("MetaCategories", out Modification subModification))
+            {
+                return subModification.DisplayString;
+            }
+
+            return SectionUtils.GetMetaCategories(details.CardInfo);
         }
 
         protected override int Sort(CardChangeDetails a, CardChangeDetails b)
