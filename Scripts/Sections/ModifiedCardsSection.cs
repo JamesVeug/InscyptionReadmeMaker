@@ -57,9 +57,6 @@ namespace JamesGames.ReadmeMaker.Sections
             int nameIndex = columns.FindIndex((a)=>a.HeaderName == "Name");
             columns[nameIndex].HeaderName = "Display Name";
             
-            columns.Insert(nameIndex, new TableColumn<CardChangeDetails>("Name", GetName));
-            columns.Insert(nameIndex + 1, new TableColumn<CardChangeDetails>("MetaCategories", GetMetaCategories));
-            
             rows = BreakdownForTable(out tableHeaders, columns.ToArray());
         }
 

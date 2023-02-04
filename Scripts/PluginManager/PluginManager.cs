@@ -5,6 +5,7 @@ using System.Text;
 using BepInEx;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using JamesGames.ReadmeMaker.Sections;
 using ReadmeMaker.Scripts.Utils;
 
 namespace JamesGames.ReadmeMaker
@@ -347,62 +348,29 @@ namespace JamesGames.ReadmeMaker
         
         private static List<CardInfoGetterInfo> GetCardModificationGetters()
         {
-            return new List<CardInfoGetterInfo>()
+            List<CardInfoGetterInfo> data = new List<CardInfoGetterInfo>();
+            data.Add(new CardInfoGetterInfo()
             {
-				new CardInfoGetterInfo() {
-                    HeaderName = "Name",
-                    Getter = (a) => a.name
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "MetaCategories",
-                    Getter = SectionUtils.GetMetaCategories
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Mod Prefix",
-                    Getter = (a) => a.GetModPrefix()
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Display Name",
-                    Getter = (a) => a.displayedName
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Description",
-                    Getter = (a) => a.description
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Cost",
-                    Getter = (a) =>
-                    {
-                        StringBuilder costBuilder = new StringBuilder();
-                        ReadmeDump.AppendAllCosts(a, costBuilder);
-                        return costBuilder.ToString();
-                    }
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Power",
-                    Getter = (a) => a.baseAttack
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Health",
-                    Getter = (a) => a.baseHealth
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Sigils",
-                    Getter = SectionUtils.GetSigils
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Specials",
-                    Getter = SectionUtils.GetSpecialAbilities
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Traits",
-                    Getter = SectionUtils.GetTraits
-                },
-                new CardInfoGetterInfo() {
-                    HeaderName = "Tribes",
-                    Getter = SectionUtils.GetTribes
-                },
-            };
+                HeaderName = "Name",
+                Getter = (a)=>a.name
+            });
+            
+            foreach (TableColumn<CardInfo> columns in SectionUtils.GetCardTableColumns())
+            {
+                string headerName = columns.HeaderName;
+                if (headerName == "Name")
+                {
+                    headerName = "Display Name";
+                }
+                
+                data.Add(new CardInfoGetterInfo()
+                {
+                    HeaderName = headerName,
+                    Getter = columns.Getter
+                });
+            }
+
+            return data;
         }
     }
 }
