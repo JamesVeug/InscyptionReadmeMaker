@@ -131,6 +131,7 @@ namespace JamesGames.ReadmeMaker
         
         public readonly bool BoonsShow = Bind(SectionsHeader, "Show Boons", true, "Show all new Boons added in its own section..");
         public readonly bool ModifiedCardsShow = Bind(SectionsHeader, "Show Cards Modified", true, "Show a section that lists all the cards modified.");
+        public readonly bool ModifiedCardsOnlyShowChanges = Bind(SectionsHeader, "Show modified only Changes", false, "When True this section will only show what has changed on cards.");
         public readonly bool ConfigSectionShow = Bind(SectionsHeader, "Show Configs", true, "Should the Readme Maker show a section listing all the new configs added?");
         public readonly bool EncountersShow = Bind(SectionsHeader, "Show Encounters", true, "Show all new encounters added in its own section..");
         public readonly bool AscensionChallengesShow = Bind(SectionsHeader, "Show Kaycees Mod Challenges", true, "Show all new challenges added for Kaycee's mod.");

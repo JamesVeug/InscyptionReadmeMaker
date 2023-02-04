@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DiskCardGame;
 using InscryptionAPI.Card;
+using ReadmeMaker.Scripts.Utils;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -29,42 +30,27 @@ namespace JamesGames.ReadmeMaker.Sections
         public override void GetTableDump(out List<TableHeader> tableHeaders, out List<Dictionary<string, string>> rows)
         {
             List<TableColumn<CardChangeDetails>> columns = new List<TableColumn<CardChangeDetails>>();
-            
-            
-            if (!cardModifiedFieldNames.Contains("Mod Prefix"))
+            List<TableColumn<CardInfo>> tableColumns = SectionUtils.GetCardTableColumns();
+
+            foreach (TableColumn<CardInfo> column in tableColumns)
             {
-                if (ReadmeConfig.Instance.ShowGUIDS)
+                string columnHeaderName = column.HeaderName;
+                if (columnHeaderName != "Name" && columnHeaderName != "ModPrefix" && 
+                    !cardModifiedFieldNames.Contains(columnHeaderName) && ReadmeConfig.Instance.ModifiedCardsOnlyShowChanges)
                 {
-                    columns.Add(new TableColumn<CardChangeDetails>("Mod Prefix", (a) =>
-                    {
-                        return a.CardInfo.GetModPrefix();
-                    }));
+                    // This field was never changed and we don't want to see any
+                    continue;
                 }
-            }
-            
-            columns.Add(new TableColumn<CardChangeDetails>("Name", (a) =>
-            {
-                if (a.Modifications.TryGetValue("Name", out Modification data))
+                
+                TableColumn<CardChangeDetails> c = new TableColumn<CardChangeDetails>(columnHeaderName, (a)=>
                 {
-                    return data.OldData;
-                }
-
-                return a.CardInfo.name;
-            }));
-            
-
-            foreach (string fieldName in cardModifiedFieldNames)
-            {
-                columns.Add(new TableColumn<CardChangeDetails>(fieldName,
-                    delegate(CardChangeDetails a)
+                    if (a.Modifications.TryGetValue(columnHeaderName, out Modification subModification))
                     {
-                        if (a.Modifications.TryGetValue(fieldName, out Modification subModification))
-                        {
-                            return subModification.DisplayString;
-                        }
-
-                        return "";
-                    }, true, Alignment.Middle));
+                        return subModification.DisplayString;
+                    }
+                    return column.Getter(a.CardInfo);
+                }, column.Enabled, column.Alignment);
+                columns.Add(c);
             }
             
             
