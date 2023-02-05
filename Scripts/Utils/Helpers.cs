@@ -45,7 +45,10 @@ namespace JamesGames.ReadmeMaker
         
         public static Tuple<string, string> GetGUIDAndNameFromEnum(string value)
         {
-            if (GUIDNameLookup == null)
+            // NOTE: Fast lookup disabled because the GUIDManager can have new content at any time.
+            // So disabled until there is a better solution.
+            
+            //if (GUIDNameLookup == null)
             {
                 //Plugin.Log.LogInfo($"[GetGUIDAndNameFromEnum] Building fast lookup");
                 
