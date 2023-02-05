@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DiskCardGame;
 using InscryptionAPI.Card;
 using ReadmeMaker.Scripts.Utils;
@@ -48,6 +49,7 @@ namespace JamesGames.ReadmeMaker.Sections
                     {
                         return subModification.DisplayString;
                     }
+
                     return column.Getter(a.CardInfo);
                 }, column.Enabled, column.Alignment);
                 columns.Add(c);
@@ -58,26 +60,6 @@ namespace JamesGames.ReadmeMaker.Sections
             columns[nameIndex].HeaderName = "Display Name";
             
             rows = BreakdownForTable(out tableHeaders, columns.ToArray());
-        }
-
-        private string GetName(CardChangeDetails details)
-        {
-            if (details.Modifications.TryGetValue("Name", out Modification subModification))
-            {
-                return subModification.DisplayString;
-            }
-
-            return details.CardInfo.name;
-        }
-
-        private string GetMetaCategories(CardChangeDetails details)
-        {
-            if (details.Modifications.TryGetValue("MetaCategories", out Modification subModification))
-            {
-                return subModification.DisplayString;
-            }
-
-            return SectionUtils.GetMetaCategories(details.CardInfo);
         }
 
         protected override int Sort(CardChangeDetails a, CardChangeDetails b)
