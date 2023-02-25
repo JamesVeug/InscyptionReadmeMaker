@@ -374,7 +374,7 @@ namespace JamesGames.ReadmeMaker
 		        IList l = (IList)o;
 		        if (l.Count == 0)
 		        {
-			        return "/";
+			        return "";
 		        }
                 
 		        string s = "";
