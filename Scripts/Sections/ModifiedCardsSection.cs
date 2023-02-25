@@ -42,6 +42,11 @@ namespace JamesGames.ReadmeMaker.Sections
                     // This field was never changed and we don't want to see any
                     continue;
                 }
+
+                if (columnHeaderName == "Name")
+                {
+                    columnHeaderName = "Display Name";
+                }
                 
                 TableColumn<CardChangeDetails> c = new TableColumn<CardChangeDetails>(columnHeaderName, (a)=>
                 {
@@ -54,10 +59,6 @@ namespace JamesGames.ReadmeMaker.Sections
                 }, column.Enabled, column.Alignment);
                 columns.Add(c);
             }
-
-
-            int nameIndex = columns.FindIndex((a)=>a.HeaderName == "Name");
-            columns[nameIndex].HeaderName = "Display Name";
             
             rows = BreakdownForTable(out tableHeaders, columns.ToArray());
         }
