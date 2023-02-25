@@ -61,7 +61,7 @@ namespace JamesGames.ReadmeMaker.Sections
             for (int i = 0; i < region.region.bosses.Count; i++)
             {
                 Opponent.Type opponentType = region.region.bosses[i];
-                string opponent = opponentType.ToString();
+                string opponent = ReadmeHelpers.GetOpponentName(opponentType);
                 if (i == 0)
                 {
                     opponents = opponent;

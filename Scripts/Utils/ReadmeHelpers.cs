@@ -89,6 +89,16 @@ namespace JamesGames.ReadmeMaker
 			return parsedDescription.Replace("[creature]", "A card bearing this sigil");
 		}
 
+		public static string GetOpponentName(Opponent.Type type)
+		{
+			Tuple<string,string> guidAndNameFromEnum = Helpers.GetGUIDAndNameFromEnum(type.ToString());
+			if (guidAndNameFromEnum == null)
+			{
+				return type.ToString();
+			}
+			return guidAndNameFromEnum.Item2;
+		}
+
 		public static string GetTraitName(Trait trait)
 		{
 			 Tuple<string,string> guidAndNameFromEnum = Helpers.GetGUIDAndNameFromEnum(trait.ToString());
