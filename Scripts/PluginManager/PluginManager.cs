@@ -348,12 +348,6 @@ namespace JamesGames.ReadmeMaker
         private static List<CardInfoGetterInfo> GetCardModificationGetters()
         {
             List<CardInfoGetterInfo> data = new List<CardInfoGetterInfo>();
-            data.Add(new CardInfoGetterInfo()
-            {
-                HeaderName = "Name",
-                Getter = (a)=>a.name
-            });
-            
             foreach (TableColumn<CardInfo> columns in SectionUtils.GetCardTableColumns())
             {
                 string headerName = columns.HeaderName;
