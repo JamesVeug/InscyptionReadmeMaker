@@ -409,6 +409,11 @@ namespace JamesGames.ReadmeMaker
 		        return GetTraitName((Trait)o);
 	        }
 
+	        if (memberInfo == typeof(Opponent.Type))
+	        {
+		        return GetOpponentName((Opponent.Type)o);
+	        }
+
 	        string convertToString = o.ToString();
 	        if (convertToString == (" (" + memberInfo.FullName + ")"))
 	        {
