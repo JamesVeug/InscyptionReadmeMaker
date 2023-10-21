@@ -1,9 +1,6 @@
 using BepInEx;
 using BepInEx.Logging;
-using DiskCardGame;
 using HarmonyLib;
-using InscryptionAPI.Card;
-using JamesGames.ReadmeMaker.ExternalHelpers;
 
 namespace JamesGames.ReadmeMaker
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using InscryptionAPI.Ascension;
+using InscryptionAPI.Guid;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -28,7 +29,8 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override string GetGUID(ChallengeManager.FullChallenge o)
         {
-            return Helpers.GetGUID(((int)o.Challenge.challengeType).ToString());
+            GuidManager.TryGetGuidAndKeyEnumValue(o.Challenge.challengeType, out string guid, out string key);
+            return guid;
         }
 
         protected override int Sort(ChallengeManager.FullChallenge a, ChallengeManager.FullChallenge b)

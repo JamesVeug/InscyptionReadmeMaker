@@ -8,7 +8,6 @@ using System.Reflection;
 using DiskCardGame;
 using InscryptionAPI.Card;
 using InscryptionAPI.Guid;
-using ReadmeMaker.Patches;
 using UnityEngine;
 
 namespace JamesGames.ReadmeMaker
@@ -91,30 +90,27 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetOpponentName(Opponent.Type type)
 		{
-			Tuple<string,string> guidAndNameFromEnum = Helpers.GetGUIDAndNameFromEnum(type.ToString());
-			if (guidAndNameFromEnum == null)
+			if (GuidManager.TryGetGuidAndKeyEnumValue(type, out string guid, out string name))
 			{
-				return type.ToString();
+				return name;
 			}
-			return guidAndNameFromEnum.Item2;
+			return type.ToString();
 		}
 
 		public static string GetTraitName(Trait trait)
 		{
-			 Tuple<string,string> guidAndNameFromEnum = Helpers.GetGUIDAndNameFromEnum(trait.ToString());
-			 if (guidAndNameFromEnum == null)
-			 {
-				 return trait.ToString();
-			 }
-			 return guidAndNameFromEnum.Item2;
+			if (GuidManager.TryGetGuidAndKeyEnumValue(trait, out string guid, out string name))
+			{
+				return name;
+			}
+			return trait.ToString();
 		}
 
 		public static string GetTribeName(Tribe tribe)
 		{
-			string tribeName = tribe.GetName();
-			if (!string.IsNullOrEmpty(tribeName))
+			if (GuidManager.TryGetGuidAndKeyEnumValue(tribe, out string guid, out string name))
 			{
-				return tribeName;
+				return name;
 			}
 			
 			return tribe.ToString();
@@ -122,7 +118,11 @@ namespace JamesGames.ReadmeMaker
 
 		public static string GetTribeGUID(Tribe tribe)
 		{
-			return tribe.GetModTag();
+			if (GuidManager.TryGetGuidAndKeyEnumValue(tribe, out string guid, out string name))
+			{
+				return guid;
+			}
+			return "";
 		}
 
 		public static string GetPower(CardInfo info)

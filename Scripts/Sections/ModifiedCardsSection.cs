@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DiskCardGame;
-using InscryptionAPI.Card;
 using ReadmeMaker.Scripts.Utils;
 
 namespace JamesGames.ReadmeMaker.Sections

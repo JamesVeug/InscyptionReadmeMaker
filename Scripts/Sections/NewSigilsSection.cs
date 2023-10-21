@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InscryptionAPI.Card;
 using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
@@ -30,8 +29,7 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override string GetGUID(FullAbility o)
         {
-            string guid = Helpers.GetGUID(((int)o.Id).ToString());
-            return guid;
+            return o.ModGUID;
         }
 
         protected override int Sort(FullAbility a, FullAbility b)

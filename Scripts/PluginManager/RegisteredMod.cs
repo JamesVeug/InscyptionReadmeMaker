@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using BepInEx;
 using DiskCardGame;
-using UnityEngine;
 
 namespace JamesGames.ReadmeMaker
 {

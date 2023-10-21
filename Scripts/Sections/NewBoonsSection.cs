@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InscryptionAPI.Boons;
-using InscryptionAPI.Encounters;
-using InscryptionAPI.Nodes;
+using InscryptionAPI.Guid;
 
 namespace JamesGames.ReadmeMaker.Sections
 {
@@ -30,7 +28,11 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override string GetGUID(BoonManager.FullBoon o)
         {
-            return Helpers.GetGUID(((int)o.boon.type).ToString());
+            if (GuidManager.TryGetGuidAndKeyEnumValue(o.boon.type, out string guid, out string key))
+            {
+                return guid;
+            }
+            return "";
         }
 
         protected override int Sort(BoonManager.FullBoon a, BoonManager.FullBoon b)

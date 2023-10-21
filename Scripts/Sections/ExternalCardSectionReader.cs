@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using DiskCardGame;
 using JamesGames.ReadmeMaker.Sections;
-using UnityEngine;
 
 namespace JamesGames.ReadmeMaker.ExternalHelpers
 {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using DiskCardGame;
 using HarmonyLib;
 using InscryptionAPI.Encounters;
-using InscryptionAPI.Guid;
 using JamesGames.ReadmeMaker;
 
 namespace ReadmeMaker.Patches

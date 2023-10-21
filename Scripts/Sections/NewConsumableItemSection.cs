@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DiskCardGame;
-using InscryptionAPI.Card;
 using InscryptionAPI.Items;
 using InscryptionAPI.Items.Extensions;
 using InscryptionAPI.Regions;
-using FullAbility = InscryptionAPI.Card.AbilityManager.FullAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
 {

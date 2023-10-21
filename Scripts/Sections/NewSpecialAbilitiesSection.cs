@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InscryptionAPI.Card;
+using InscryptionAPI.Guid;
 using SpecialAbility = InscryptionAPI.Card.SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility;
 
 namespace JamesGames.ReadmeMaker.Sections
@@ -51,7 +51,11 @@ namespace JamesGames.ReadmeMaker.Sections
 
         public override string GetGUID(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility o)
         {
-            return Helpers.GetGUID(((int)o.Id).ToString());
+            if (GuidManager.TryGetGuidAndKeyEnumValue(o.Id, out string guid, out string key))
+            {
+                return guid;
+            }
+            return "";
         }
 
         protected override int Sort(SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility a, SpecialTriggeredAbilityManager.FullSpecialTriggeredAbility b)

@@ -1,8 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using BepInEx;
-using BepInEx.Bootstrap;
 using DiskCardGame;
 using InscryptionAPI.Card;
 

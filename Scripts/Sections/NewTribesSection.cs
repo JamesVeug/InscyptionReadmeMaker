@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DiskCardGame;
 using InscryptionAPI.Card;
-using ReadmeMaker.Patches;
 using TribeInfo = InscryptionAPI.Card.TribeManager.TribeInfo;
 
 namespace JamesGames.ReadmeMaker.Sections

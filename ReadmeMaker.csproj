@@ -23,7 +23,7 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>lib\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="InscryptionAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="InscryptionAPI">
       <HintPath>lib\InscryptionAPI.dll</HintPath>
     </Reference>
     <Reference Include="Sirenix.Serialization">
